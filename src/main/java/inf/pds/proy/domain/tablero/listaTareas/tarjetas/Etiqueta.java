@@ -1,4 +1,4 @@
-package inf.pds.proy.domain.listaTareas.tarjetas.impl;
+package inf.pds.proy.domain.tablero.listaTareas.tarjetas;
 
 public class Etiqueta {
 

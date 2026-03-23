@@ -1,6 +1,4 @@
-package inf.pds.proy.domain.listaTareas.tarjetas.impl;
-
-import inf.pds.proy.domain.listaTareas.tarjetas.Tarjeta;
+package inf.pds.proy.domain.tablero.listaTareas.tarjetas;
 
 public class TarjetaTarea implements Tarjeta{
 

@@ -1,6 +1,4 @@
-package inf.pds.proy.domain.listaTareas.tarjetas;
-
-import inf.pds.proy.domain.listaTareas.tarjetas.impl.Etiqueta;
+package inf.pds.proy.domain.tablero.listaTareas.tarjetas;
 
 public interface Tarjeta {
 

@@ -1,9 +1,10 @@
-package inf.pds.proy.domain.listaTareas;
+package inf.pds.proy.domain.tablero.listaTareas;
 
 import java.util.List;
-import java.util.ArrayList;
 
-import inf.pds.proy.domain.listaTareas.tarjetas.Tarjeta;
+import inf.pds.proy.domain.tablero.listaTareas.tarjetas.Tarjeta;
+
+import java.util.ArrayList;
 
 public class ListaTareas {
 
