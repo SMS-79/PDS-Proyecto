@@ -9,6 +9,9 @@ public interface Tarjeta {
 	
 	public void marcarCompletada();
 	
+	public boolean isCompletada();
+
+	
 	
 	
 	
