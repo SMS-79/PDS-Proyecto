@@ -20,7 +20,7 @@ public class ListaTareas {
 		this.tarjetas.add(tarjeta);
 	}
 
-	public List<Tarjeta> getTargeta(){
+	public List<Tarjeta> getTarjetas(){
 		return tarjetas;
 	}
 

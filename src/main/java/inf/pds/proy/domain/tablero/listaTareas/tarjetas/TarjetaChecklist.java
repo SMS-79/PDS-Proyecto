@@ -1,15 +1,18 @@
 package inf.pds.proy.domain.tablero.listaTareas.tarjetas;
 
-public class TarjetaChecklist {
+import java.util.HashMap;
+import java.util.Map;
+
+public class TarjetaChecklist implements Tarjeta {
 
     private Etiqueta etiqueta; 
     private boolean completada;
-    private Map<String, boolean> items;  
+    private Map<String, Boolean> items;  
 
     public TarjetaChecklist(Etiqueta etiqueta, boolean completada){
         this.etiqueta = etiqueta; 
-        this.completada = false;
-        this.items = new Map<String, boolean> items;  
+        this.completada = completada;
+        this.items = new HashMap<>();  
     }
 
     public void addItem(String i){
@@ -34,9 +37,9 @@ public class TarjetaChecklist {
         return this.etiqueta; 
     }
 
-    public boolean isCompletada({
+    public boolean isCompletada(){
         return completada;
-    })
+    }
 
 
 

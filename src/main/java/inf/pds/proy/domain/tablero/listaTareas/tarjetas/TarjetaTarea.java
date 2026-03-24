@@ -26,6 +26,7 @@ public class TarjetaTarea implements Tarjeta{
         this.completada = true; 
     }
 
+    @Override
     public boolean isCompletada(){
         return completada;
     }
