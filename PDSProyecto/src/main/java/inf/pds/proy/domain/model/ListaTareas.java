@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Lista {
+public class ListaTareas {
 	
 	private UUID id; 
 	private String tipo; 
 	private List<Tarjeta> tarjetas; 
 	
-	public Lista (String tipo) {
+	public ListaTareas (String tipo) {
 		this.id = UUID.randomUUID(); 
 		this.tipo = tipo;
 		this.tarjetas = new ArrayList<>(); 

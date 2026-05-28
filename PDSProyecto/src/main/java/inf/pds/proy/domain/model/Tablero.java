@@ -16,8 +16,8 @@ public class Tablero {
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
-	private List<Lista> listas; // columnas dinámicas tipo (DOING, TODO, BACKLOG, STOPPED etc...) 
-	private Lista completedList; // lista para separar las completadas
+	private List<ListaTareas> listaTareas; // columnas dinámicas tipo (DOING, TODo, BACKLOG, STOPPED etc...) 
+	private ListaTareas completedList; // lista para separar las completadas
 	
 	public Tablero() {
 		
@@ -30,9 +30,9 @@ public class Tablero {
 		this.url = url; 
 		this.bloqueado = false;
 		this.miembros = new ArrayList<>(); 
-		this.listas = new ArrayList<>(); 
+		this.listaTareas = new ArrayList<>(); 
 		this.historialOp = new ArrayList<>(); 
-		this.completedList = new Lista("Completadas"); 
+		this.completedList = new ListaTareas("Completadas"); 
 	}
 
 	public UUID getId() {
@@ -81,17 +81,17 @@ public class Tablero {
 	}
 
 
-	public List<Lista> getListas() {
-		return listas;
+	public List<ListaTareas> getListas() {
+		return listaTareas;
 	}
 
 
-	public Lista getCompletedList() {
+	public ListaTareas getCompletedList() {
 		return completedList;
 	}
 	
-	public void addLista(Lista lista) {
-		this.listas.add(lista);
+	public void addLista(ListaTareas listaTareas) {
+		this.listaTareas.add(listaTareas);
 	}
 	
 	public void addMiembro(Usuario u) {
