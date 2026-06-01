@@ -2,12 +2,12 @@ package inf.pds.proy.adapters.jpa;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
 import inf.pds.proy.adapters.jpa.repository.UsuarioJpaRepository;
 import inf.pds.proy.adapters.mappers.UsuarioMapper;
 import inf.pds.proy.domain.model.Usuario;
+import inf.pds.proy.domain.model.UsuarioId;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -35,7 +35,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 	}
 
 	@Override
-	public Optional<Usuario> filtrarUsuarioById(UUID id) {
+	public Optional<Usuario> filtrarUsuarioById(UsuarioId id) {
 		return jpaRepository.findById(id).map(userMapper::toDomain);
 	}
 
@@ -50,7 +50,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 	}
 
 	@Override
-	public void eliminarUsuario(UUID id) {
+	public void eliminarUsuario(UsuarioId id) {
 		jpaRepository.deleteById(id);
 		
 	}

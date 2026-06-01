@@ -2,11 +2,10 @@ package inf.pds.proy.domain.model;
 
 import java.net.URL;
 import java.util.List;
-import java.util.UUID;
 
 public class Usuario {
 	
-	private UUID id;
+	private UsuarioId id;
 	private String nombre;
 	private String email;
 	private String pswd;
@@ -18,23 +17,19 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(UUID id, String nombre, String email, String pswd) {
+	public Usuario(UsuarioId id, String nombre, String email, String pswd) {
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
 		this.pswd = pswd;
 	}
 	
-	public Usuario(String nombre, String email, String pswd) {
-		this(UUID.randomUUID(), nombre, email, pswd);
-	}
-	
 
-	public UUID getId() {
+	public UsuarioId getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(UsuarioId id) {
 		this.id = id;
 	}
 
