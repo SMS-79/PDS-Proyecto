@@ -1,7 +1,6 @@
 package inf.pds.proy.adapters.jpa.entity;
 
-import java.util.UUID;
-
+import inf.pds.proy.domain.model.UsuarioId;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +9,7 @@ public class UsuarioEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	private UsuarioId id;
 	
 	private String nombre;
 	
@@ -21,11 +20,11 @@ public class UsuarioEntity {
 	
 	public UsuarioEntity() {}
 
-	public UUID getId() {
+	public UsuarioId getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(UsuarioId id) {
 		this.id = id;
 	}
 

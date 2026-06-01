@@ -1,12 +1,11 @@
 package inf.pds.proy.adapters.rest;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import inf.pds.proy.domain.model.Usuario;
+import inf.pds.proy.domain.model.UsuarioId;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 
 @RestController
@@ -27,7 +26,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> obtener(@PathVariable UUID id){
+	public ResponseEntity<Usuario> obtener(@PathVariable UsuarioId id){
 		return usuarioService.filtrarUsuarioById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 	
