@@ -9,7 +9,7 @@ public class Tablero {
 	
 	
 	
-	private UUID id;
+	private TableroId id;
 	private String nombre;
 	private Usuario propietario; 
 	private URL url; 
@@ -23,8 +23,8 @@ public class Tablero {
 		
 	}
 	
-	public Tablero(String nombre, Usuario propietario, URL url) {
-		this.id = UUID.randomUUID(); 
+	public Tablero(TableroId id, String nombre, Usuario propietario, URL url) {
+		this.id = id; 
 		this.nombre = nombre; 
 		this.propietario = propietario; 
 		this.url = url; 
@@ -35,11 +35,11 @@ public class Tablero {
 		this.completedList = new ListaTareas("Completadas"); 
 	}
 
-	public UUID getId() {
+	public TableroId getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(TableroId id) {
 		this.id = id;
 	}
 
@@ -88,6 +88,10 @@ public class Tablero {
 
 	public ListaTareas getCompletedList() {
 		return completedList;
+	}
+	
+	public List<Usuario> getMiembros(){
+		return miembros;
 	}
 	
 	public void addLista(ListaTareas listaTareas) {

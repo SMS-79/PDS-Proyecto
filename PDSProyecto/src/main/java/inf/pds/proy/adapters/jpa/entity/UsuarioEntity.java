@@ -1,5 +1,8 @@
 package inf.pds.proy.adapters.jpa.entity;
 
+import java.util.List;
+
+import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.UsuarioId;
 import jakarta.persistence.*;
 
@@ -18,6 +21,12 @@ public class UsuarioEntity {
 	
 	private String password;
 	
+	
+	@OneToMany(mappedBy="propietario")
+	private List<Tablero> tableros;
+	
+	
+
 	public UsuarioEntity() {}
 
 	public UsuarioId getId() {
@@ -51,6 +60,15 @@ public class UsuarioEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public List<Tablero> getTableros() {
+		return tableros;
+	}
+
+	public void setTableros(List<Tablero> tableros) {
+		this.tableros = tableros;
+	}
+	
 	
 	
 	

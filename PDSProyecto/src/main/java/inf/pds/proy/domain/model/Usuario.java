@@ -10,7 +10,7 @@ public class Usuario {
 	private String email;
 	private String pswd;
 	
-	private List<URL> urlTableros;
+	private List<Tablero> tableros;
 	private List<Tablero> tablerosCompartidos;
 	
 	public Usuario() {
@@ -57,12 +57,12 @@ public class Usuario {
 		this.pswd = pswd;
 	}
 
-	public List<URL> getUrls() {
-		return urlTableros;
+	public List<Tablero> getTableros() {
+		return tableros;
 	}
 
-	public void setUrl(List<URL> url) {
-		this.urlTableros = url;
+	public void setUrl(List<Tablero> tableros) {
+		this.tableros = tableros;
 	}
 	
 	

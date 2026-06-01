@@ -20,9 +20,9 @@ public class UsuarioServiceImpl implements UsuarioService{
 	
 	@Override
 	public Usuario crearUsuario(String nombre, String correo, String pswd) {
-		Usuario user;
+		
 		try {
-			user = new Usuario(UsuarioId.of(new Random().nextLong()), nombre, correo, pswd);
+			Usuario user = new Usuario(UsuarioId.of(new Random().nextLong()), nombre, correo, pswd);
 			repUser.guardarUsuario(user);
 			return user;
 		} catch(IdentificadorUsuarioException e) {
