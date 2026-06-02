@@ -79,15 +79,26 @@ public class Tablero {
 	public List<HistorialOps> getHistorialOp() {
 		return historialOp;
 	}
-
+	
+	public void setHistorialOp(List<HistorialOps> historial) {
+		this.historialOp = historial;
+	}
 
 	public List<ListaTareas> getListas() {
 		return listaTareas;
+	}
+	
+	public void setListas(List<ListaTareas> listaTareas) {
+		this.listaTareas = listaTareas;
 	}
 
 
 	public ListaTareas getCompletedList() {
 		return completedList;
+	}
+	
+	public void setCompletedList(ListaTareas listaCompletadas) {
+		this.completedList = listaCompletadas;
 	}
 	
 	public List<Usuario> getMiembros(){

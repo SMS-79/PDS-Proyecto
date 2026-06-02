@@ -46,6 +46,11 @@ public class TableroServiceImpl implements TableroService{
 	public Optional<Tablero> filtrarTableroByURL(URL url) {
 		return repTab.filtrarTableroByURL(url);
 	}
+	
+	@Override
+	public void eliminarTablero(Tablero tablero) {
+		repTab.eliminarTablero(tablero);
+	}
 
 	@Override
 	public void eliminarTablero(TableroId id) {

@@ -26,10 +26,13 @@ public class TableroEntity {
 	@Column(unique = true, nullable = false)
 	private URL url; 
 	
-	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
+	private boolean bloqueado;
 	private List<HistorialOps> historialOp;
+	
+	@ManyToOne
+	@JoinColumn(name="miembros", nullable=true)
 	private List<Usuario> miembros; 
-	private List<ListaTareas> listaTareas; // columnas dinámicas tipo (DOING, TODo, BACKLOG, STOPPED etc...) 
+	private List<ListaTareas> listaTareas;
 	private ListaTareas completedList;
 	public TableroId getId() {
 		return id;

@@ -14,6 +14,7 @@ public interface TableroService {
 	List<Tablero> obtenerTableros();
 	Optional<Tablero> filtrarTableroById(TableroId id);
 	Optional<Tablero> filtrarTableroByURL(URL url);
+	void eliminarTablero(Tablero tablero);
 	void eliminarTablero(TableroId id);
 
 }

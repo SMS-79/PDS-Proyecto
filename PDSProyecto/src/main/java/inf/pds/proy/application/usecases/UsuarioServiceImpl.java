@@ -47,6 +47,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 	
 	@Override
+	public void eliminarUsuario(Usuario usuario) {
+		repUser.eliminarUsuario(usuario);
+	}
+	
+	@Override
 	public void eliminarUsuario(UsuarioId id) {
 		repUser.eliminarUsuario(id);
 	}
