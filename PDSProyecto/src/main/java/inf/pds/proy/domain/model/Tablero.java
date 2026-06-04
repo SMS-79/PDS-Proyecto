@@ -9,7 +9,7 @@ public class Tablero {
 	
 	
 	
-	private UUID id;
+	private TableroId id;
 	private String nombre;
 	private Usuario propietario; 
 	private URL url; 
@@ -23,23 +23,23 @@ public class Tablero {
 		
 	}
 	
-	public Tablero(String nombre, Usuario propietario, URL url) {
-		this.id = UUID.randomUUID(); 
-		this.nombre = nombre; 
-		this.propietario = propietario; 
-		this.url = url; 
+	public Tablero(TableroId id, String nombre, Usuario propietario, URL url) {
+		this.id = id;
+		this.nombre = nombre;
+		this.propietario = propietario;
+		this.url = url;
 		this.bloqueado = false;
-		this.miembros = new ArrayList<>(); 
-		this.listaTareas = new ArrayList<>(); 
-		this.historialOp = new ArrayList<>(); 
-		this.completedList = new ListaTareas("Completadas"); 
+		this.miembros = new ArrayList<>();
+		this.listaTareas = new ArrayList<>();
+		this.historialOp = new ArrayList<>();
+		this.completedList = new ListaTareas("Completadas");
 	}
 
-	public UUID getId() {
+	public TableroId getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(TableroId id) {
 		this.id = id;
 	}
 
@@ -79,15 +79,30 @@ public class Tablero {
 	public List<HistorialOps> getHistorialOp() {
 		return historialOp;
 	}
-
+	
+	public void setHistorialOp(List<HistorialOps> historial) {
+		this.historialOp = historial;
+	}
 
 	public List<ListaTareas> getListas() {
 		return listaTareas;
+	}
+	
+	public void setListas(List<ListaTareas> listaTareas) {
+		this.listaTareas = listaTareas;
 	}
 
 
 	public ListaTareas getCompletedList() {
 		return completedList;
+	}
+	
+	public void setCompletedList(ListaTareas listaCompletadas) {
+		this.completedList = listaCompletadas;
+	}
+	
+	public List<Usuario> getMiembros(){
+		return miembros;
 	}
 	
 	public void addLista(ListaTareas listaTareas) {

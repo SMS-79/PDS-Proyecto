@@ -15,7 +15,7 @@ public abstract class Tarjeta {
 	protected Tarjeta(UUID id, String nombre, Etiqueta etiqueta) {
 		this.id = id;
 		this.nombre = nombre;
-		this.etiqueta = Optional.of(etiqueta);
+		this.etiqueta = Optional.ofNullable(etiqueta);
 		this.completada = false;
 	}
 	

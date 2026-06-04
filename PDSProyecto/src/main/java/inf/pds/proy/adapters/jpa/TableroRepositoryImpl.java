@@ -1,0 +1,59 @@
+package inf.pds.proy.adapters.jpa;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+
+import inf.pds.proy.adapters.jpa.entity.TableroEntity;
+import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
+import inf.pds.proy.adapters.mappers.TableroMapper;
+import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.TableroId;
+import inf.pds.proy.domain.ports.output.TableroRepository;
+
+public class TableroRepositoryImpl implements TableroRepository{
+
+	
+	private final TableroJpaRepository jpaRepository;
+	private final TableroMapper tableMapper;
+	
+	public TableroRepositoryImpl(TableroJpaRepository jpaRep, TableroMapper tableMapper) {
+		this.jpaRepository = jpaRep;
+		this.tableMapper = tableMapper;
+	}
+	
+	@Override
+	public Tablero guardarTablero(Tablero tablero) {
+		TableroEntity tableEntity = tableMapper.toEntity(tablero);
+		return tableMapper.toDomain(jpaRepository.save(tableEntity));
+		
+	}
+
+	@Override
+	public List<Tablero> obtenerTableros() {
+		return jpaRepository.findAll().stream()
+				.map(tableMapper::toDomain)
+				.toList();
+	}
+
+	@Override
+	public Optional<Tablero> filtrarTableroById(TableroId id) {
+		return jpaRepository.findById(id).map(tableMapper::toDomain);
+	}
+
+	@Override
+	public Optional<Tablero> filtrarTableroByURL(URL url) {
+		return jpaRepository.findByURL(url).map(tableMapper::toDomain);
+	}
+
+	@Override
+	public void eliminarTablero(Tablero tablero) {
+		jpaRepository.delete(tableMapper.toEntity(tablero));
+	}
+
+	@Override
+	public void eliminarTablero(TableroId id) {
+		jpaRepository.deleteById(id);
+	}
+
+}

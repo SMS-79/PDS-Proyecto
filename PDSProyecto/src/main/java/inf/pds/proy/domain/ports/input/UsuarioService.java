@@ -11,6 +11,7 @@ public interface UsuarioService {
 	List<Usuario> obtenerUsuarios();
 	Optional<Usuario> filtrarUsuarioById(UsuarioId id);
 	Optional<Usuario> filtrarUsuarioByEmail(String email);
+	void eliminarUsuario(Usuario usuario);
 	void eliminarUsuario(UsuarioId id);
 	
 	
