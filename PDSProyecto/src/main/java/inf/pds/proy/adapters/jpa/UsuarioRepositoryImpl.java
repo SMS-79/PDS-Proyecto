@@ -21,10 +21,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 	}
 
 	@Override
-	public void guardarUsuario(Usuario usuario) {
+	public Usuario guardarUsuario(Usuario usuario) {
 		UsuarioEntity userEntity = userMapper.toEntity(usuario);
-		jpaRepository.save(userEntity);
-		
+		return userMapper.toDomain(jpaRepository.save(userEntity));
 	}
 	
 	@Override

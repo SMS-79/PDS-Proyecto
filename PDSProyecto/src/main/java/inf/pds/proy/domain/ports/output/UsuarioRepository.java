@@ -8,9 +8,8 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.UsuarioId;
 
 public interface UsuarioRepository {
-
 	
-	void guardarUsuario(Usuario usuario);
+	Usuario guardarUsuario(Usuario usuario);
 	List<Usuario> obtenerUsuarios();
 	Optional<Usuario> filtrarUsuarioById(UsuarioId id);
 	Optional<Usuario> filtrarUsuarioByEmail(String email);

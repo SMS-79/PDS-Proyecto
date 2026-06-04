@@ -7,7 +7,7 @@ public class TableroId {
 
 	
 	public static class IdentificadorTableroException extends Exception {
-		private static final long serialVersionUID = 49448132L;
+		private static final long serialVersionUID = 4944813248848099L;
 		
 		public IdentificadorTableroException(String mensaje) {
 			super(mensaje);

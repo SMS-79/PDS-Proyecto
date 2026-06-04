@@ -24,15 +24,15 @@ public class Tablero {
 	}
 	
 	public Tablero(TableroId id, String nombre, Usuario propietario, URL url) {
-		this.id = id; 
-		this.nombre = nombre; 
-		this.propietario = propietario; 
-		this.url = url; 
+		this.id = id;
+		this.nombre = nombre;
+		this.propietario = propietario;
+		this.url = url;
 		this.bloqueado = false;
-		this.miembros = new ArrayList<>(); 
-		this.listaTareas = new ArrayList<>(); 
-		this.historialOp = new ArrayList<>(); 
-		this.completedList = new ListaTareas("Completadas"); 
+		this.miembros = new ArrayList<>();
+		this.listaTareas = new ArrayList<>();
+		this.historialOp = new ArrayList<>();
+		this.completedList = new ListaTareas("Completadas");
 	}
 
 	public TableroId getId() {

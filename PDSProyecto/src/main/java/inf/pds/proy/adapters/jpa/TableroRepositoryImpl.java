@@ -23,9 +23,10 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 	
 	@Override
-	public void guardarTablero(Tablero tablero) {
+	public Tablero guardarTablero(Tablero tablero) {
 		TableroEntity tableEntity = tableMapper.toEntity(tablero);
-		jpaRepository.save(tableEntity);
+		return tableMapper.toDomain(jpaRepository.save(tableEntity));
+		
 	}
 
 	@Override

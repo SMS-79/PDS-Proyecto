@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.stereotype.Service;
+
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.model.Usuario;
@@ -12,6 +14,7 @@ import inf.pds.proy.domain.model.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 
+@Service
 public class TableroServiceImpl implements TableroService{
 
 	private TableroRepository repTab;
@@ -27,7 +30,7 @@ public class TableroServiceImpl implements TableroService{
 			repTab.guardarTablero(table);
 			return table;
 		}catch(IdentificadorTableroException e) {
-			
+			e.printStackTrace();
 		}
 		return null;
 	}

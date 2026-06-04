@@ -6,7 +6,6 @@ import java.util.List;
 import inf.pds.proy.domain.model.HistorialOps;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.TableroId;
-import inf.pds.proy.domain.model.Usuario;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,7 +20,7 @@ public class TableroEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="propietario_id", nullable=false)
-	private Usuario propietario; 
+	private UsuarioEntity propietario; 
 	
 	@Column(unique = true, nullable = false)
 	private URL url; 
@@ -29,11 +28,13 @@ public class TableroEntity {
 	private boolean bloqueado;
 	private List<HistorialOps> historialOp;
 	
-	@ManyToOne
-	@JoinColumn(name="miembros", nullable=true)
-	private List<Usuario> miembros; 
+	@OneToMany(mappedBy="propietario_id")
+	@JoinColumn(name="miembros")
+	private List<UsuarioEntity> miembros; 
 	private List<ListaTareas> listaTareas;
 	private ListaTareas completedList;
+	
+	
 	public TableroId getId() {
 		return id;
 	}
@@ -46,10 +47,10 @@ public class TableroEntity {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public Usuario getPropietario() {
+	public UsuarioEntity getPropietario() {
 		return propietario;
 	}
-	public void setPropietario(Usuario propietario) {
+	public void setPropietario(UsuarioEntity propietario) {
 		this.propietario = propietario;
 	}
 	public URL getUrl() {
@@ -70,10 +71,10 @@ public class TableroEntity {
 	public void setHistorialOp(List<HistorialOps> historialOp) {
 		this.historialOp = historialOp;
 	}
-	public List<Usuario> getMiembros() {
+	public List<UsuarioEntity> getMiembros() {
 		return miembros;
 	}
-	public void setMiembros(List<Usuario> miembros) {
+	public void setMiembros(List<UsuarioEntity> miembros) {
 		this.miembros = miembros;
 	}
 	public List<ListaTareas> getListaTareas() {

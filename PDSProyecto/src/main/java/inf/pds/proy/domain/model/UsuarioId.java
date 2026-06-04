@@ -8,7 +8,7 @@ public class UsuarioId {
 
 	
 	public static class IdentificadorUsuarioException extends Exception {
-		private static final long serialVersionUID = 49448132L;
+		private static final long serialVersionUID = 4944813248848099L;
 		
 		public IdentificadorUsuarioException(String mensaje) {
 			super(mensaje);

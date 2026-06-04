@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.stereotype.Service;
+
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.UsuarioId;
 import inf.pds.proy.domain.model.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService{
 	
 	private UsuarioRepository repUser;

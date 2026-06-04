@@ -9,7 +9,7 @@ import inf.pds.proy.domain.model.TableroId;
 
 public interface TableroRepository {
 
-	void guardarTablero(Tablero tablero);
+	Tablero guardarTablero(Tablero tablero);
 	List<Tablero> obtenerTableros();
 	Optional<Tablero> filtrarTableroById(TableroId id);
 	Optional<Tablero> filtrarTableroByURL(URL url);
