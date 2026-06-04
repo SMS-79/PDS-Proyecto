@@ -14,7 +14,7 @@ public class TableroEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private TableroId id;
+	private Long id;
 	
 	private String nombre;
 	
@@ -23,22 +23,30 @@ public class TableroEntity {
 	private UsuarioEntity propietario; 
 	
 	@Column(unique = true, nullable = false)
-	private URL url; 
+	private String url; 
 	
 	private boolean bloqueado;
-	private List<HistorialOps> historialOp;
+
+    @OneToMany
+    @JoinColumn(name = "tablero_id")
+    private List<HistorialOpsEntity> historialOp; 
+    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "tablero_id")
+    private List<ListaTareasEntity> listaTareas;
 	
-	@OneToMany(mappedBy="propietario_id")
-	@JoinColumn(name="miembros")
+	@ManyToMany
+	@JoinTable(name = "tablero_miembros",
+	joinColumns = @JoinColumn(name = "tablero_id"),
+	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private List<UsuarioEntity> miembros; 
-	private List<ListaTareas> listaTareas;
 	private ListaTareas completedList;
 	
 	
-	public TableroId getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(TableroId id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNombre() {
@@ -53,10 +61,10 @@ public class TableroEntity {
 	public void setPropietario(UsuarioEntity propietario) {
 		this.propietario = propietario;
 	}
-	public URL getUrl() {
+	public String getUrl() {
 		return url;
 	}
-	public void setUrl(URL url) {
+	public void setUrl(String url) {
 		this.url = url;
 	}
 	public boolean isBloqueado() {
@@ -65,10 +73,10 @@ public class TableroEntity {
 	public void setBloqueado(boolean bloqueado) {
 		this.bloqueado = bloqueado;
 	}
-	public List<HistorialOps> getHistorialOp() {
+	public List<HistorialOpsEntity> getHistorialOp() {
 		return historialOp;
 	}
-	public void setHistorialOp(List<HistorialOps> historialOp) {
+	public void setHistorialOp(List<HistorialOpsEntity> historialOp) {
 		this.historialOp = historialOp;
 	}
 	public List<UsuarioEntity> getMiembros() {
@@ -77,10 +85,10 @@ public class TableroEntity {
 	public void setMiembros(List<UsuarioEntity> miembros) {
 		this.miembros = miembros;
 	}
-	public List<ListaTareas> getListaTareas() {
+	public List<ListaTareasEntity> getListaTareas() {
 		return listaTareas;
 	}
-	public void setListaTareas(List<ListaTareas> listaTareas) {
+	public void setListaTareas(List<ListaTareasEntity> listaTareas) {
 		this.listaTareas = listaTareas;
 	}
 	public ListaTareas getCompletedList() {
