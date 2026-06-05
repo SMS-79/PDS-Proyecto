@@ -1,34 +1,33 @@
 package inf.pds.proy.domain.model;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public abstract class Tarjeta {
 
 	
-	private UUID id;
+	private Long id;
 	private String nombre;
 	private Optional<Etiqueta> etiqueta;
 	private boolean completada;
 	
 	
-	protected Tarjeta(UUID id, String nombre, Etiqueta etiqueta) {
+	protected Tarjeta(Long id, String nombre, Etiqueta etiqueta) {
 		this.id = id;
 		this.nombre = nombre;
 		this.etiqueta = Optional.ofNullable(etiqueta);
 		this.completada = false;
 	}
 	
-	protected Tarjeta(UUID id, String nombre) {
+	protected Tarjeta(Long id, String nombre) {
 		this(id, nombre, null);
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

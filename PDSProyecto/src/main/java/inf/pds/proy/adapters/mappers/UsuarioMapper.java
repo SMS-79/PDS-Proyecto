@@ -20,9 +20,6 @@ public class UsuarioMapper {
 	}
 	
 	public Usuario toDomain(UsuarioEntity userEntity) {
-		Usuario user = new Usuario(userEntity.getId(), userEntity.getNombre(), userEntity.getEmail(), userEntity.getPassword());
-		
-		return user;
-		
+		return new Usuario(userEntity.getId(), userEntity.getNombre(), userEntity.getEmail(), userEntity.getPassword());		
 	}
 }

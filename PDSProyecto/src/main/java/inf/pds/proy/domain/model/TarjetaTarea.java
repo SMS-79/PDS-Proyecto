@@ -1,20 +1,20 @@
 package inf.pds.proy.domain.model;
 
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.Random;
 
 public class TarjetaTarea extends Tarjeta {
 	
 	private String descripcion; 
 	private LocalDate fechaLimite; 
-	private Usuario reponsable; 
+	private Usuario responsable; 
 	
-	public TarjetaTarea(UUID id, String nombre, Etiqueta etiqueta) {
+	public TarjetaTarea(Long id, String nombre, Etiqueta etiqueta) {
 		super(id, nombre, etiqueta);
 	}
 
     public TarjetaTarea(String nombre, Etiqueta etiqueta, String descripcion, LocalDate fechaLimite) {
-        super(UUID.randomUUID(), nombre, etiqueta);
+        super(new Random().nextLong(), nombre, etiqueta);
         this.descripcion = descripcion;
         this.fechaLimite = fechaLimite;
     }
@@ -36,11 +36,11 @@ public class TarjetaTarea extends Tarjeta {
 	}
 
 	public Usuario getReponsable() {
-		return reponsable;
+		return responsable;
 	}
 
-	public void setReponsable(Usuario reponsable) {
-		this.reponsable = reponsable;
+	public void setReponsable(Usuario responsable) {
+		this.responsable = responsable;
 	}
     
     

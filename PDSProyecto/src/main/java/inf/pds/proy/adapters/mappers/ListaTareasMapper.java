@@ -1,10 +1,11 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.stereotype.Component;
+
 import inf.pds.proy.adapters.jpa.entity.ListaTareasEntity;
-import inf.pds.proy.adapters.jpa.entity.TarjetaEntity;
+import inf.pds.proy.adapters.jpa.entity.TarjetaTareaEntity;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tarjeta;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ListaTareasMapper {
@@ -35,11 +36,11 @@ public class ListaTareasMapper {
     }
 
     // Para convertir tarjetas individuales (usado en completedList)
-    public TarjetaEntity tarjetaToEntity(Tarjeta tarjeta) {
+    public TarjetaTareaEntity tarjetaToEntity(Tarjeta tarjeta) {
         return tarjetaMapper.toEntity(tarjeta);
     }
 
-    public Tarjeta tarjetaToDomain(TarjetaEntity entity) {
+    public Tarjeta tarjetaToDomain(TarjetaTareaEntity entity) {
         return tarjetaMapper.toDomain(entity);
     }
 }

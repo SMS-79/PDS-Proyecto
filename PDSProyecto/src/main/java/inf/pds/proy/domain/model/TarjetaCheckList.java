@@ -2,19 +2,19 @@ package inf.pds.proy.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
 
 public class TarjetaCheckList extends Tarjeta{
 	
-	List<CheckListItem> items; 
+	List<CheckListItem> items;
 
-	public TarjetaCheckList(UUID id, String nombre, Etiqueta etiqueta) {
+	public TarjetaCheckList(Long id, String nombre, Etiqueta etiqueta) {
 		super(id, nombre, etiqueta);
 		this.items = new ArrayList<>(); 
 	}
 	
     public TarjetaCheckList(String nombre, Etiqueta etiqueta) {
-        super(UUID.randomUUID(), nombre, etiqueta);
+        super(new Random().nextLong(), nombre, etiqueta);
         this.items = new ArrayList<>();
     }
 

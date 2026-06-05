@@ -1,12 +1,17 @@
 package inf.pds.proy.adapters.jpa.entity;
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import inf.pds.proy.domain.model.ListaTareasId;
-import inf.pds.proy.domain.model.TableroId;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
 @Entity
@@ -26,7 +31,7 @@ public class ListaTareasEntity {
 	
 	@OneToMany(mappedBy = "lista_tareas")
 	@JoinColumn(name = "tarjetas")
-	private List<TarjetaEntity> tarjetas; 
+	private List<TarjetaTareaEntity> tarjetas; 
 	
 	
 	public ListaTareasEntity() {}
@@ -55,12 +60,29 @@ public class ListaTareasEntity {
     	this.tablero = tablero; 
     }
 
-    public List<TarjetaEntity> getTarjetas() { 
+    public List<TarjetaTareaEntity> getTarjetas() { 
     	return tarjetas; 
     }
     
-    public void setTarjetas(List<TarjetaEntity> tarjetas) { 
+    public void setTarjetas(List<TarjetaTareaEntity> tarjetas) { 
     	this.tarjetas = tarjetas;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, tablero, tarjetas, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof ListaTareasEntity))
+			return false;
+		ListaTareasEntity other = (ListaTareasEntity) obj;
+		return Objects.equals(id, other.id) && Objects.equals(tablero, other.tablero)
+				&& Objects.equals(tarjetas, other.tarjetas) && Objects.equals(tipo, other.tipo);
+	}
+    
 	
 }

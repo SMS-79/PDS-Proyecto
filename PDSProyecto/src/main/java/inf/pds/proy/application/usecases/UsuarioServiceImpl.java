@@ -7,8 +7,6 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
-import inf.pds.proy.domain.model.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
@@ -23,15 +21,10 @@ public class UsuarioServiceImpl implements UsuarioService{
 	
 	@Override
 	public Usuario crearUsuario(String nombre, String correo, String pswd) {
-		
-		try {
-			Usuario user = new Usuario(UsuarioId.of(new Random().nextLong()), nombre, correo, pswd);
-			repUser.guardarUsuario(user);
-			return user;
-		} catch(IdentificadorUsuarioException e) {
-			e.printStackTrace();
-		}
-		return null;
+
+		Usuario user = new Usuario(new Random().nextLong(), nombre, correo, pswd);
+		repUser.guardarUsuario(user);
+		return user;
 	}
 	
 	@Override
@@ -40,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 	
 	@Override
-	public Optional<Usuario> filtrarUsuarioById(UsuarioId id) {
+	public Optional<Usuario> filtrarUsuarioById(Long id) {
 		return repUser.filtrarUsuarioById(id); 
 	}
 
@@ -55,7 +48,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 	
 	@Override
-	public void eliminarUsuario(UsuarioId id) {
+	public void eliminarUsuario(Long id) {
 		repUser.eliminarUsuario(id);
 	}
 
