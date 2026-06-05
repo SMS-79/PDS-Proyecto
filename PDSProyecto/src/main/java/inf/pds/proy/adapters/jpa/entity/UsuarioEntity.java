@@ -12,7 +12,7 @@ public class UsuarioEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UsuarioId id;
+	private Long id;
 	
 	private String nombre;
 	
@@ -29,11 +29,11 @@ public class UsuarioEntity {
 
 	public UsuarioEntity() {}
 
-	public UsuarioId getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UsuarioId id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

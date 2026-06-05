@@ -5,19 +5,24 @@ import inf.pds.proy.domain.model.HistorialOps;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.adapters.mappers.UsuarioMapper;
 
 public class TableroMapper {
 	
 	private UsuarioMapper userMapper; 
+	private ListaTareasMapper listaMapper;
+	private HistorialOpsMapper historialMapper;
 	
 	public TableroEntity toEntity(Tablero table) {
 		TableroEntity tableroEntity = new TableroEntity();
 		tableroEntity.setBloqueado(table.isBloqueado());
 		tableroEntity.setCompletedList(table.getCompletedList());	
-		tableroEntity.setHistorialOp(table.getHistorialOp());
+		tableroEntity.setHistorialOp(table.getHistorialOp().stream()
+				.map(historialMapper::toEntity)
+				.toList());
 		tableroEntity.setId(table.getId());
-		tableroEntity.setListaTareas(table.getListas());
+		tableroEntity.setListaTareas(table.getListas().stream()
+				.map(listaMapper::toEntity)
+				.toList());
 		tableroEntity.setMiembros(table.getMiembros().stream()
 				.map(userMapper::toEntity)
 				.toList());
@@ -34,7 +39,7 @@ public class TableroMapper {
 		table.setBloqueado(tableroEntity.isBloqueado());
 		table.setCompletedList(tableroEntity.getCompletedList());
 		
-		for(ListaTareas t : tableroEntity.getListaTareas()) {
+		for(ListaTareas t : tableroEntity.getListaTareas().stream().map(listaMapper::toDomain).toList()) {
 			table.addLista(t);
 		}
 		
@@ -44,7 +49,7 @@ public class TableroMapper {
 			table.addMiembro(u);
 		}
 		
-		for(HistorialOps o : tableroEntity.getHistorialOp()) {
+		for(HistorialOps o : tableroEntity.getHistorialOp().stream().map(historialMapper::toDomain).toList()) {
 			table.registrarOp(o);
 		}
 		
