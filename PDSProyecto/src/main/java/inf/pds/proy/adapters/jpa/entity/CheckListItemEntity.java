@@ -11,6 +11,7 @@ public class CheckListItemEntity {
 	private Long id;
     private String descripcion;
     private boolean completado;
+    
 	public Long getId() {
 		return id;
 	}

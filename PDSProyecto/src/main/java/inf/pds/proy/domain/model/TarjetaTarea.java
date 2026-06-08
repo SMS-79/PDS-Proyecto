@@ -1,7 +1,6 @@
 package inf.pds.proy.domain.model;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 public class TarjetaTarea extends Tarjeta {
 	
@@ -13,8 +12,8 @@ public class TarjetaTarea extends Tarjeta {
 		super(id, nombre, etiqueta);
 	}
 
-    public TarjetaTarea(String nombre, Etiqueta etiqueta, String descripcion, LocalDate fechaLimite) {
-        super(new Random().nextLong(), nombre, etiqueta);
+    public TarjetaTarea(Long id, String nombre, Etiqueta etiqueta, String descripcion, LocalDate fechaLimite) {
+        super(id, nombre, etiqueta);
         this.descripcion = descripcion;
         this.fechaLimite = fechaLimite;
     }

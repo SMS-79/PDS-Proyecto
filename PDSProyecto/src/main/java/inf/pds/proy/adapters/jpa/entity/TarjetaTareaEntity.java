@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue("TAREA") 
-public class TarjetaTareaEntity {
+public class TarjetaTareaEntity extends TarjetaEntity {
 	
 	
 	private String descripcion; 

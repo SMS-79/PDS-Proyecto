@@ -31,7 +31,7 @@ public class ListaTareasEntity {
 	
 	@OneToMany(mappedBy = "lista_tareas")
 	@JoinColumn(name = "tarjetas")
-	private List<TarjetaTareaEntity> tarjetas; 
+	private List<TarjetaEntity> tarjetas; 
 	
 	
 	public ListaTareasEntity() {}
@@ -60,11 +60,11 @@ public class ListaTareasEntity {
     	this.tablero = tablero; 
     }
 
-    public List<TarjetaTareaEntity> getTarjetas() { 
+    public List<TarjetaEntity> getTarjetas() { 
     	return tarjetas; 
     }
     
-    public void setTarjetas(List<TarjetaTareaEntity> tarjetas) { 
+    public void setTarjetas(List<TarjetaEntity> tarjetas) { 
     	this.tarjetas = tarjetas;
     }
 
