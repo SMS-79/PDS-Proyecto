@@ -3,10 +3,14 @@ package inf.pds.proy.adapters.rest;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.ports.input.TableroService;
 
 @RestController
@@ -27,7 +31,7 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Tablero> obtener(@PathVariable TableroId id){
+	public ResponseEntity<Tablero> obtener(@PathVariable Long id){
 		return tableroService.filtrarTableroById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 	

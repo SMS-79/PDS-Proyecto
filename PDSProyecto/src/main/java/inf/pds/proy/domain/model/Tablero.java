@@ -1,18 +1,16 @@
 package inf.pds.proy.domain.model;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Tablero {
 	
 	
 	
-	private TableroId id;
+	private Long id;
 	private String nombre;
 	private Usuario propietario; 
-	private URL url; 
+	private String url; 
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
@@ -23,7 +21,7 @@ public class Tablero {
 		
 	}
 	
-	public Tablero(TableroId id, String nombre, Usuario propietario, URL url) {
+	public Tablero(Long id, String nombre, Usuario propietario, String url) {
 		this.id = id;
 		this.nombre = nombre;
 		this.propietario = propietario;
@@ -35,11 +33,11 @@ public class Tablero {
 		this.completedList = new ListaTareas("Completadas");
 	}
 
-	public TableroId getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(TableroId id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -59,11 +57,11 @@ public class Tablero {
 		this.propietario = propietario;
 	}
 
-	public URL getUrl() {
+	public String getUrl() {
 		return url;
 	}
 
-	public void setUrl(URL url) {
+	public void setUrl(String url) {
 		this.url = url;
 	}
 
@@ -117,7 +115,7 @@ public class Tablero {
 		this.historialOp.add(op); 
 	}
 
-	public void addTarjeta(UUID idLista, Tarjeta tarjeta, Usuario usuario) {
+	public void addTarjeta(Long idLista, Tarjeta tarjeta, Usuario usuario) {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}

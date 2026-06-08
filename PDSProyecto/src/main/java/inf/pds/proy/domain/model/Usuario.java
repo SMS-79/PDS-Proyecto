@@ -1,11 +1,10 @@
 package inf.pds.proy.domain.model;
 
-import java.net.URL;
 import java.util.List;
 
 public class Usuario {
 	
-	private UsuarioId id;
+	private Long id;
 	private String nombre;
 	private String email;
 	private String pswd;
@@ -17,7 +16,7 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(UsuarioId id, String nombre, String email, String pswd) {
+	public Usuario(Long id, String nombre, String email, String pswd) {
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
@@ -25,11 +24,11 @@ public class Usuario {
 	}
 	
 
-	public UsuarioId getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UsuarioId id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

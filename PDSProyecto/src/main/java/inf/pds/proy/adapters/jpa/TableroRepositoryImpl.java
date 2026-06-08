@@ -1,6 +1,5 @@
 package inf.pds.proy.adapters.jpa;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
 import inf.pds.proy.adapters.mappers.TableroMapper;
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 
 public class TableroRepositoryImpl implements TableroRepository{
@@ -37,12 +35,12 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroById(TableroId id) {
+	public Optional<Tablero> filtrarTableroById(Long id) {
 		return jpaRepository.findById(id).map(tableMapper::toDomain);
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroByURL(URL url) {
+	public Optional<Tablero> filtrarTableroByURL(String url) {
 		return jpaRepository.findByURL(url).map(tableMapper::toDomain);
 	}
 
@@ -52,7 +50,7 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
-	public void eliminarTablero(TableroId id) {
+	public void eliminarTablero(Long id) {
 		jpaRepository.deleteById(id);
 	}
 

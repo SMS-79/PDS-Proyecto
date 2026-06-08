@@ -1,26 +1,30 @@
 package inf.pds.proy.domain.model;
 
-import java.util.UUID;
+import java.util.Random;
 
 public class CheckListItem {
 
-	private UUID id;
+	private Long id;
     private String descripcion;
     private boolean completado;
 
     public CheckListItem() {}
+    
+    public CheckListItem(Long id, String descripcion, boolean completado) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.completado = completado;
+    }
 
     public CheckListItem(String descripcion) {
-        this.id = UUID.randomUUID();
-        this.descripcion = descripcion;
-        this.completado = false;
+    	this(new Random().nextLong(), descripcion, false);
     }
    
-    public UUID getId() {
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

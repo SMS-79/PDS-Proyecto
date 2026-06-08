@@ -1,11 +1,8 @@
 package inf.pds.proy.adapters.jpa.entity;
 
-import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
-import inf.pds.proy.domain.model.HistorialOps;
-import inf.pds.proy.domain.model.ListaTareas;
-import inf.pds.proy.domain.model.TableroId;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +11,7 @@ public class TableroEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private TableroId id;
+	private Long id;
 	
 	private String nombre;
 	
@@ -23,22 +20,30 @@ public class TableroEntity {
 	private UsuarioEntity propietario; 
 	
 	@Column(unique = true, nullable = false)
-	private URL url; 
+	private String url; 
 	
 	private boolean bloqueado;
-	private List<HistorialOps> historialOp;
+
+    @OneToMany
+    @JoinColumn(name = "tablero_id")
+    private List<HistorialOpsEntity> historialOp; 
+    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "tablero_id")
+    private List<ListaTareasEntity> listaTareas;
 	
-	@OneToMany(mappedBy="propietario_id")
-	@JoinColumn(name="miembros")
+	@ManyToMany
+	@JoinTable(name = "tablero_miembros",
+	joinColumns = @JoinColumn(name = "tablero_id"),
+	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private List<UsuarioEntity> miembros; 
-	private List<ListaTareas> listaTareas;
-	private ListaTareas completedList;
+	private ListaTareasEntity completedList;
 	
 	
-	public TableroId getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(TableroId id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNombre() {
@@ -53,10 +58,10 @@ public class TableroEntity {
 	public void setPropietario(UsuarioEntity propietario) {
 		this.propietario = propietario;
 	}
-	public URL getUrl() {
+	public String getUrl() {
 		return url;
 	}
-	public void setUrl(URL url) {
+	public void setUrl(String url) {
 		this.url = url;
 	}
 	public boolean isBloqueado() {
@@ -65,10 +70,10 @@ public class TableroEntity {
 	public void setBloqueado(boolean bloqueado) {
 		this.bloqueado = bloqueado;
 	}
-	public List<HistorialOps> getHistorialOp() {
+	public List<HistorialOpsEntity> getHistorialOp() {
 		return historialOp;
 	}
-	public void setHistorialOp(List<HistorialOps> historialOp) {
+	public void setHistorialOp(List<HistorialOpsEntity> historialOp) {
 		this.historialOp = historialOp;
 	}
 	public List<UsuarioEntity> getMiembros() {
@@ -77,18 +82,36 @@ public class TableroEntity {
 	public void setMiembros(List<UsuarioEntity> miembros) {
 		this.miembros = miembros;
 	}
-	public List<ListaTareas> getListaTareas() {
+	public List<ListaTareasEntity> getListaTareas() {
 		return listaTareas;
 	}
-	public void setListaTareas(List<ListaTareas> listaTareas) {
+	public void setListaTareas(List<ListaTareasEntity> listaTareas) {
 		this.listaTareas = listaTareas;
 	}
-	public ListaTareas getCompletedList() {
+	public ListaTareasEntity getCompletedList() {
 		return completedList;
 	}
-	public void setCompletedList(ListaTareas completedList) {
+	public void setCompletedList(ListaTareasEntity completedList) {
 		this.completedList = completedList;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(bloqueado, completedList, historialOp, id, listaTareas, miembros, nombre, propietario, url);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof TableroEntity))
+			return false;
+		TableroEntity other = (TableroEntity) obj;
+		return bloqueado == other.bloqueado && Objects.equals(completedList, other.completedList)
+				&& Objects.equals(historialOp, other.historialOp) && Objects.equals(id, other.id)
+				&& Objects.equals(listaTareas, other.listaTareas) && Objects.equals(miembros, other.miembros)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(propietario, other.propietario)
+				&& Objects.equals(url, other.url);
+	}
+	
 
 	
 	

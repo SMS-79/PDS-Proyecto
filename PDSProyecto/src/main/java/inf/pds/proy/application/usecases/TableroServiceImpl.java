@@ -1,6 +1,5 @@
 package inf.pds.proy.application.usecases;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -8,9 +7,7 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 
@@ -24,15 +21,10 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Tablero crearTablero(String nombre, Usuario propietario, URL url) {
-		try {
-			Tablero table = new Tablero(TableroId.of(new Random().nextLong()), nombre, propietario, url);
-			repTab.guardarTablero(table);
-			return table;
-		}catch(IdentificadorTableroException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Tablero crearTablero(String nombre, Usuario propietario, String url) {
+		Tablero table = new Tablero(new Random().nextLong(), nombre, propietario, url);
+		repTab.guardarTablero(table);
+		return table;
 	}
 
 	@Override
@@ -41,12 +33,12 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroById(TableroId id) {
+	public Optional<Tablero> filtrarTableroById(Long id) {
 		return repTab.filtrarTableroById(id);
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroByURL(URL url) {
+	public Optional<Tablero> filtrarTableroByURL(String url) {
 		return repTab.filtrarTableroByURL(url);
 	}
 	
@@ -56,7 +48,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public void eliminarTablero(TableroId id) {
+	public void eliminarTablero(Long id) {
 		repTab.eliminarTablero(id);
 	}
 	
