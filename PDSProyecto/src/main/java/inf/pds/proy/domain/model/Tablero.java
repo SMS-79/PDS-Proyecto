@@ -2,6 +2,7 @@ package inf.pds.proy.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Tablero {
 	
@@ -14,7 +15,7 @@ public class Tablero {
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
-	private List<ListaTareas> listaTareas; // columnas dinámicas tipo (DOING, TODo, BACKLOG, STOPPED etc...) 
+	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, TODo, BACKLOG, STOPPED etc...) 
 	private ListaTareas completedList; // lista para separar las completadas
 	
 	public Tablero() {
@@ -28,7 +29,7 @@ public class Tablero {
 		this.url = url;
 		this.bloqueado = false;
 		this.miembros = new ArrayList<>();
-		this.listaTareas = new ArrayList<>();
+		this.listasTareas = new ArrayList<>();
 		this.historialOp = new ArrayList<>();
 		this.completedList = new ListaTareas("Completadas");
 	}
@@ -83,11 +84,11 @@ public class Tablero {
 	}
 
 	public List<ListaTareas> getListas() {
-		return listaTareas;
+		return listasTareas;
 	}
 	
 	public void setListas(List<ListaTareas> listaTareas) {
-		this.listaTareas = listaTareas;
+		this.listasTareas = listaTareas;
 	}
 
 
@@ -103,8 +104,20 @@ public class Tablero {
 		return miembros;
 	}
 	
-	public void addLista(ListaTareas listaTareas) {
-		this.listaTareas.add(listaTareas);
+	public ListaTareas crearLista(String tipo) {
+		ListaTareas listaTareas = new ListaTareas(tipo);
+		this.listasTareas.add(listaTareas);
+		return listaTareas;
+	}
+	
+	public Optional<ListaTareas> obtenerLista(Long id) {
+		return this.listasTareas.stream()
+				.filter(l -> l.getId().equals(id))
+				.findFirst();
+	}
+	
+	public void eliminarLista(ListaTareas lista) {
+		this.listasTareas.remove(lista);
 	}
 	
 	public void addMiembro(Usuario u) {
@@ -120,7 +133,7 @@ public class Tablero {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
 		
-		ListaTareas lista = listaTareas.stream()
+		ListaTareas lista = listasTareas.stream()
 			.filter(l -> l.getId().equals(idLista))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("Lista no encotrada"));
