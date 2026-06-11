@@ -1,8 +1,11 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.stereotype.Component;
+
 import inf.pds.proy.adapters.jpa.entity.CheckListItemEntity;
 import inf.pds.proy.domain.model.CheckListItem;
 
+@Component
 public class CheckListItemMapper {
 
 	public CheckListItemEntity toEntity(CheckListItem item) {

@@ -2,25 +2,25 @@ package inf.pds.proy.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
 
 public class ListaTareas {
 	
-	private UUID id; 
+	private Long id; 
 	private String tipo; 
 	private List<Tarjeta> tarjetas; 
 	
 	public ListaTareas (String tipo) {
-		this.id = UUID.randomUUID(); 
+		this.id = new Random().nextLong(); 
 		this.tipo = tipo;
 		this.tarjetas = new ArrayList<>(); 
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -1,11 +1,13 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.stereotype.Component;
+
 import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.domain.model.HistorialOps;
-import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Usuario;
 
+@Component
 public class TableroMapper {
 	
 	private UsuarioMapper userMapper; 
@@ -38,10 +40,7 @@ public class TableroMapper {
 		
 		table.setBloqueado(tableroEntity.isBloqueado());
 		table.setCompletedList(listaMapper.toDomain(tableroEntity.getCompletedList()));
-		
-		for(ListaTareas t : tableroEntity.getListaTareas().stream().map(listaMapper::toDomain).toList()) {
-			table.addLista(t);
-		}
+		table.setListas(tableroEntity.getListaTareas().stream().map(listaMapper::toDomain).toList());
 		
 		for(Usuario u : tableroEntity.getMiembros().stream()
 				.map(userMapper::toDomain)

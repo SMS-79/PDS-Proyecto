@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.*;
 
+import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class TableroServiceImpl implements TableroService{
@@ -50,6 +52,30 @@ public class TableroServiceImpl implements TableroService{
 	@Override
 	public void eliminarTablero(Long id) {
 		repTab.eliminarTablero(id);
+	}
+
+	@Override
+	@Transactional
+	public ListaTareas crearLista(Tablero tablero, String tipo) {
+		return tablero.crearLista(tipo);
+	}
+
+	@Override
+	@Transactional
+	public List<ListaTareas> obtenerListas(Tablero tablero) {
+		return tablero.getListas();
+	}
+
+	@Override
+	@Transactional
+	public Optional<ListaTareas> filtrarListaById(Tablero tablero, Long id) {
+		return tablero.obtenerLista(id);
+	}
+
+	@Override
+	@Transactional
+	public void eliminarLista(Tablero tablero, ListaTareas lista) {
+		tablero.eliminarLista(lista);
 	}
 	
 	

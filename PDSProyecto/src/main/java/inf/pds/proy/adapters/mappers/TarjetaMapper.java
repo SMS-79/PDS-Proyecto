@@ -1,5 +1,7 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.stereotype.Component;
+
 import inf.pds.proy.adapters.jpa.entity.TarjetaCheckListEntity;
 import inf.pds.proy.adapters.jpa.entity.TarjetaEntity;
 import inf.pds.proy.adapters.jpa.entity.TarjetaTareaEntity;
@@ -8,6 +10,7 @@ import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
 
+@Component
 public class TarjetaMapper {
 	
 	CheckListItemMapper itemMapper;
