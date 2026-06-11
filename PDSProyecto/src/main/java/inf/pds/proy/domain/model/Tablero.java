@@ -4,25 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
+
 public class Tablero {
 	
 	
 	
-	private Long id;
+	private TableroId id;
 	private String nombre;
 	private Usuario propietario; 
 	private String url; 
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
-	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, TODo, BACKLOG, STOPPED etc...) 
+	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
 	private ListaTareas completedList; // lista para separar las completadas
 	
 	public Tablero() {
 		
 	}
 	
-	public Tablero(Long id, String nombre, Usuario propietario, String url) {
+	public Tablero(TableroId id, String nombre, Usuario propietario, String url) {
 		this.id = id;
 		this.nombre = nombre;
 		this.propietario = propietario;
@@ -31,14 +33,18 @@ public class Tablero {
 		this.miembros = new ArrayList<>();
 		this.listasTareas = new ArrayList<>();
 		this.historialOp = new ArrayList<>();
-		this.completedList = new ListaTareas("Completadas");
+		try {
+			this.completedList = new ListaTareas("Completadas");
+		} catch (IdentificadorListaException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public Long getId() {
+	public TableroId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(TableroId id) {
 		this.id = id;
 	}
 
@@ -105,12 +111,18 @@ public class Tablero {
 	}
 	
 	public ListaTareas crearLista(String tipo) {
-		ListaTareas listaTareas = new ListaTareas(tipo);
-		this.listasTareas.add(listaTareas);
-		return listaTareas;
+		try {
+			ListaTareas listaTareas = new ListaTareas(tipo);
+			this.listasTareas.add(listaTareas);
+			return listaTareas;
+		}catch(IdentificadorListaException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
-	public Optional<ListaTareas> obtenerLista(Long id) {
+	public Optional<ListaTareas> obtenerLista(ListaTareasId id) {
 		return this.listasTareas.stream()
 				.filter(l -> l.getId().equals(id))
 				.findFirst();
@@ -128,7 +140,7 @@ public class Tablero {
 		this.historialOp.add(op); 
 	}
 
-	public void addTarjeta(Long idLista, Tarjeta tarjeta, Usuario usuario) {
+	public void addTarjeta(ListaTareasId idLista, Tarjeta tarjeta, Usuario usuario) {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}

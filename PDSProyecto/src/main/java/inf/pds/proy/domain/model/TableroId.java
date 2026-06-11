@@ -1,10 +1,13 @@
 package inf.pds.proy.domain.model;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class TableroId {
+	
 	private Long codigo;
-
+	
+	private static Random rand;
 	
 	public static class IdentificadorTableroException extends Exception {
 		private static final long serialVersionUID = 4944813248848099L;
@@ -31,6 +34,11 @@ public class TableroId {
 		
 		return new TableroId(codigo);
 	}
+	
+	public static TableroId random() {
+		return new TableroId(rand.nextLong());
+	}
+	
 	
 	public Long getId() {
 		return this.codigo;

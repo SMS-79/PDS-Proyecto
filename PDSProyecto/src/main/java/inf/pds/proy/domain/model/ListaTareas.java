@@ -2,25 +2,26 @@ package inf.pds.proy.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
 
 public class ListaTareas {
 	
-	private Long id; 
+	private ListaTareasId id; 
 	private String tipo; 
 	private List<Tarjeta> tarjetas; 
 	
-	public ListaTareas (String tipo) {
-		this.id = new Random().nextLong(); 
+	public ListaTareas (String tipo) throws IdentificadorListaException {
+		this.id = ListaTareasId.random();
 		this.tipo = tipo;
 		this.tarjetas = new ArrayList<>(); 
 	}
 
-	public Long getId() {
+	public ListaTareasId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(ListaTareasId id) {
 		this.id = id;
 	}
 

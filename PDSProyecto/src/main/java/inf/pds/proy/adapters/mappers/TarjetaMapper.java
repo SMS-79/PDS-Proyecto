@@ -8,6 +8,7 @@ import inf.pds.proy.adapters.jpa.entity.TarjetaTareaEntity;
 import inf.pds.proy.domain.model.Etiqueta;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
+import inf.pds.proy.domain.model.TarjetaId;
 import inf.pds.proy.domain.model.TarjetaTarea;
 
 @Component
@@ -33,7 +34,7 @@ public class TarjetaMapper {
 		}
 		
 		
-		tarjetaEntity.setId(tarjeta.getId());
+		tarjetaEntity.setId(tarjeta.getId().getId());
 		tarjetaEntity.setNombre(tarjeta.getNombre());
 		tarjetaEntity.setCompletada(tarjeta.isCompletada());
 		if(tarjeta.getEtiqueta().isPresent()) {
@@ -52,25 +53,37 @@ public class TarjetaMapper {
 	
 	
 	public Tarjeta toDomain(TarjetaEntity tarjetaEntity) {
-		Tarjeta tarjeta;
+		Tarjeta tarjeta = null;
 		Etiqueta etiq = null;
 		
 		if(tarjetaEntity.getEtiquetaNombre() != null && tarjetaEntity.getEtiquetaColor() != null) {
 			etiq = new Etiqueta(tarjetaEntity.getEtiquetaNombre(), tarjetaEntity.getEtiquetaColor());
 		}
-		
-		if(tarjetaEntity instanceof TarjetaCheckListEntity) {
-			TarjetaCheckList tarjetaCheckList = new TarjetaCheckList(tarjetaEntity.getId(), tarjetaEntity.getNombre(), etiq);
-			tarjetaCheckList.setItems(((TarjetaCheckListEntity) tarjetaEntity).getItems().stream()
-																							.map(itemMapper::toDomain)
-																							.toList());
-			tarjeta = tarjetaCheckList;
+		try {
+			if(tarjetaEntity instanceof TarjetaCheckListEntity) {
+				TarjetaCheckList tarjetaCheckList = new TarjetaCheckList(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq);
+				tarjetaCheckList.setItems(((TarjetaCheckListEntity) tarjetaEntity).getItems().stream()
+																								.map(itemMapper::toDomain)
+																								.toList());
+				tarjeta = tarjetaCheckList;
+			}
+			else{
+				
+				TarjetaTarea tarjetaTarea = new TarjetaTarea(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq);
+				
+				tarjetaTarea.setDescripcion(((TarjetaTareaEntity) tarjetaEntity).getDescripcion());
+				tarjetaTarea.setFechaLimite(((TarjetaTareaEntity) tarjetaEntity).getFechaLimite());
+				
+				tarjeta = tarjetaTarea;
+			}
+			
+			
+			
+			tarjeta.setCompletada(tarjetaEntity.isCompletada());
+			
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-		else{
-			tarjeta = new TarjetaTarea(tarjetaEntity.getId(), tarjetaEntity.getNombre(), etiq, ((TarjetaTareaEntity) tarjetaEntity).getDescripcion(), ((TarjetaTareaEntity) tarjetaEntity).getFechaLimite());
-		}
-		
-		tarjeta.setCompletada(tarjetaEntity.isCompletada());
 		
 		return tarjeta;
 	}

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import inf.pds.proy.adapters.jpa.entity.ListaTareasEntity;
 import inf.pds.proy.adapters.jpa.entity.TarjetaEntity;
 import inf.pds.proy.domain.model.ListaTareas;
+import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.Tarjeta;
 
 @Component
@@ -28,11 +29,16 @@ public class ListaTareasMapper {
     }
 
     public ListaTareas toDomain(ListaTareasEntity entity) {
-        ListaTareas lista = new ListaTareas(entity.getTipo());
-        entity.getTarjetas().stream()
-            .map(tarjetaMapper::toDomain)
-            .forEach(lista::addTarjeta);
-        return lista;
+    	try {
+    		ListaTareas lista = new ListaTareas(entity.getTipo());
+            entity.getTarjetas().stream()
+                .map(tarjetaMapper::toDomain)
+                .forEach(lista::addTarjeta);
+            return lista;
+    	} catch(IdentificadorListaException e) {
+    		e.printStackTrace();
+    	}
+        return null;
     }
 
     // Para convertir tarjetas individuales (usado en completedList)

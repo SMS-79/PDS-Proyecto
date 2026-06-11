@@ -2,12 +2,14 @@ package inf.pds.proy.application.usecases;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.stereotype.*;
 
 import inf.pds.proy.domain.model.ListaTareas;
+import inf.pds.proy.domain.model.ListaTareasId;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.TableroId;
+import inf.pds.proy.domain.model.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
@@ -23,8 +25,8 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Tablero crearTablero(String nombre, Usuario propietario, String url) {
-		Tablero table = new Tablero(new Random().nextLong(), nombre, propietario, url);
+	public Tablero crearTablero(String nombre, Usuario propietario, String url) throws IdentificadorTableroException {
+		Tablero table = new Tablero(TableroId.random(), nombre, propietario, url);
 		repTab.guardarTablero(table);
 		return table;
 	}
@@ -35,7 +37,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroById(Long id) {
+	public Optional<Tablero> filtrarTableroById(TableroId id) {
 		return repTab.filtrarTableroById(id);
 	}
 
@@ -50,7 +52,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public void eliminarTablero(Long id) {
+	public void eliminarTablero(TableroId id) {
 		repTab.eliminarTablero(id);
 	}
 
@@ -68,7 +70,7 @@ public class TableroServiceImpl implements TableroService{
 
 	@Override
 	@Transactional
-	public Optional<ListaTareas> filtrarListaById(Tablero tablero, Long id) {
+	public Optional<ListaTareas> filtrarListaById(Tablero tablero, ListaTareasId id) {
 		return tablero.obtenerLista(id);
 	}
 

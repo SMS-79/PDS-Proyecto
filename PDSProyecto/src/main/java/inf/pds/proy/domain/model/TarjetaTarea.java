@@ -8,14 +8,12 @@ public class TarjetaTarea extends Tarjeta {
 	private LocalDate fechaLimite; 
 	private Usuario responsable; 
 	
-	public TarjetaTarea(Long id, String nombre, Etiqueta etiqueta) {
+	public TarjetaTarea(TarjetaId id, String nombre, Etiqueta etiqueta) {
 		super(id, nombre, etiqueta);
 	}
 
-    public TarjetaTarea(Long id, String nombre, Etiqueta etiqueta, String descripcion, LocalDate fechaLimite) {
-        super(id, nombre, etiqueta);
-        this.descripcion = descripcion;
-        this.fechaLimite = fechaLimite;
+    public TarjetaTarea(String nombre, Etiqueta etiqueta) {
+        super(TarjetaId.random(), nombre, etiqueta);
     }
 
 	public String getDescripcion() {

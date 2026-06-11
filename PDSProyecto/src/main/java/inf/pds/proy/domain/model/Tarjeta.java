@@ -5,29 +5,29 @@ import java.util.Optional;
 public abstract class Tarjeta {
 
 	
-	private Long id;
+	private TarjetaId id;
 	private String nombre;
 	private Optional<Etiqueta> etiqueta;
 	private boolean completada;
 	
 	
-	protected Tarjeta(Long id, String nombre, Etiqueta etiqueta) {
+	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta) {
 		this.id = id;
 		this.nombre = nombre;
 		this.etiqueta = Optional.ofNullable(etiqueta);
 		this.completada = false;
 	}
 	
-	protected Tarjeta(Long id, String nombre) {
+	protected Tarjeta(TarjetaId id, String nombre) {
 		this(id, nombre, null);
 	}
 
-	public Long getId() {
+	public TarjetaId getId() {
 		return id;
 	}
 
 
-	public void setId(Long id) {
+	public void setId(TarjetaId id) {
 		this.id = id;
 	}
 
