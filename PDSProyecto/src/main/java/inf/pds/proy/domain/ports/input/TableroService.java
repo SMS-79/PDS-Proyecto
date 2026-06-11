@@ -18,5 +18,5 @@ public interface TableroService {
 	Optional<ListaTareas> filtrarListaById(Tablero tablero, Long id);
 	void eliminarTablero(Tablero tablero);
 	void eliminarTablero(Long id);
-
+	void eliminarLista(Tablero tablero, ListaTareas id);
 }

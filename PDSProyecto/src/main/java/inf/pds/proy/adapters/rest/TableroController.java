@@ -37,6 +37,12 @@ public class TableroController {
 		return ResponseEntity.ok(tableroService.obtenerTableros());
 	}
 	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id){
+		tableroService.eliminarTablero(id);
+		return ResponseEntity.noContent().build();
+	}
+	
 	@PostMapping("/{id}/listas")
 	public ResponseEntity<ListaTareas> crearLista(@PathVariable Long id, @RequestBody ListaTareas listaTarea){
 		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
@@ -72,4 +78,16 @@ public class TableroController {
 
 	}
 
+	@DeleteMapping("/{id}/listas/{listaId}")
+	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id, @PathVariable Long listaId){
+		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
+		if(tablero.isPresent()) {
+			Optional<ListaTareas> lista =  tableroService.filtrarListaById(tablero.get(), listaId);
+			if(lista.isPresent()) {
+				tableroService.eliminarLista(tablero.get(), lista.get());
+				return ResponseEntity.noContent().build();
+			}		
+		}
+		return ResponseEntity.notFound().build();
+	}
 }

@@ -71,6 +71,12 @@ public class TableroServiceImpl implements TableroService{
 	public Optional<ListaTareas> filtrarListaById(Tablero tablero, Long id) {
 		return tablero.obtenerLista(id);
 	}
+
+	@Override
+	@Transactional
+	public void eliminarLista(Tablero tablero, ListaTareas lista) {
+		tablero.eliminarLista(lista);
+	}
 	
 	
 	
