@@ -65,7 +65,5 @@ public class Usuario {
 	public void setUrl(List<Tablero> tableros) {
 		this.tableros = tableros;
 	}
-	
-	
 
 }

@@ -142,6 +142,8 @@ public class Tablero {
 		this.historialOp.add(op); 
 	}
 
+	
+	
 	public void addTarjeta(ListaTareasId idLista, Tarjeta tarjeta, Usuario usuario) {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
