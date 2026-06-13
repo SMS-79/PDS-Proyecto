@@ -2,6 +2,8 @@ package inf.pds.proy.domain.model;
 
 import java.time.LocalDate;
 
+import inf.pds.proy.domain.model.ids.TarjetaId;
+
 public class TarjetaTarea extends Tarjeta {
 	
 	private String descripcion; 

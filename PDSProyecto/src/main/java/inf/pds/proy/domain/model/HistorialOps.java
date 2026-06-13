@@ -2,6 +2,8 @@ package inf.pds.proy.domain.model;
 
 import java.time.LocalDateTime;
 
+import inf.pds.proy.domain.model.ids.HistorialOpsId;
+
 public class HistorialOps {
 	
 	private HistorialOpsId id;

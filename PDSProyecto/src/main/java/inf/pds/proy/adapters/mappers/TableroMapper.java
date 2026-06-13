@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.domain.model.HistorialOps;
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 
 @Component
 public class TableroMapper {

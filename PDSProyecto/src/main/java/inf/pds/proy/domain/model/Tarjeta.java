@@ -2,6 +2,8 @@ package inf.pds.proy.domain.model;
 
 import java.util.Optional;
 
+import inf.pds.proy.domain.model.ids.TarjetaId;
+
 public abstract class Tarjeta {
 
 	

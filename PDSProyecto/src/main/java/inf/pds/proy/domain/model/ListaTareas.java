@@ -3,7 +3,8 @@ package inf.pds.proy.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 
 public class ListaTareas {
 	

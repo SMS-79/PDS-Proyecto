@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
-import inf.pds.proy.domain.model.UsuarioId.IdentificadorUsuarioException;
+import inf.pds.proy.domain.model.ids.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 
 @Component
 public class UsuarioMapper {

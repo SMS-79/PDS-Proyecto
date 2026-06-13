@@ -1,4 +1,4 @@
-package inf.pds.proy.domain.model;
+package inf.pds.proy.domain.model.ids;
 
 import java.util.Objects;
 import java.util.Random;

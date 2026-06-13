@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 

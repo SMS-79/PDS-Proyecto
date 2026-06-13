@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.ListaTareas;
-import inf.pds.proy.domain.model.ListaTareasId;
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 
 public interface TableroService {
 	

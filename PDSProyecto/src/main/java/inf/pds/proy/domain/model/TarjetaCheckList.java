@@ -2,6 +2,8 @@ package inf.pds.proy.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import inf.pds.proy.domain.model.ids.TarjetaId;
 public class TarjetaCheckList extends Tarjeta{
 	
 	List<CheckListItem> items;

@@ -1,30 +1,30 @@
 package inf.pds.proy.domain.model;
 
-import java.util.Random;
+import inf.pds.proy.domain.model.ids.CheckListItemId;
 
 public class CheckListItem {
 
-	private Long id;
+	private CheckListItemId id;
     private String descripcion;
     private boolean completado;
 
     public CheckListItem() {}
     
-    public CheckListItem(Long id, String descripcion, boolean completado) {
+    public CheckListItem(CheckListItemId id, String descripcion, boolean completado) {
         this.id = id;
         this.descripcion = descripcion;
         this.completado = completado;
     }
 
     public CheckListItem(String descripcion) {
-    	this(new Random().nextLong(), descripcion, false);
+    	this(CheckListItemId.random(), descripcion, false);
     }
    
-    public Long getId() {
+    public CheckListItemId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(CheckListItemId id) {
 		this.id = id;
 	}
 

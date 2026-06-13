@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.HistorialOpsEntity;
 import inf.pds.proy.domain.model.HistorialOps;
-import inf.pds.proy.domain.model.HistorialOpsId;
-import inf.pds.proy.domain.model.HistorialOpsId.IdentificadorHistorialException;
+import inf.pds.proy.domain.model.ids.HistorialOpsId;
+import inf.pds.proy.domain.model.ids.HistorialOpsId.IdentificadorHistorialException;
 
 
 

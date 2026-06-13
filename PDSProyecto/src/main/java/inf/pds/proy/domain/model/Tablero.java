@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 
 public class Tablero {
 	

@@ -7,7 +7,7 @@ import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
 import inf.pds.proy.adapters.mappers.TableroMapper;
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 
 public class TableroRepositoryImpl implements TableroRepository{

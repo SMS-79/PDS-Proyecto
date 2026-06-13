@@ -1,50 +1,50 @@
-package inf.pds.proy.domain.model;
+package inf.pds.proy.domain.model.ids;
 
 import java.util.Objects;
 import java.util.Random;
 
-public class TableroId {
+public class UsuarioId {
 	
 	private Long codigo;
 	
 	private static Random rand;
+
 	
-	public static class IdentificadorTableroException extends Exception {
+	public static class IdentificadorUsuarioException extends Exception {
 		private static final long serialVersionUID = 4944813248848099L;
 		
-		public IdentificadorTableroException(String mensaje) {
+		public IdentificadorUsuarioException(String mensaje) {
 			super(mensaje);
 		}
 		
-		public IdentificadorTableroException(String mensaje, Exception ex) {
+		public IdentificadorUsuarioException(String mensaje, Exception ex) {
 			super(mensaje, ex);
 		}
 	}
 	
 	
-	public TableroId(Long codigo) {
+	public UsuarioId(Long codigo) {
 		this.codigo = codigo;
 	}
 	
 	
-	public static TableroId of(Long codigo) throws IdentificadorTableroException{
+	public static UsuarioId of(Long codigo) throws IdentificadorUsuarioException{
 		if(codigo == null) {
-			throw new IdentificadorTableroException("El codigo no puede ser nulo");
+			throw new IdentificadorUsuarioException("El codigo no puede ser nulo");
 		}
 		
-		return new TableroId(codigo);
+		return new UsuarioId(codigo);
 	}
 	
-	public static TableroId random() {
-		return new TableroId(rand.nextLong());
+	public static UsuarioId random() {
+		return new UsuarioId(rand.nextLong());
 	}
-	
 	
 	public Long getId() {
 		return this.codigo;
 	}
-
-
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(codigo);
@@ -59,8 +59,10 @@ public class TableroId {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TableroId other = (TableroId) obj;
+		UsuarioId other = (UsuarioId) obj;
 		return Objects.equals(codigo, other.codigo);
 	}
+	
+	
 	
 }

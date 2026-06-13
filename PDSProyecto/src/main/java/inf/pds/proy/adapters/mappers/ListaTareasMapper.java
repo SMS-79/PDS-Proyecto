@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import inf.pds.proy.adapters.jpa.entity.ListaTareasEntity;
 import inf.pds.proy.adapters.jpa.entity.TarjetaEntity;
 import inf.pds.proy.domain.model.ListaTareas;
-import inf.pds.proy.domain.model.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 
 @Component
 public class ListaTareasMapper {

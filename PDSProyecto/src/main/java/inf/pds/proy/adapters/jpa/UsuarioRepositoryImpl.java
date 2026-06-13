@@ -7,7 +7,7 @@ import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
 import inf.pds.proy.adapters.jpa.repository.UsuarioJpaRepository;
 import inf.pds.proy.adapters.mappers.UsuarioMapper;
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository {

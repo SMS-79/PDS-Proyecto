@@ -8,8 +8,8 @@ import inf.pds.proy.adapters.jpa.entity.TarjetaTareaEntity;
 import inf.pds.proy.domain.model.Etiqueta;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
-import inf.pds.proy.domain.model.TarjetaId;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.ids.TarjetaId;
 
 @Component
 public class TarjetaMapper {

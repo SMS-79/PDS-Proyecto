@@ -2,6 +2,8 @@ package inf.pds.proy.domain.model;
 
 import java.util.List;
 
+import inf.pds.proy.domain.model.ids.UsuarioId;
+
 public class Usuario {
 	
 	private UsuarioId id;

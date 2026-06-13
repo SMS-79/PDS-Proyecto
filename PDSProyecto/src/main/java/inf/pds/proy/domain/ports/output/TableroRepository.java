@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId;
 
 public interface TableroRepository {
 

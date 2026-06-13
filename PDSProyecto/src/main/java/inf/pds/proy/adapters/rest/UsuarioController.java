@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
-import inf.pds.proy.domain.model.UsuarioId.IdentificadorUsuarioException;
+import inf.pds.proy.domain.model.ids.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 
 @RestController

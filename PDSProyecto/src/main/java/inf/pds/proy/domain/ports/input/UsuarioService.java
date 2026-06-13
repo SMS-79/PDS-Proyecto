@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.Usuario;
-import inf.pds.proy.domain.model.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public interface UsuarioService {
 
