@@ -1,11 +1,12 @@
 package inf.pds.proy.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.Random;
+
+import inf.pds.proy.domain.model.ids.HistorialOpsId;
 
 public class HistorialOps {
 	
-	private Long id;
+	private HistorialOpsId id;
 	private String descripcion;
 	private TipoOperacion tipo;
 	private LocalDateTime fecha;
@@ -13,7 +14,7 @@ public class HistorialOps {
 	
 	public HistorialOps() {}
 	
-	public HistorialOps(Long id, TipoOperacion tipo, Usuario usuario, LocalDateTime fecha){
+	public HistorialOps(HistorialOpsId id, TipoOperacion tipo, Usuario usuario, LocalDateTime fecha){
 		this.id = id;
 		this.tipo = tipo;
 		this.usuario = usuario;
@@ -21,13 +22,13 @@ public class HistorialOps {
 	}
 	
 	public HistorialOps(TipoOperacion tipo, Usuario usuario){
-		this(new Random().nextLong(), tipo, usuario, LocalDateTime.now());
+		this(HistorialOpsId.random(), tipo, usuario, LocalDateTime.now());
 	}
 	
-	public Long getId() {
+	public HistorialOpsId getId() {
 		return id; 
 	}
-	public void setId(Long id) {
+	public void setId(HistorialOpsId id) {
 		this.id = id;
 	}
 	

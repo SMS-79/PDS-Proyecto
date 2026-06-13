@@ -1,10 +1,13 @@
-package inf.pds.proy.domain.model;
+package inf.pds.proy.domain.model.ids;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class UsuarioId {
 	
 	private Long codigo;
+	
+	private static Random rand;
 
 	
 	public static class IdentificadorUsuarioException extends Exception {
@@ -33,11 +36,15 @@ public class UsuarioId {
 		return new UsuarioId(codigo);
 	}
 	
+	public static UsuarioId random() {
+		return new UsuarioId(rand.nextLong());
+	}
+	
 	public Long getId() {
 		return this.codigo;
 	}
-
-
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(codigo);

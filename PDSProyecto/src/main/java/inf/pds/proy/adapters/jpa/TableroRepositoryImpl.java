@@ -7,6 +7,7 @@ import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
 import inf.pds.proy.adapters.mappers.TableroMapper;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 
 public class TableroRepositoryImpl implements TableroRepository{
@@ -35,8 +36,8 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroById(Long id) {
-		return jpaRepository.findById(id).map(tableMapper::toDomain);
+	public Optional<Tablero> filtrarTableroById(TableroId id) {
+		return jpaRepository.findById(id.getId()).map(tableMapper::toDomain);
 	}
 
 	@Override
@@ -50,8 +51,8 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
-	public void eliminarTablero(Long id) {
-		jpaRepository.deleteById(id);
+	public void eliminarTablero(TableroId id) {
+		jpaRepository.deleteById(id.getId());
 	}
 
 }

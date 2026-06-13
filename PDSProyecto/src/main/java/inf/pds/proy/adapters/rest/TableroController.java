@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.ports.input.TableroService;
 
 @RestController
@@ -22,14 +25,27 @@ public class TableroController {
 	
 	@PostMapping
 	public ResponseEntity<Tablero> crear(@RequestBody Tablero tablero){
-		Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario(), tablero.getUrl());
 		
-		return ResponseEntity.ok(table);
+		try {
+			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario(), tablero.getUrl());
+			return ResponseEntity.ok(table);
+		} catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+		
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Tablero> obtener(@PathVariable Long id){
-		return tableroService.filtrarTableroById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+		try {
+			return tableroService.filtrarTableroById(TableroId.of(id)).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+		} catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping
@@ -39,55 +55,83 @@ public class TableroController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id){
-		tableroService.eliminarTablero(id);
-		return ResponseEntity.noContent().build();
+		try {
+			tableroService.eliminarTablero(TableroId.of(id));
+			return ResponseEntity.noContent().build();
+		} catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
 	}
 	
 	@PostMapping("/{id}/listas")
 	public ResponseEntity<ListaTareas> crearLista(@PathVariable Long id, @RequestBody ListaTareas listaTarea){
-		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
-		if(tablero.isPresent()) {
-			ListaTareas lista = tableroService.crearLista(tablero.get(), listaTarea.getTipo());
-			return ResponseEntity.ok(lista);
-		}
-		return ResponseEntity.notFound().build();
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				ListaTareas lista = tableroService.crearLista(tablero.get(), listaTarea.getTipo());
+				return ResponseEntity.ok(lista);
+			}
+			return ResponseEntity.notFound().build();
 		
+		}catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
 	}
 	
 	
 	@GetMapping("/{id}/listas")
 	public ResponseEntity<List<ListaTareas>> obtenerListasTablero(@PathVariable Long id){
-		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
-		if(tablero.isPresent()) {
-			return ResponseEntity.ok(tableroService.obtenerListas(tablero.get()));
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				return ResponseEntity.ok(tableroService.obtenerListas(tablero.get()));
+			}
+			return ResponseEntity.notFound().build();
+		} catch(IdentificadorTableroException e) {
+			e.printStackTrace();
 		}
-		return ResponseEntity.notFound().build();
-
+		
+		return ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}")
 	public ResponseEntity<ListaTareas> obtenerListasTablero(@PathVariable Long id, @PathVariable Long listaId){
-		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
-		if(tablero.isPresent()) {
-			Optional<ListaTareas> lista =  tableroService.filtrarListaById(tablero.get(), listaId);
-			if(lista.isPresent()) {
-				return ResponseEntity.ok(lista.get());
-			}		
-		}
-		return ResponseEntity.notFound().build();
-
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					return ResponseEntity.ok(lista.get());
+				}		
+			}
+			return ResponseEntity.notFound().build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return ResponseEntity.badRequest().build();
 	}
 
 	@DeleteMapping("/{id}/listas/{listaId}")
 	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id, @PathVariable Long listaId){
-		Optional<Tablero> tablero = tableroService.filtrarTableroById(id);
-		if(tablero.isPresent()) {
-			Optional<ListaTareas> lista =  tableroService.filtrarListaById(tablero.get(), listaId);
-			if(lista.isPresent()) {
-				tableroService.eliminarLista(tablero.get(), lista.get());
-				return ResponseEntity.noContent().build();
-			}		
-		}
-		return ResponseEntity.notFound().build();
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					tableroService.eliminarLista(tablero.get(), lista.get());
+					return ResponseEntity.noContent().build();
+				}		
+			}
+			return ResponseEntity.notFound().build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return ResponseEntity.badRequest().build();
 	}
 }

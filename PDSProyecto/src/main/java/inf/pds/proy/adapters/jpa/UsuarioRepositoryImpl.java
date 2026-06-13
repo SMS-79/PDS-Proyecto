@@ -7,6 +7,7 @@ import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
 import inf.pds.proy.adapters.jpa.repository.UsuarioJpaRepository;
 import inf.pds.proy.adapters.mappers.UsuarioMapper;
 import inf.pds.proy.domain.model.Usuario;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -33,8 +34,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 	}
 
 	@Override
-	public Optional<Usuario> filtrarUsuarioById(Long id) {
-		return jpaRepository.findById(id).map(userMapper::toDomain);
+	public Optional<Usuario> filtrarUsuarioById(UsuarioId id) {
+		return jpaRepository.findById(id.getId()).map(userMapper::toDomain);
 	}
 
 	@Override
@@ -48,8 +49,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 	}
 
 	@Override
-	public void eliminarUsuario(Long id) {
-		jpaRepository.deleteById(id);
+	public void eliminarUsuario(UsuarioId id) {
+		jpaRepository.deleteById(id.getId());
 		
 	}
 

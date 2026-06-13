@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import inf.pds.proy.domain.model.Usuario;
+import inf.pds.proy.domain.model.ids.UsuarioId;
+import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
 
 @RestController
@@ -32,7 +34,14 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> obtener(@PathVariable Long id){
-		return usuarioService.filtrarUsuarioById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+		try {
+			return usuarioService.filtrarUsuarioById(UsuarioId.of(id)).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+		}catch (IdentificadorUsuarioException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+		
 	}
 	
 	@GetMapping

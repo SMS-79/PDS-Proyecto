@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.ids.TableroId;
 
 public interface TableroRepository {
 
 	Tablero guardarTablero(Tablero tablero);
 	List<Tablero> obtenerTableros();
-	Optional<Tablero> filtrarTableroById(Long id);
+	Optional<Tablero> filtrarTableroById(TableroId id);
 	Optional<Tablero> filtrarTableroByURL(String url);
 	void eliminarTablero(Tablero tablero);
-	void eliminarTablero(Long id);
+	void eliminarTablero(TableroId id);
 	
 }

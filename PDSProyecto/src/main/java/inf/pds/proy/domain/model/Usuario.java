@@ -2,9 +2,11 @@ package inf.pds.proy.domain.model;
 
 import java.util.List;
 
+import inf.pds.proy.domain.model.ids.UsuarioId;
+
 public class Usuario {
 	
-	private Long id;
+	private UsuarioId id;
 	private String nombre;
 	private String email;
 	private String pswd;
@@ -16,7 +18,7 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(Long id, String nombre, String email, String pswd) {
+	public Usuario(UsuarioId id, String nombre, String email, String pswd) {
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
@@ -24,11 +26,11 @@ public class Usuario {
 	}
 	
 
-	public Long getId() {
+	public UsuarioId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UsuarioId id) {
 		this.id = id;
 	}
 

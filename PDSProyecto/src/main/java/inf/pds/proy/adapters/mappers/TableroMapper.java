@@ -6,6 +6,8 @@ import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.domain.model.HistorialOps;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Usuario;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 
 @Component
 public class TableroMapper {
@@ -21,7 +23,7 @@ public class TableroMapper {
 		tableroEntity.setHistorialOp(table.getHistorialOp().stream()
 				.map(historialMapper::toEntity)
 				.toList());
-		tableroEntity.setId(table.getId());
+		tableroEntity.setId(table.getId().getId());
 		tableroEntity.setListaTareas(table.getListas().stream()
 				.map(listaMapper::toEntity)
 				.toList());
@@ -36,8 +38,13 @@ public class TableroMapper {
 	}
 	
 	public Tablero toDomain(TableroEntity tableroEntity) {
-		Tablero table = new Tablero(tableroEntity.getId(), tableroEntity.getNombre(), userMapper.toDomain(tableroEntity.getPropietario()), tableroEntity.getUrl());
-		
+		Tablero table = new Tablero();
+		try {
+			table = new Tablero(TableroId.of(tableroEntity.getId()), tableroEntity.getNombre(), userMapper.toDomain(tableroEntity.getPropietario()), tableroEntity.getUrl());
+		}catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+			
 		table.setBloqueado(tableroEntity.isBloqueado());
 		table.setCompletedList(listaMapper.toDomain(tableroEntity.getCompletedList()));
 		table.setListas(tableroEntity.getListaTareas().stream().map(listaMapper::toDomain).toList());
