@@ -48,7 +48,7 @@ public class TableroEntity {
 	joinColumns = @JoinColumn(name = "tablero_id"),
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private List<UsuarioEntity> miembros; 
-	private ListaTareasEntity completedList;
+	private ListaTareasEntity listaCompletadas;
 	
 	
 	public Long getId() {
@@ -99,15 +99,15 @@ public class TableroEntity {
 	public void setListaTareas(List<ListaTareasEntity> listaTareas) {
 		this.listaTareas = listaTareas;
 	}
-	public ListaTareasEntity getCompletedList() {
-		return completedList;
+	public ListaTareasEntity getListaCompletadas() {
+		return listaCompletadas;
 	}
-	public void setCompletedList(ListaTareasEntity completedList) {
-		this.completedList = completedList;
+	public void setListaCompletadas(ListaTareasEntity listaCompletadas) {
+		this.listaCompletadas = listaCompletadas;
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(bloqueado, completedList, historialOp, id, listaTareas, miembros, nombre, propietario, url);
+		return Objects.hash(bloqueado, listaCompletadas, historialOp, id, listaTareas, miembros, nombre, propietario, url);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -116,7 +116,7 @@ public class TableroEntity {
 		if (!(obj instanceof TableroEntity))
 			return false;
 		TableroEntity other = (TableroEntity) obj;
-		return bloqueado == other.bloqueado && Objects.equals(completedList, other.completedList)
+		return bloqueado == other.bloqueado && Objects.equals(listaCompletadas, other.listaCompletadas)
 				&& Objects.equals(historialOp, other.historialOp) && Objects.equals(id, other.id)
 				&& Objects.equals(listaTareas, other.listaTareas) && Objects.equals(miembros, other.miembros)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(propietario, other.propietario)

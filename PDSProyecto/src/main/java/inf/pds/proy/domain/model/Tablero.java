@@ -22,7 +22,7 @@ public class Tablero {
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
 	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
-	private ListaTareas completedList; // lista para separar las completadas
+	private ListaTareas listaCompletadas; // lista para separar las completadas
 	
 	public Tablero() {
 		
@@ -38,7 +38,7 @@ public class Tablero {
 		this.listasTareas = new ArrayList<>();
 		this.historialOp = new ArrayList<>();
 		try {
-			this.completedList = new ListaTareas("Completadas");
+			this.listaCompletadas = new ListaTareas("Completadas");
 		} catch (IdentificadorListaException e) {
 			e.printStackTrace();
 		}
@@ -102,12 +102,12 @@ public class Tablero {
 	}
 
 
-	public ListaTareas getCompletedList() {
-		return completedList;
+	public ListaTareas getListaCompletadas() {
+		return listaCompletadas;
 	}
 	
-	public void setCompletedList(ListaTareas listaCompletadas) {
-		this.completedList = listaCompletadas;
+	public void setListaCompletadas(ListaTareas listaCompletadas) {
+		this.listaCompletadas = listaCompletadas;
 	}
 	
 	public List<Usuario> getMiembros(){

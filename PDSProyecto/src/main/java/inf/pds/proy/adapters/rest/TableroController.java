@@ -3,18 +3,20 @@ package inf.pds.proy.adapters.rest;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.model.TarjetaTarea;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
@@ -81,7 +83,7 @@ public class TableroController {
 				ListaTareas lista = tableroService.crearLista(tablero.get(), listaTarea.getTipo());
 				return ResponseEntity.ok(lista);
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		
 		}catch (IdentificadorTableroException e) {
 			e.printStackTrace();
@@ -98,7 +100,7 @@ public class TableroController {
 			if(tablero.isPresent()) {
 				return ResponseEntity.ok(tableroService.obtenerListas(tablero.get()));
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(IdentificadorTableroException e) {
 			e.printStackTrace();
 		}
@@ -116,7 +118,7 @@ public class TableroController {
 					return ResponseEntity.ok(lista.get());
 				}		
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
@@ -135,7 +137,7 @@ public class TableroController {
 					return ResponseEntity.noContent().build();
 				}		
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
@@ -144,19 +146,49 @@ public class TableroController {
 	}
 	
 	@PostMapping("/{id}/listas/{listaId}/tarjeta")
-	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody Tarjeta tarjeta){
+	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody String tipo, @RequestBody Tarjeta tarjeta){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
 			if(tablero.isPresent()) {
 				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
 				if(lista.isPresent()) {
 					Tarjeta card;
-					return ResponseEntity.ok(tarjeta);
-					//TODO: Implementar crear tarjeta checklist o tarea 
+					if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
+						card = tableroService.crearTarjetaTarea(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getReponsable());
+					}
+					else {
+						card = tableroService.crearTarjetaCheckList(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null));
+					}
+				
+					return ResponseEntity.ok(card);
 				}
 				
 			}
-			return ResponseEntity.notFound().build();
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}")
+	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), tarjetaId);
+					if(tarjeta.isPresent()) {
+						tableroService.moverTarjeta(tablero.get(), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
+						return ResponseEntity.noContent().build();
+					}
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -175,7 +207,7 @@ public class TableroController {
 					return ResponseEntity.ok(tableroService.obtenerTarjetas(tablero.get(), ListaTareasId.of(listaId)));
 				}
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -196,7 +228,7 @@ public class TableroController {
 					}
 				}
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -218,7 +250,7 @@ public class TableroController {
 					}
 				}
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
