@@ -12,6 +12,7 @@ import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.TipoOperacion;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
@@ -65,48 +66,56 @@ public class TableroServiceImpl implements TableroService{
 	@Override
 	@Transactional
 	public ListaTareas crearLista(Tablero tablero, String tipo) {
+		tablero.registrarOp(TipoOperacion.LISTA_CREADA, tablero.getPropietario());
 		return tablero.crearLista(tipo);
 	}
 
 	@Override
 	@Transactional
 	public List<ListaTareas> obtenerListas(Tablero tablero) {
+		tablero.registrarOp(TipoOperacion.LISTAS_OBTENIDAS, tablero.getPropietario());
 		return tablero.getListas();
 	}
 
 	@Override
 	@Transactional
 	public Optional<ListaTareas> filtrarListaById(Tablero tablero, ListaTareasId id) {
+		tablero.registrarOp(TipoOperacion.LISTA_BUSCADA, tablero.getPropietario());
 		return tablero.obtenerLista(id);
 	}
 
 	@Override
 	@Transactional
 	public void eliminarLista(Tablero tablero, ListaTareas lista) {
+		tablero.registrarOp(TipoOperacion.LISTA_ELIMINADA, tablero.getPropietario());
 		tablero.eliminarLista(lista);
 	}
 	
 	@Override
 	@Transactional
 	public TarjetaTarea crearTarjetaTarea(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
+		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, tablero.getPropietario());
 		return tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable);
 	}
 	
 	@Override
 	@Transactional
 	public TarjetaCheckList crearTarjetaCheckList(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta) {
+		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, tablero.getPropietario());
 		return tablero.crearTarjetaCheckList(listaId, nombre, etiqueta);
 	}
 	
 	@Override
 	@Transactional
 	public List<Tarjeta> obtenerTarjetas(Tablero tablero, ListaTareasId listaId){
+		tablero.registrarOp(TipoOperacion.TARJETAS_OBTENIDAS, tablero.getPropietario());
 		return tablero.getTarjetasDeLista(listaId);
 	}
 
 	@Override
 	@Transactional
 	public Optional<Tarjeta> filtrarTarjetasById(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId) {
+		tablero.registrarOp(TipoOperacion.TARJETA_BUSCADA, tablero.getPropietario());
 		return tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
 	}
 
@@ -114,20 +123,18 @@ public class TableroServiceImpl implements TableroService{
 	@Transactional
 	public void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta) {
 		tablero.eliminarTarjetaDeLista(listaId, tarjeta);
+		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, tablero.getPropietario());
 	}
 
 	@Override
 	public void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) {
 		Optional<Tarjeta> tarjeta = tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
-		
 		if(tarjeta.isPresent()) {
 			tablero.eliminarTarjetaDeLista(listaId, tarjeta.get());
 			tablero.addTarjetaToList(listaObjetivoId, tarjeta.get());
 		}
+		tablero.registrarOp(TipoOperacion.TARJETA_DESPLAZADA, tablero.getPropietario());
 	}
-	
-	
-	
 	
 	
 	
