@@ -1,16 +1,22 @@
 package inf.pds.proy.application.usecases;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
+import inf.pds.proy.domain.model.Etiqueta;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.model.TarjetaCheckList;
+import inf.pds.proy.domain.model.TarjetaTarea;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.TarjetaId;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 import jakarta.transaction.Transactional;
@@ -79,6 +85,37 @@ public class TableroServiceImpl implements TableroService{
 	public void eliminarLista(Tablero tablero, ListaTareas lista) {
 		tablero.eliminarLista(lista);
 	}
+	
+	@Override
+	@Transactional
+	public TarjetaTarea crearTarjetaTarea(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
+		return tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable);
+	}
+	
+	@Override
+	@Transactional
+	public TarjetaCheckList crearTarjetaCheckList(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta) {
+		return tablero.crearTarjetaCheckList(listaId, nombre, etiqueta);
+	}
+	
+	@Override
+	@Transactional
+	public List<Tarjeta> obtenerTarjetas(Tablero tablero, ListaTareasId listaId){
+		return tablero.getTarjetasDeLista(listaId);
+	}
+
+	@Override
+	@Transactional
+	public Optional<Tarjeta> filtrarTarjetasById(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId) {
+		return tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
+	}
+
+	@Override
+	@Transactional
+	public void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta) {
+		tablero.eliminarTarjetaDeLista(listaId, tarjeta);
+	}
+	
 	
 	
 	

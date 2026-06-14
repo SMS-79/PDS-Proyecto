@@ -2,7 +2,11 @@ package inf.pds.proy.adapters.jpa.entity;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import jakarta.persistence.*;
+
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("TAREA") 

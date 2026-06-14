@@ -1,12 +1,14 @@
 package inf.pds.proy.domain.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.ids.ListaTareasId;
-import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.TarjetaId;
 
 public class Tablero {
 	
@@ -144,7 +146,7 @@ public class Tablero {
 
 	
 	
-	public void addTarjeta(ListaTareasId idLista, Tarjeta tarjeta, Usuario usuario) {
+	public void addTarjetaToList(ListaTareasId idLista, Tarjeta tarjeta, Usuario usuario, Etiqueta etiqueta) {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
@@ -159,6 +161,45 @@ public class Tablero {
 		registrarOp(new HistorialOps(TipoOperacion.TARJETA_CREADA, usuario));
 	}
 	
+	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
+		TarjetaTarea tarjeta = new TarjetaTarea(nombre, responsable, etiqueta, fechaLimite);
+		
+		addTarjetaToList(listaId, tarjeta, responsable, etiqueta);
+		
+		return tarjeta; 
+	}
 	
+	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta) {
+		TarjetaCheckList tarjeta = new TarjetaCheckList(nombre, etiqueta);
+		
+		addTarjetaToList(listaId, tarjeta, this.propietario, etiqueta);
+		
+		return tarjeta; 
+	}
 
+	public List<Tarjeta> getTarjetasDeLista(ListaTareasId listaId){
+		Optional<ListaTareas> lista = obtenerLista(listaId); 
+		
+		if(lista.isPresent()) {
+			return lista.get().getTarjetas(); 
+		}
+		else {
+			return new ArrayList<>(); 
+		}
+				
+	}
+	
+	public Optional<Tarjeta> obtenerTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId){
+		return getTarjetasDeLista(listaId).stream()
+									.filter(t -> t.getId().equals(tarjetaId))
+									.findFirst();
+	}
+	
+	public void eliminarTarjetaDeLista(ListaTareasId listaId, Tarjeta tarjeta) {
+		Optional<ListaTareas> lista = obtenerLista(listaId); 
+		
+		if(lista.isPresent()) {
+			lista.get().removeTarjeta(tarjeta);
+		}
+	}
 }

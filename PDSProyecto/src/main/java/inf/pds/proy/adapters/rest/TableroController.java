@@ -4,13 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.TarjetaId;
 import inf.pds.proy.domain.ports.input.TableroService;
 
 @RestController
@@ -99,7 +107,7 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}")
-	public ResponseEntity<ListaTareas> obtenerListasTablero(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<ListaTareas> obtenerListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
 			if(tablero.isPresent()) {
@@ -117,7 +125,7 @@ public class TableroController {
 	}
 
 	@DeleteMapping("/{id}/listas/{listaId}")
-	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<ListaTareas> eliminarListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
 			if(tablero.isPresent()) {
@@ -134,4 +142,88 @@ public class TableroController {
 		
 		return ResponseEntity.badRequest().build();
 	}
+	
+	@PostMapping("/{id}/listas/{listaId}/tarjeta")
+	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody Tarjeta tarjeta){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Tarjeta card;
+					return ResponseEntity.ok(tarjeta);
+					//TODO: Implementar crear tarjeta checklist o tarea 
+				}
+				
+			}
+			return ResponseEntity.notFound().build();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{id}/listas/{listaId}/tarjetas")
+	public ResponseEntity<List<Tarjeta>> obtenerTarjetasLista(@PathVariable Long id, @PathVariable Long listaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					return ResponseEntity.ok(tableroService.obtenerTarjetas(tablero.get(), ListaTareasId.of(listaId)));
+				}
+			}
+			return ResponseEntity.notFound().build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
+	public ResponseEntity<Tarjeta> obtenerTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+					if(tarjeta.isPresent()) {
+						return ResponseEntity.ok(tarjeta.get());
+					}
+				}
+			}
+			return ResponseEntity.notFound().build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@DeleteMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
+	public ResponseEntity<Tarjeta> eliminarTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+					if(tarjeta.isPresent()) {
+						tableroService.eliminarTarjeta(tablero.get(), ListaTareasId.of(listaId) , tarjeta.get());
+						return ResponseEntity.noContent().build();
+					}
+				}
+			}
+			return ResponseEntity.notFound().build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
 }

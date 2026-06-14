@@ -3,7 +3,8 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("CHECKLIST")
