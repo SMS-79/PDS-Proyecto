@@ -3,14 +3,24 @@ package inf.pds.proy.adapters.rest;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
+import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.model.TarjetaTarea;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.TarjetaId;
 import inf.pds.proy.domain.ports.input.TableroService;
 
 @RestController
@@ -73,7 +83,7 @@ public class TableroController {
 				ListaTareas lista = tableroService.crearLista(tablero.get(), listaTarea.getTipo());
 				return ResponseEntity.ok(lista);
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		
 		}catch (IdentificadorTableroException e) {
 			e.printStackTrace();
@@ -90,7 +100,7 @@ public class TableroController {
 			if(tablero.isPresent()) {
 				return ResponseEntity.ok(tableroService.obtenerListas(tablero.get()));
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(IdentificadorTableroException e) {
 			e.printStackTrace();
 		}
@@ -99,7 +109,7 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}")
-	public ResponseEntity<ListaTareas> obtenerListasTablero(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<ListaTareas> obtenerListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
 			if(tablero.isPresent()) {
@@ -108,7 +118,7 @@ public class TableroController {
 					return ResponseEntity.ok(lista.get());
 				}		
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
@@ -117,7 +127,7 @@ public class TableroController {
 	}
 
 	@DeleteMapping("/{id}/listas/{listaId}")
-	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<ListaTareas> eliminarListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
 			if(tablero.isPresent()) {
@@ -127,11 +137,125 @@ public class TableroController {
 					return ResponseEntity.noContent().build();
 				}		
 			}
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
 		
 		return ResponseEntity.badRequest().build();
 	}
+	
+	@PostMapping("/{id}/listas/{listaId}/tarjeta")
+	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody String tipo, @RequestBody Tarjeta tarjeta){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Tarjeta card;
+					if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
+						card = tableroService.crearTarjetaTarea(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getReponsable());
+					}
+					else {
+						card = tableroService.crearTarjetaCheckList(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null));
+					}
+				
+					return ResponseEntity.ok(card);
+				}
+				
+			}
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}")
+	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), tarjetaId);
+					if(tarjeta.isPresent()) {
+						tableroService.moverTarjeta(tablero.get(), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
+						return ResponseEntity.noContent().build();
+					}
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{id}/listas/{listaId}/tarjetas")
+	public ResponseEntity<List<Tarjeta>> obtenerTarjetasLista(@PathVariable Long id, @PathVariable Long listaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					return ResponseEntity.ok(tableroService.obtenerTarjetas(tablero.get(), ListaTareasId.of(listaId)));
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
+	public ResponseEntity<Tarjeta> obtenerTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+					if(tarjeta.isPresent()) {
+						return ResponseEntity.ok(tarjeta.get());
+					}
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@DeleteMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
+	public ResponseEntity<Tarjeta> eliminarTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+					if(tarjeta.isPresent()) {
+						tableroService.eliminarTarjeta(tablero.get(), ListaTareasId.of(listaId) , tarjeta.get());
+						return ResponseEntity.noContent().build();
+					}
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
 }

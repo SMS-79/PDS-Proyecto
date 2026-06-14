@@ -14,10 +14,13 @@ public class TarjetaTarea extends Tarjeta {
 		super(id, nombre, etiqueta);
 	}
 
-    public TarjetaTarea(String nombre, Etiqueta etiqueta) {
+    public TarjetaTarea(String nombre, Usuario responsable, Etiqueta etiqueta, LocalDate fechaLimite) {
         super(TarjetaId.random(), nombre, etiqueta);
+        this.responsable = responsable; 
+        this.fechaLimite = fechaLimite; 
     }
-
+    
+   
 	public String getDescripcion() {
 		return descripcion;
 	}
