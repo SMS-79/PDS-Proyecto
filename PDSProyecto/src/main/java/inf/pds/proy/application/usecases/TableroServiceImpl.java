@@ -115,6 +115,17 @@ public class TableroServiceImpl implements TableroService{
 	public void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta) {
 		tablero.eliminarTarjetaDeLista(listaId, tarjeta);
 	}
+
+	@Override
+	public void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) {
+		Optional<Tarjeta> tarjeta = tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
+		
+		if(tarjeta.isPresent()) {
+			tablero.eliminarTarjetaDeLista(listaId, tarjeta.get());
+			tablero.addTarjetaToList(listaObjetivoId, tarjeta.get());
+		}
+	}
+	
 	
 	
 	

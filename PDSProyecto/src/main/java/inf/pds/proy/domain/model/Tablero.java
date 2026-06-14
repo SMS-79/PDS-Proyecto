@@ -146,7 +146,7 @@ public class Tablero {
 
 	
 	
-	public void addTarjetaToList(ListaTareasId idLista, Tarjeta tarjeta, Usuario usuario, Etiqueta etiqueta) {
+	public void addTarjetaToList(ListaTareasId idLista, Tarjeta tarjeta) {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
@@ -158,13 +158,13 @@ public class Tablero {
 				
 		lista.addTarjeta(tarjeta);
 		
-		registrarOp(new HistorialOps(TipoOperacion.TARJETA_CREADA, usuario));
+		registrarOp(new HistorialOps(TipoOperacion.TARJETA_CREADA, propietario));
 	}
 	
 	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		TarjetaTarea tarjeta = new TarjetaTarea(nombre, responsable, etiqueta, fechaLimite);
 		
-		addTarjetaToList(listaId, tarjeta, responsable, etiqueta);
+		addTarjetaToList(listaId, tarjeta);
 		
 		return tarjeta; 
 	}
@@ -172,7 +172,7 @@ public class Tablero {
 	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta) {
 		TarjetaCheckList tarjeta = new TarjetaCheckList(nombre, etiqueta);
 		
-		addTarjetaToList(listaId, tarjeta, this.propietario, etiqueta);
+		addTarjetaToList(listaId, tarjeta);
 		
 		return tarjeta; 
 	}

@@ -33,4 +33,5 @@ public interface TableroService {
 	void eliminarTablero(TableroId id);
 	void eliminarLista(Tablero tablero, ListaTareas lista);
 	void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta); 
+	void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId);
 }
