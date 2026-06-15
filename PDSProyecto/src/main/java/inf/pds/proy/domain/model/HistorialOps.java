@@ -6,7 +6,7 @@ import inf.pds.proy.domain.model.ids.HistorialOpsId;
 
 public class HistorialOps {
 	
-	public static enum TipoOperacion {
+	public enum TipoOperacion {
 		LISTA_CREADA, LISTA_BUSCADA, LISTAS_OBTENIDAS, LISTA_ELIMINADA, TARJETA_CREADA, TARJETA_BUSCADA, TARJETAS_OBTENIDAS, TARJETA_ELIMINADA, TARJETA_DESPLAZADA, AÑADIR_MIEMBRO, ELIMINAR_MIEMBRO
 	}
 	
