@@ -1,5 +1,6 @@
 package inf.pds.proy.adapters.jpa.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +35,7 @@ public class TableroEntity {
 	private String url; 
 	
 	private boolean bloqueado;
+	private LocalDateTime bloqueoFin;
 
     @OneToMany
     @JoinColumn(name = "tablero_id")
@@ -80,6 +82,12 @@ public class TableroEntity {
 	}
 	public void setBloqueado(boolean bloqueado) {
 		this.bloqueado = bloqueado;
+	}
+	public LocalDateTime getBloqueoFin() {
+		return this.bloqueoFin;
+	}
+	public void setBloqueoFin(LocalDateTime bloqueoFin) {
+		this.bloqueoFin = bloqueoFin;
 	}
 	public List<HistorialOpsEntity> getHistorialOp() {
 		return historialOp;

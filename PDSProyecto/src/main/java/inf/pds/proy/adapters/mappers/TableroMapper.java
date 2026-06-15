@@ -18,6 +18,7 @@ public class TableroMapper {
 	public TableroEntity toEntity(Tablero table) {
 		TableroEntity tableroEntity = new TableroEntity();
 		tableroEntity.setBloqueado(table.isBloqueado());
+		tableroEntity.setBloqueoFin(table.getBloqueoFin());
 		tableroEntity.setListaCompletadas(listaMapper.toEntity(table.getListaCompletadas()));	
 		tableroEntity.setHistorialOp(table.getHistorialOp().stream()
 				.map(historialMapper::toEntity)
@@ -45,6 +46,7 @@ public class TableroMapper {
 		}
 			
 		table.setBloqueado(tableroEntity.isBloqueado());
+		table.setBloqueoFin(tableroEntity.getBloqueoFin());
 		table.setListaCompletadas(listaMapper.toDomain(tableroEntity.getListaCompletadas()));
 		table.setListas(tableroEntity.getListaTareas().stream().map(listaMapper::toDomain).toList());
 		table.setHistorialOp(tableroEntity.getHistorialOp().stream().map(historialMapper::toDomain).toList());
