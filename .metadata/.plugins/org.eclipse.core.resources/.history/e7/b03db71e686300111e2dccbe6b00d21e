@@ -1,5 +1,0 @@
-package inf.pds.proy.adapters.jpa;
-
-public class ListaTareasRepositoryImpl {
-
-}

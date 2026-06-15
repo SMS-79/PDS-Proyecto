@@ -1,5 +1,0 @@
-package inf.pds.proy.domain.ports.output;
-
-public interface ListaTareasRepository {
-
-}

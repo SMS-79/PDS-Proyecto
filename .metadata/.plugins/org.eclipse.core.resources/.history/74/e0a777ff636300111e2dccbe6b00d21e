@@ -1,5 +1,0 @@
-package inf.pds.proy.domain.ports.input;
-
-public class ListaTareasService {
-
-}
