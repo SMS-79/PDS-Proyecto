@@ -6,6 +6,10 @@ import inf.pds.proy.domain.model.ids.HistorialOpsId;
 
 public class HistorialOps {
 	
+	public static enum TipoOperacion {
+		LISTA_CREADA, LISTA_BUSCADA, LISTAS_OBTENIDAS, LISTA_ELIMINADA, TARJETA_CREADA, TARJETA_BUSCADA, TARJETAS_OBTENIDAS, TARJETA_ELIMINADA, TARJETA_DESPLAZADA, AÑADIR_MIEMBRO, ELIMINAR_MIEMBRO
+	}
+	
 	private HistorialOpsId id;
 	private String descripcion;
 	private TipoOperacion tipo;
@@ -14,15 +18,15 @@ public class HistorialOps {
 	
 	public HistorialOps() {}
 	
-	public HistorialOps(HistorialOpsId id, TipoOperacion tipo, Usuario usuario, LocalDateTime fecha){
+	public HistorialOps(HistorialOpsId id, String descripcion, TipoOperacion tipo, Usuario usuario, LocalDateTime fecha){
 		this.id = id;
 		this.tipo = tipo;
 		this.usuario = usuario;
 		this.fecha = fecha;
 	}
 	
-	public HistorialOps(TipoOperacion tipo, Usuario usuario){
-		this(HistorialOpsId.random(), tipo, usuario, LocalDateTime.now());
+	public HistorialOps(TipoOperacion tipo, String descripcion, Usuario usuario){
+		this(HistorialOpsId.random(), descripcion, tipo, usuario, LocalDateTime.now());
 	}
 	
 	public HistorialOpsId getId() {

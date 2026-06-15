@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
@@ -140,8 +141,8 @@ public class Tablero {
 		this.miembros.add(u); 
 	}
 	
-	public void registrarOp(TipoOperacion tOp, Usuario user) {
-		this.historialOp.add(new HistorialOps(tOp, user)); 
+	public void registrarOp(TipoOperacion tOp, String descripcion, Usuario user) {
+		this.historialOp.add(new HistorialOps(tOp, descripcion, user)); 
 	}
 
 	
