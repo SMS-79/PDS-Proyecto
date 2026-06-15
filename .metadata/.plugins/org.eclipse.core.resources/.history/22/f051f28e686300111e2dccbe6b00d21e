@@ -1,0 +1,59 @@
+package inf.pds.proy.application.usecases;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import inf.pds.proy.domain.model.ListaTareas;
+import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.ports.input.ListaTareasService;
+import inf.pds.proy.domain.ports.output.ListaTareasRepository;
+
+public class ListaTareasServiceImpl implements ListaTareasService {
+	
+	private ListaTareasRepository repLista; 
+	
+	public ListaTareasServiceImpl(ListaTareasRepository repLista) {
+		this.repLista = repLista; 
+	}
+	
+	@Override
+	public ListaTareas crearListaTareas(String tipo, Long tableroId) {
+		ListaTareas lista = new ListaTareas(tipo); 
+		return repLista.guardarLista(lista);
+	}
+	
+	 @Override
+	 public List<ListaTareas> obtenerListaTareas() {
+		 return repLista.obtenerListasTareas();
+	 }
+	 
+	 @Override
+	 public Optional<ListaTareas> filtrarListaById(UUID id) {
+		 return repLista.filtrarListaById(id);
+	 }
+	 
+	 @Override
+	 public void eliminarLista(UUID id) {
+		 repLista.eliminarLista(id);
+	 }	
+	 
+	 @Override
+	 public ListaTareas addTarjeta(UUID listaId, Tarjeta tarjeta) {
+	     ListaTareas lista = repLista.filtrarListaById(listaId)
+	    		 			.orElseThrow(() -> new RuntimeException("Lista no encontrada: " + listaId));
+	     lista.addTarjeta(tarjeta); 
+	     return repLista.guardarLista(lista);
+	 }
+	 
+	 @Override
+	 public ListaTareas elimTarjeta(UUID listaId, UUID tarjetaId) {
+	     ListaTareas lista = repLista.filtrarListaById(listaId)
+	    		 			.orElseThrow(() -> new RuntimeException("Lista no encontrada: " + listaId));
+	     lista.getTarjetas().stream()
+	         		.filter(t -> t.getId().equals(tarjetaId))
+	         		.findFirst()
+	         		.ifPresent(lista::removeTarjeta); 
+	     return repLista.guardarLista(lista);
+	 }
+}

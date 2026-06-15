@@ -3,6 +3,8 @@ package inf.pds.proy.adapters.jpa;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
 import inf.pds.proy.adapters.jpa.repository.UsuarioJpaRepository;
 import inf.pds.proy.adapters.mappers.UsuarioMapper;
@@ -10,6 +12,7 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.output.UsuarioRepository;
 
+@Repository
 public class UsuarioRepositoryImpl implements UsuarioRepository {
 	
 	private final UsuarioJpaRepository jpaRepository;

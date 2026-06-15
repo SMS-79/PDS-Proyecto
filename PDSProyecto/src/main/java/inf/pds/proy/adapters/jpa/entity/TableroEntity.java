@@ -15,6 +15,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -50,6 +51,9 @@ public class TableroEntity {
 	joinColumns = @JoinColumn(name = "tablero_id"),
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private List<UsuarioEntity> miembros; 
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "lista_completadas_id")
 	private ListaTareasEntity listaCompletadas;
 	
 	

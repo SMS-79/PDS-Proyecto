@@ -4,6 +4,7 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,8 +30,8 @@ public class ListaTareasEntity {
 	private String tipo; 
 	
 	
-	@OneToMany(mappedBy = "lista_tareas")
-	@JoinColumn(name = "tarjetas")
+	@OneToMany
+	@JoinColumn(name = "lista_tareas_id") 
 	private List<TarjetaEntity> tarjetas; 
 	
 	

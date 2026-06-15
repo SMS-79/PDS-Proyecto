@@ -3,15 +3,19 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue("CHECKLIST")
 public class TarjetaCheckListEntity extends TarjetaEntity {
 	
-	
-	List<CheckListItemEntity> items;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "tarjeta_id") 
+	private List<CheckListItemEntity> items;
 
 	public List<CheckListItemEntity> getItems() {
 		return items;
@@ -40,9 +44,4 @@ public class TarjetaCheckListEntity extends TarjetaEntity {
 		TarjetaCheckListEntity other = (TarjetaCheckListEntity) obj;
 		return Objects.equals(items, other.items);
 	}
-
-	
-	
-	
-
 }

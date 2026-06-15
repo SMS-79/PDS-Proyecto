@@ -7,7 +7,7 @@ public class TableroId {
 	
 	private Long codigo;
 	
-	private static Random rand;
+	private static Random rand = new Random();
 	
 	public static class IdentificadorTableroException extends Exception {
 		private static final long serialVersionUID = 4944813248848099L;

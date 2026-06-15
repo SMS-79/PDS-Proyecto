@@ -3,7 +3,6 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.util.List;
 import java.util.Objects;
 
-import inf.pds.proy.domain.model.Tablero;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,11 +26,8 @@ public class UsuarioEntity {
 	
 	private String password;
 	
-	
 	@OneToMany(mappedBy="propietario")
-	private List<Tablero> tableros;
-	
-	
+	private List<TableroEntity> tableros;
 
 	public UsuarioEntity() {}
 
@@ -67,11 +63,11 @@ public class UsuarioEntity {
 		this.password = password;
 	}
 	
-	public List<Tablero> getTableros() {
+	public List<TableroEntity> getTableros() {
 		return tableros;
 	}
 
-	public void setTableros(List<Tablero> tableros) {
+	public void setTableros(List<TableroEntity> tableros) {
 		this.tableros = tableros;
 	}
 
@@ -91,9 +87,5 @@ public class UsuarioEntity {
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(password, other.password)
 				&& Objects.equals(tableros, other.tableros);
 	}
-	
-	
-	
-	
 	
 }
