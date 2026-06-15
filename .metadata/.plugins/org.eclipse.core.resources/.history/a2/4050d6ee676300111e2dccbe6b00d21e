@@ -1,0 +1,5 @@
+package inf.pds.proy.adapters.jpa.repository;
+
+public interface ListaTareasJpaRepository {
+
+}

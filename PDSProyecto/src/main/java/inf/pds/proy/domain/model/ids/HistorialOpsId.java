@@ -6,7 +6,7 @@ import java.util.Random;
 public class HistorialOpsId {
 	private Long codigo;
 	
-	private static Random rand;
+	private static Random rand = new Random();
 	
 	public static class IdentificadorHistorialException extends Exception {
 		private static final long serialVersionUID = 4944813248848099L;

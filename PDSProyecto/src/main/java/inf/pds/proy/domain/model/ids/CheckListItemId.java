@@ -6,7 +6,7 @@ import java.util.Random;
 public class CheckListItemId {
 	private Long codigo;
 	
-	private static Random rand;
+	private static Random rand = new Random();
 
 	
 	public static class IdentificadorItemException extends Exception {

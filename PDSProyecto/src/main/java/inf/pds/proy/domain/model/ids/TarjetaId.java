@@ -7,7 +7,7 @@ public class TarjetaId {
 	
 	private Long codigo;
 	
-	private static Random rand;
+	private static Random rand = new Random();
 
 	
 	public static class IdentificadorTarjetaException extends Exception {

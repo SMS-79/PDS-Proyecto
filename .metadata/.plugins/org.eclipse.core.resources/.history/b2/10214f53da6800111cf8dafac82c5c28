@@ -1,0 +1,98 @@
+package inf.pds.proy.domain.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
+import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
+
+class TableroTest {
+
+    private Tablero tablero;
+    private Usuario propietario;
+
+    @BeforeEach
+    void setUp() throws IdentificadorTableroException {
+        propietario = new Usuario(UsuarioId.random(), "Pedro", "pedro@test.com", "1234");
+        tablero = new Tablero(TableroId.random(), "Tablero Test", propietario, "tablero-test");
+    }
+
+    @Test
+    void crearLista_añadeListaAlTablero() {
+        ListaTareas lista = tablero.crearLista("TODO");
+
+        assertNotNull(lista);
+        assertEquals("TODO", lista.getTipo());
+        assertEquals(1, tablero.getListas().size());
+    }
+
+    @Test
+    void obtenerLista_devuelveListaExistente() {
+        ListaTareas lista = tablero.crearLista("DOING");
+
+        assertTrue(tablero.obtenerLista(lista.getId()).isPresent());
+        assertEquals(lista, tablero.obtenerLista(lista.getId()).get());
+    }
+
+    @Test
+    void eliminarLista_borraLaLista() {
+        ListaTareas lista = tablero.crearLista("DONE");
+
+        tablero.eliminarLista(lista);
+
+        assertTrue(tablero.getListas().isEmpty());
+    }
+
+    @Test
+    void crearTarjetaTarea_laAñadeALaLista() {
+        ListaTareas lista = tablero.crearLista("TODO");
+        Usuario responsable = new Usuario(UsuarioId.random(), "Ana", "ana@test.com", "abcd");
+        LocalDate fecha = LocalDate.now().plusDays(3);
+
+        TarjetaTarea tarjeta = tablero.crearTarjetaTarea(
+                lista.getId(),
+                "Implementar tests",
+                null,
+                fecha,
+                responsable
+        );
+
+        assertNotNull(tarjeta);
+        assertEquals("Implementar tests", tarjeta.getNombre());
+        assertEquals(responsable, tarjeta.getReponsable());
+        assertEquals(fecha, tarjeta.getFechaLimite());
+        assertEquals(1, lista.getTarjetas().size());
+        assertTrue(lista.getTarjetas().contains(tarjeta));
+    }
+
+    @Test
+    void crearTarjetaCheckList_laAñadeALaLista() {
+        ListaTareas lista = tablero.crearLista("BACKLOG");
+
+        TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(
+                lista.getId(),
+                "Checklist inicial",
+                null
+        );
+
+        assertNotNull(tarjeta);
+        assertEquals("Checklist inicial", tarjeta.getNombre());
+        assertEquals(1, lista.getTarjetas().size());
+        assertTrue(lista.getTarjetas().contains(tarjeta));
+    }
+
+    @Test
+    void crearTarjeta_siTableroBloqueado_lanzaExcepcion() {
+        ListaTareas lista = tablero.crearLista("TODO");
+        tablero.setBloqueado(true);
+
+        assertThrows(IllegalStateException.class, () ->
+                tablero.crearTarjetaCheckList(lista.getId(), "No debería crearse", null)
+        );
+    }
+}
