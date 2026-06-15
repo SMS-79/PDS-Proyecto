@@ -203,7 +203,7 @@ public class TableroController {
 		return ResponseEntity.badRequest().build();
 	}
 	
-	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}")
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/cambiar")
 	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
@@ -222,7 +222,28 @@ public class TableroController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/completar")
+	public ResponseEntity<Tarjeta> alternarCompletarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
+		try {
+			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
+			if(tablero.isPresent()) {
+				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
+				if(lista.isPresent()) {
+					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), tarjetaId);
+					if(tarjeta.isPresent()) {
+						tableroService.moverTarjeta(tablero.get(), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
+						return ResponseEntity.noContent().build();
+					}
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity.badRequest().build();
 	}
 	
