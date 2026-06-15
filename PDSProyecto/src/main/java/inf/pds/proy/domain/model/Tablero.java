@@ -1,9 +1,12 @@
 package inf.pds.proy.domain.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.scheduling.annotation.Scheduled;
 
 import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
@@ -13,21 +16,18 @@ import inf.pds.proy.domain.model.ids.TarjetaId;
 
 public class Tablero {
 	
-	
-	
 	private TableroId id;
 	private String nombre;
 	private Usuario propietario;
 	private String url;
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
+	private LocalDateTime bloqueoFin;
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
 	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
 	private ListaTareas listaCompletadas; // lista para separar las completadas
 	
-	public Tablero() {
-		
-	}
+	public Tablero() {}
 	
 	public Tablero(TableroId id, String nombre, Usuario propietario, String url) {
 		this.id = id;
@@ -85,6 +85,13 @@ public class Tablero {
 		this.bloqueado = bloqueado;
 	}
 
+	public LocalDateTime getBloqueoFin() {
+		return this.bloqueoFin;
+	}
+
+	public void setBloqueoFin(LocalDateTime bloqueoFin) {
+		this.bloqueoFin = bloqueoFin;
+	}
 
 	public List<HistorialOps> getHistorialOp() {
 		return historialOp;
@@ -200,6 +207,22 @@ public class Tablero {
 		
 		if(lista.isPresent()) {
 			lista.get().removeTarjeta(tarjeta);
+		}
+	}
+	
+	public void bloquear(LocalDateTime fechaBloqueo) {
+		setBloqueado(true);
+		setBloqueoFin(fechaBloqueo);
+	}
+	
+	public void desbloquear() {
+		setBloqueado(false);
+	}
+	
+	@Scheduled(fixedRate = 60000)
+	public void desbloquearTiempo() {
+		if(this.getBloqueoFin().isBefore(LocalDateTime.now())) {
+			desbloquear();
 		}
 	}
 }

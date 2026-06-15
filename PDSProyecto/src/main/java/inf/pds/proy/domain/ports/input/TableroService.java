@@ -1,6 +1,7 @@
 package inf.pds.proy.domain.ports.input;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,6 @@ public interface TableroService {
 	void eliminarLista(Tablero tablero, ListaTareas lista);
 	void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta); 
 	void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId);
+	void bloquearTablero(TableroId tableroId, LocalDateTime fechaBloqueo);
+	void desbloquearTablero(TableroId tableroId);
 }

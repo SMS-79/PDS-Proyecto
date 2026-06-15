@@ -1,5 +1,6 @@
 package inf.pds.proy.adapters.rest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,11 @@ public class TableroController {
 		
 	}
 	
+	@GetMapping
+	public ResponseEntity<List<Tablero>> obtenerTableros(){
+		return ResponseEntity.ok(tableroService.obtenerTableros());
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Tablero> obtener(@PathVariable Long id){
 		try {
@@ -58,10 +64,30 @@ public class TableroController {
 		return ResponseEntity.badRequest().build();
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<Tablero>> obtenerTableros(){
-		return ResponseEntity.ok(tableroService.obtenerTableros());
+	@PatchMapping("/{id}/bloquear")
+	public ResponseEntity<Tablero> bloquear(@PathVariable Long id, @RequestBody LocalDateTime fechaBloqueo){
+		try {
+			tableroService.bloquearTablero(TableroId.of(id), fechaBloqueo);
+			return ResponseEntity.noContent().build();
+		} catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
 	}
+	
+	@PatchMapping("/{id}/desbloquear")
+	public ResponseEntity<Tablero> desbloquear(@PathVariable Long id){
+		try {
+			tableroService.desbloquearTablero(TableroId.of(id));
+			return ResponseEntity.noContent().build();
+		} catch (IdentificadorTableroException e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Tablero> eliminarTablero(@PathVariable Long id){
@@ -149,7 +175,7 @@ public class TableroController {
 	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody String tipo, @RequestBody Tarjeta tarjeta){
 		try {
 			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
+			if(tablero.isPresent() && !tablero.get().isBloqueado()) {
 				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
 				if(lista.isPresent()) {
 					Tarjeta card;
@@ -162,11 +188,14 @@ public class TableroController {
 				
 					return ResponseEntity.ok(card);
 				}
-				
 			}
-
+			
+			if(tablero.isPresent() && tablero.get().isBloqueado()) {
+				return ResponseEntity.badRequest().build();
+			}
+			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
+	
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

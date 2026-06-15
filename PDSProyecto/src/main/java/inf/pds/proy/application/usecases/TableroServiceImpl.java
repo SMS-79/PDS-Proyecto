@@ -1,6 +1,7 @@
 package inf.pds.proy.application.usecases;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,7 @@ public class TableroServiceImpl implements TableroService{
 	public void eliminarTablero(TableroId id) {
 		repTab.eliminarTablero(id);
 	}
+	
 
 	@Override
 	@Transactional
@@ -151,6 +153,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
+	@Transactional
 	public void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) {
 		Optional<Tarjeta> tarjeta = tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
 		if(tarjeta.isPresent()) {
@@ -158,6 +161,28 @@ public class TableroServiceImpl implements TableroService{
 			tablero.addTarjetaToList(listaObjetivoId, tarjeta.get());
 			String desc = "Tarjeta " + tarjeta.get().getNombre() + " con id " + tarjeta.get().getId() + " desplazada de lista " + listaId + " a lista " + listaObjetivoId;
 			tablero.registrarOp(TipoOperacion.TARJETA_DESPLAZADA, desc, tablero.getPropietario());
+		}
+		
+	}
+
+	@Override
+	public void bloquearTablero(TableroId tableroId, LocalDateTime fechaBloqueo) {
+		Optional<Tablero> tablero = filtrarTableroById(tableroId);
+		if(tablero.isPresent()) {
+			tablero.get().bloquear(fechaBloqueo);
+			String desc = "Tablero " + tablero.get().getNombre() + " bloqueado hasta " + fechaBloqueo.toString();
+			tablero.get().registrarOp(TipoOperacion.TABLERO_BLOQUEADO, desc , tablero.get().getPropietario());
+		}
+		
+	}
+
+	@Override
+	public void desbloquearTablero(TableroId tableroId) {
+		Optional<Tablero> tablero = filtrarTableroById(tableroId);
+		if(tablero.isPresent()) {
+			tablero.get().desbloquear();
+			String desc = "Tablero " + tablero.get().getNombre() + " desbloqueado.";
+			tablero.get().registrarOp(TipoOperacion.TABLERO_DESBLOQUEADO, desc , tablero.get().getPropietario());
 		}
 		
 	}
