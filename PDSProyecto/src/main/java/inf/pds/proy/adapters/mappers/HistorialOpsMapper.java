@@ -28,7 +28,7 @@ public class HistorialOpsMapper {
 	
 	public HistorialOps toDomain(HistorialOpsEntity historialEntity) {
 		try {
-			return new HistorialOps(HistorialOpsId.of(historialEntity.getId()), historialEntity.getTipo(), userMapper.toDomain(historialEntity.getUsuario()), historialEntity.getFecha());
+			return new HistorialOps(HistorialOpsId.of(historialEntity.getId()), historialEntity.getDescripcion(),  historialEntity.getTipo(), userMapper.toDomain(historialEntity.getUsuario()), historialEntity.getFecha());
 		} catch (IdentificadorHistorialException e) {
 			e.printStackTrace();
 		}

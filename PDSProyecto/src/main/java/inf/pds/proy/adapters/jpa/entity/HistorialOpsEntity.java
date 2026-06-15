@@ -3,7 +3,7 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import inf.pds.proy.domain.model.TipoOperacion;
+import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

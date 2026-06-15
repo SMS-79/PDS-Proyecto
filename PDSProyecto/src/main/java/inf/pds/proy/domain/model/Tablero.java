@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
@@ -16,8 +17,8 @@ public class Tablero {
 	
 	private TableroId id;
 	private String nombre;
-	private Usuario propietario; 
-	private String url; 
+	private Usuario propietario;
+	private String url;
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private List<HistorialOps> historialOp;
 	private List<Usuario> miembros; 
@@ -140,8 +141,8 @@ public class Tablero {
 		this.miembros.add(u); 
 	}
 	
-	public void registrarOp(HistorialOps op) {
-		this.historialOp.add(op); 
+	public void registrarOp(TipoOperacion tOp, String descripcion, Usuario user) {
+		this.historialOp.add(new HistorialOps(tOp, descripcion, user)); 
 	}
 
 	
@@ -158,7 +159,6 @@ public class Tablero {
 				
 		lista.addTarjeta(tarjeta);
 		
-		registrarOp(new HistorialOps(TipoOperacion.TARJETA_CREADA, propietario));
 	}
 	
 	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
