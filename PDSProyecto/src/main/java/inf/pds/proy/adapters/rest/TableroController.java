@@ -18,6 +18,7 @@ import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.exceptions.*;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
@@ -69,6 +70,8 @@ public class TableroController {
 		try {
 			tableroService.bloquearTablero(TableroId.of(id), fechaBloqueo);
 			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
 		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
 		}
@@ -81,6 +84,8 @@ public class TableroController {
 		try {
 			tableroService.desbloquearTablero(TableroId.of(id));
 			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
 		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
 		}
@@ -103,17 +108,14 @@ public class TableroController {
 	
 	@PostMapping("/{id}/listas")
 	public ResponseEntity<ListaTareas> crearLista(@PathVariable Long id, @RequestBody ListaTareas listaTarea){
-		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				ListaTareas lista = tableroService.crearLista(tablero.get(), listaTarea.getTipo());
-				return ResponseEntity.ok(lista);
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
-		}catch (IdentificadorTableroException e) {
+		try{
+			ListaTareas lista = tableroService.crearLista(TableroId.of(id), listaTarea.getTipo());
+			return ResponseEntity.ok(lista);
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return ResponseEntity.badRequest().build();
 	}
@@ -122,14 +124,12 @@ public class TableroController {
 	@GetMapping("/{id}/listas")
 	public ResponseEntity<List<ListaTareas>> obtenerListasTablero(@PathVariable Long id){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				return ResponseEntity.ok(tableroService.obtenerListas(tablero.get()));
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			return ResponseEntity.ok(tableroService.obtenerListas(TableroId.of(id)));
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
 		} catch(IdentificadorTableroException e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return ResponseEntity.badRequest().build();
 	}
@@ -137,14 +137,13 @@ public class TableroController {
 	@GetMapping("/{id}/listas/{listaId}")
 	public ResponseEntity<ListaTareas> obtenerListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					return ResponseEntity.ok(lista.get());
-				}		
-			}
+			Optional<ListaTareas> lista = tableroService.filtrarListaById(TableroId.of(id), ListaTareasId.of(listaId));
+			if(lista.isPresent()) {
+				return ResponseEntity.ok(lista.get());
+			}		
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
@@ -155,15 +154,10 @@ public class TableroController {
 	@DeleteMapping("/{id}/listas/{listaId}")
 	public ResponseEntity<ListaTareas> eliminarListaTablero(@PathVariable Long id, @PathVariable Long listaId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					tableroService.eliminarLista(tablero.get(), lista.get());
-					return ResponseEntity.noContent().build();
-				}		
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			tableroService.eliminarLista(TableroId.of(id), ListaTareasId.of(listaId));
+			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
 		} catch(Exception e) {
 			e.printStackTrace();
 		} 
@@ -174,31 +168,21 @@ public class TableroController {
 	@PostMapping("/{id}/listas/{listaId}/tarjeta")
 	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody String tipo, @RequestBody Tarjeta tarjeta){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent() && !tablero.get().isBloqueado()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					Tarjeta card;
-					if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
-						card = tableroService.crearTarjetaTarea(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getReponsable());
-					}
-					else {
-						card = tableroService.crearTarjetaCheckList(tablero.get(), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null));
-					}
+			Tarjeta card;
+			if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
+				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getReponsable());
+			}
+			else {
+				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null));
+			}
 				
-					return ResponseEntity.ok(card);
-				}
-			}
-			
-			if(tablero.isPresent() && tablero.get().isBloqueado()) {
-				return ResponseEntity.badRequest().build();
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	
-		}catch (Exception e) {
+			return ResponseEntity.ok(card);
+				
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		}  catch(Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return ResponseEntity.badRequest().build();
 	}
@@ -206,20 +190,11 @@ public class TableroController {
 	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/cambiar")
 	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), tarjetaId);
-					if(tarjeta.isPresent()) {
-						tableroService.moverTarjeta(tablero.get(), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
-						return ResponseEntity.noContent().build();
-					}
-				}
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
-		}catch (Exception e) {
+			tableroService.moverTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
+			return ResponseEntity.noContent().build();
+		}catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ResponseEntity.badRequest().build();
@@ -228,20 +203,13 @@ public class TableroController {
 	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/completar")
 	public ResponseEntity<Tarjeta> alternarCompletarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), tarjetaId);
-					if(tarjeta.isPresent()) {
-						tableroService.moverTarjeta(tablero.get(), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
-						return ResponseEntity.noContent().build();
-					}
-				}
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
-		}catch (Exception e) {
+			
+			tableroService.alternarCompletarTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId);
+			return ResponseEntity.noContent().build();
+					
+		}catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ResponseEntity.badRequest().build();
@@ -250,15 +218,10 @@ public class TableroController {
 	@GetMapping("/{id}/listas/{listaId}/tarjetas")
 	public ResponseEntity<List<Tarjeta>> obtenerTarjetasLista(@PathVariable Long id, @PathVariable Long listaId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					return ResponseEntity.ok(tableroService.obtenerTarjetas(tablero.get(), ListaTareasId.of(listaId)));
-				}
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		} catch(Exception e) {
+			return ResponseEntity.ok(tableroService.obtenerTarjetas(TableroId.of(id), ListaTareasId.of(listaId)));
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -268,15 +231,9 @@ public class TableroController {
 	@GetMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
 	public ResponseEntity<Tarjeta> obtenerTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
-					if(tarjeta.isPresent()) {
-						return ResponseEntity.ok(tarjeta.get());
-					}
-				}
+			Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(TableroId.of(id), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+			if(tarjeta.isPresent()) {
+				return ResponseEntity.ok(tarjeta.get());
 			}
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch(Exception e) {
@@ -289,18 +246,8 @@ public class TableroController {
 	@DeleteMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
 	public ResponseEntity<Tarjeta> eliminarTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
 		try {
-			Optional<Tablero> tablero = tableroService.filtrarTableroById(TableroId.of(id));
-			if(tablero.isPresent()) {
-				Optional<ListaTareas> lista = tableroService.filtrarListaById(tablero.get(), ListaTareasId.of(listaId));
-				if(lista.isPresent()) {
-					Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(tablero.get(), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
-					if(tarjeta.isPresent()) {
-						tableroService.eliminarTarjeta(tablero.get(), ListaTareasId.of(listaId) , tarjeta.get());
-						return ResponseEntity.noContent().build();
-					}
-				}
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			tableroService.eliminarTarjeta(TableroId.of(id), ListaTareasId.of(listaId) , TarjetaId.of(tarjetaId));
+			return ResponseEntity.noContent().build();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
