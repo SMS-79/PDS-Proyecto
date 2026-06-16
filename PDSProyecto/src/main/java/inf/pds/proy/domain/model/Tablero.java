@@ -157,13 +157,8 @@ public class Tablero {
 	
 	
 	public void addTarjetaToList(ListaTareasId listaId, Tarjeta tarjeta) throws ListaNoExistenteException{
-		
-		
-		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
-		
-				
+		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));		
 		lista.addTarjeta(tarjeta);
-		
 	}
 	
 	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException {
@@ -192,9 +187,7 @@ public class Tablero {
 
 	public List<Tarjeta> getTarjetasDeLista(ListaTareasId listaId) throws ListaNoExistenteException{
 		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada")); 
-		
 		return lista.getTarjetas(); 
-			
 	}
 	
 	public Optional<Tarjeta> obtenerTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException{
@@ -213,7 +206,6 @@ public class Tablero {
 		else {
 			listaCompletadas.removeTarjeta(tarjeta);
 		}
-		
 	}
 	
 	public void eliminarTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException, TarjetaNoExistenteException{
