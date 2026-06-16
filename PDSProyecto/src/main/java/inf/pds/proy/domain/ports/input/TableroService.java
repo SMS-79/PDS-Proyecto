@@ -20,21 +20,26 @@ import inf.pds.proy.domain.model.ids.TarjetaId;
 public interface TableroService {
 	
 	Tablero crearTablero(String nombre, Usuario propietario, String url) throws IdentificadorTableroException;
-	ListaTareas crearLista(Tablero tablero, String tipo);
-	TarjetaTarea crearTarjetaTarea(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable);
-	TarjetaCheckList crearTarjetaCheckList(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta); 
 	List<Tablero> obtenerTableros();
 	Optional<Tablero> filtrarTableroById(TableroId id);
 	Optional<Tablero> filtrarTableroByURL(String url);
-	List<ListaTareas> obtenerListas(Tablero tablero);
-	Optional<ListaTareas> filtrarListaById(Tablero tablero, ListaTareasId id);
-	List<Tarjeta> obtenerTarjetas(Tablero tablero, ListaTareasId listaId);
-	Optional<Tarjeta> filtrarTarjetasById(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId); 
 	void eliminarTablero(Tablero tablero);
 	void eliminarTablero(TableroId id);
-	void eliminarLista(Tablero tablero, ListaTareas lista);
-	void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta); 
-	void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId);
 	void bloquearTablero(TableroId tableroId, LocalDateTime fechaBloqueo);
 	void desbloquearTablero(TableroId tableroId);
+	
+	ListaTareas crearLista(Tablero tablero, String tipo);
+	List<ListaTareas> obtenerListas(Tablero tablero);
+	Optional<ListaTareas> filtrarListaById(Tablero tablero, ListaTareasId id);
+	void eliminarLista(Tablero tablero, ListaTareas lista);
+	
+	TarjetaTarea crearTarjetaTarea(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable);
+	TarjetaCheckList crearTarjetaCheckList(Tablero tablero, ListaTareasId listaId, String nombre, Etiqueta etiqueta); 
+	List<Tarjeta> obtenerTarjetas(Tablero tablero, ListaTareasId listaId);
+	Optional<Tarjeta> filtrarTarjetasById(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId); 
+	void moverTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId);
+	void alternarCompletarTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId);
+	void eliminarTarjeta(Tablero tablero, ListaTareasId listaId, Tarjeta tarjeta); 
+	
+	
 }

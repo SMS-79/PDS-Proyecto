@@ -143,6 +143,14 @@ public class TableroServiceImpl implements TableroService{
 		tablero.registrarOp(TipoOperacion.TARJETA_BUSCADA, desc, tablero.getPropietario());
 		return tarjetaOptional;
 	}
+	
+	@Override
+	@Transactional
+	public void alternarCompletarTarjeta(Tablero tablero, ListaTareasId listaId, TarjetaId tarjetaId) {
+		String desc = "Tarjeta con id " + tarjetaId+ " completada";
+		tablero.alternarCompletarTarjeta(listaId, tarjetaId);
+		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, desc, tablero.getPropietario());
+	}
 
 	@Override
 	@Transactional

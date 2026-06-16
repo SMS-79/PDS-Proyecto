@@ -202,6 +202,19 @@ public class Tablero {
 									.findFirst();
 	}
 	
+	public void alternarCompletarTarjeta(ListaTareasId listaId, TarjetaId tarjetaId) {
+		Optional<Tarjeta> tarjeta = obtenerTarjetaDeLista(listaId, tarjetaId);
+		if(tarjeta.isPresent()) {
+			tarjeta.get().setCompletada(!tarjeta.get().isCompletada());
+			if(tarjeta.get().isCompletada()) {
+				listaCompletadas.addTarjeta(tarjeta.get());
+			}
+			else {
+				listaCompletadas.removeTarjeta(tarjeta.get());
+			}
+		}
+	}
+	
 	public void eliminarTarjetaDeLista(ListaTareasId listaId, Tarjeta tarjeta) {
 		Optional<ListaTareas> lista = obtenerLista(listaId); 
 		
