@@ -13,6 +13,7 @@ import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
+import inf.pds.proy.domain.model.exceptions.*;
 
 public class Tablero {
 	
@@ -140,7 +141,8 @@ public class Tablero {
 				.findFirst();
 	}
 	
-	public void eliminarLista(ListaTareas lista) {
+	public void eliminarLista(ListaTareasId listaId) {
+		ListaTareas lista = obtenerLista(listaId).orElse(null);
 		this.listasTareas.remove(lista);
 	}
 	
@@ -154,21 +156,16 @@ public class Tablero {
 
 	
 	
-	public void addTarjetaToList(ListaTareasId idLista, Tarjeta tarjeta) {
+	public void addTarjetaToList(ListaTareasId listaId, Tarjeta tarjeta) throws ListaNoExistenteException{
+		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));		
+		lista.addTarjeta(tarjeta);
+	}
+	
+	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
 		
-		ListaTareas lista = listasTareas.stream()
-			.filter(l -> l.getId().equals(idLista))
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Lista no encotrada"));
-				
-		lista.addTarjeta(tarjeta);
-		
-	}
-	
-	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		TarjetaTarea tarjeta = new TarjetaTarea(nombre, responsable, etiqueta, fechaLimite);
 		
 		addTarjetaToList(listaId, tarjeta);
@@ -176,7 +173,11 @@ public class Tablero {
 		return tarjeta; 
 	}
 	
-	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta) {
+	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta) throws ListaNoExistenteException{
+		if(this.bloqueado) {
+			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
+		}
+		
 		TarjetaCheckList tarjeta = new TarjetaCheckList(nombre, etiqueta);
 		
 		addTarjetaToList(listaId, tarjeta);
@@ -184,43 +185,34 @@ public class Tablero {
 		return tarjeta; 
 	}
 
-	public List<Tarjeta> getTarjetasDeLista(ListaTareasId listaId){
-		Optional<ListaTareas> lista = obtenerLista(listaId); 
-		
-		if(lista.isPresent()) {
-			return lista.get().getTarjetas(); 
-		}
-		else {
-			return new ArrayList<>(); 
-		}
-				
+	public List<Tarjeta> getTarjetasDeLista(ListaTareasId listaId) throws ListaNoExistenteException{
+		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada")); 
+		return lista.getTarjetas(); 
 	}
 	
-	public Optional<Tarjeta> obtenerTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId){
+	public Optional<Tarjeta> obtenerTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException{
 		return getTarjetasDeLista(listaId).stream()
 									.filter(t -> t.getId().equals(tarjetaId))
 									.findFirst();
 	}
 	
-	public void alternarCompletarTarjeta(ListaTareasId listaId, TarjetaId tarjetaId) {
-		Optional<Tarjeta> tarjeta = obtenerTarjetaDeLista(listaId, tarjetaId);
-		if(tarjeta.isPresent()) {
-			tarjeta.get().setCompletada(!tarjeta.get().isCompletada());
-			if(tarjeta.get().isCompletada()) {
-				listaCompletadas.addTarjeta(tarjeta.get());
-			}
-			else {
-				listaCompletadas.removeTarjeta(tarjeta.get());
-			}
+	public void alternarCompletarTarjeta(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException, TarjetaNoExistenteException{
+		Tarjeta tarjeta = obtenerTarjetaDeLista(listaId, tarjetaId).orElseThrow(() -> new TarjetaNoExistenteException("Tarjeta con id " + tarjetaId + " no encontrada"));
+		
+		tarjeta.setCompletada(!tarjeta.isCompletada());
+		if(tarjeta.isCompletada()) {
+			listaCompletadas.addTarjeta(tarjeta);
+		}
+		else {
+			listaCompletadas.removeTarjeta(tarjeta);
 		}
 	}
 	
-	public void eliminarTarjetaDeLista(ListaTareasId listaId, Tarjeta tarjeta) {
-		Optional<ListaTareas> lista = obtenerLista(listaId); 
+	public void eliminarTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException, TarjetaNoExistenteException{
+		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada")); 
+		Tarjeta tarjeta = obtenerTarjetaDeLista(listaId, tarjetaId).orElseThrow(() -> new TarjetaNoExistenteException("Tarjeta con id " + tarjetaId + " no encontrada"));
+		lista.removeTarjeta(tarjeta);
 		
-		if(lista.isPresent()) {
-			lista.get().removeTarjeta(tarjeta);
-		}
 	}
 	
 	public void bloquear(LocalDateTime fechaBloqueo) {
