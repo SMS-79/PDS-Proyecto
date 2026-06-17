@@ -44,4 +44,6 @@ public class TarjetaCheckListEntity extends TarjetaEntity {
 		TarjetaCheckListEntity other = (TarjetaCheckListEntity) obj;
 		return Objects.equals(items, other.items);
 	}
+
+	
 }

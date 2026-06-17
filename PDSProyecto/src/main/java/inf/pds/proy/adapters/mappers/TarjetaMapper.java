@@ -15,37 +15,38 @@ import inf.pds.proy.domain.model.ids.TarjetaId;
 public class TarjetaMapper {
 	
 	CheckListItemMapper itemMapper;
+	UsuarioMapper userMapper;
 
 	public TarjetaEntity toEntity(Tarjeta tarjeta) {
 		TarjetaEntity tarjetaEntity;
-		if(tarjeta instanceof TarjetaCheckList) {
+		
+		if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
+			
+			TarjetaTareaEntity taskEntity = new TarjetaTareaEntity();
+			taskEntity.setDescripcion(tarjetaTarea.getDescripcion());
+			
+			tarjetaEntity = taskEntity;
+		}
+		else{
 			TarjetaCheckListEntity checkListEntity = new TarjetaCheckListEntity();
 			checkListEntity.setItems(((TarjetaCheckList) tarjeta).getItems().stream()
 																			.map(itemMapper::toEntity)
 																			.toList());
 			tarjetaEntity = checkListEntity;
 		}
-		else{
-			TarjetaTareaEntity taskEntity = new TarjetaTareaEntity();
-			taskEntity.setDescripcion(((TarjetaTarea) tarjeta).getDescripcion());
-			taskEntity.setFechaLimite(((TarjetaTarea) tarjeta).getFechaLimite());
-			
-			tarjetaEntity = taskEntity;
-		}
 		
 		
 		tarjetaEntity.setId(tarjeta.getId().getId());
 		tarjetaEntity.setNombre(tarjeta.getNombre());
 		tarjetaEntity.setCompletada(tarjeta.isCompletada());
-		if(tarjeta.getEtiqueta().isPresent()) {
-			Etiqueta etiq = tarjeta.getEtiqueta().get();
-			tarjetaEntity.setEtiquetaNombre(etiq.nombre());
-			tarjetaEntity.setEtiquetaColor(etiq.color());
-		}
-		else {
-			tarjetaEntity.setEtiquetaNombre(null);
-			tarjetaEntity.setEtiquetaColor(null);
-		}
+		
+		Etiqueta etiq = tarjeta.getEtiqueta().orElseGet(() -> new Etiqueta(null, null));
+		
+		tarjetaEntity.setEtiquetaNombre(etiq.nombre());
+		tarjetaEntity.setEtiquetaColor(etiq.color());
+		tarjetaEntity.setFechaLimite(tarjeta.getFechaLimite());
+		tarjetaEntity.setResponsable(userMapper.toEntity(tarjeta.getResponsable()));
+		
 
 		return tarjetaEntity;
 	}
@@ -55,32 +56,24 @@ public class TarjetaMapper {
 	public Tarjeta toDomain(TarjetaEntity tarjetaEntity) {
 		Tarjeta tarjeta = null;
 		Etiqueta etiq = null;
-		
 		if(tarjetaEntity.getEtiquetaNombre() != null && tarjetaEntity.getEtiquetaColor() != null) {
 			etiq = new Etiqueta(tarjetaEntity.getEtiquetaNombre(), tarjetaEntity.getEtiquetaColor());
 		}
+		
 		try {
-			if(tarjetaEntity instanceof TarjetaCheckListEntity) {
-				TarjetaCheckList tarjetaCheckList = new TarjetaCheckList(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq);
+			if(tarjetaEntity instanceof TarjetaTareaEntity taskEntity) {
+				TarjetaTarea tarjetaTarea = new TarjetaTarea(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq, tarjetaEntity.getFechaLimite(), userMapper.toDomain(tarjetaEntity.getResponsable()), taskEntity.getDescripcion());
+				tarjeta = tarjetaTarea;
+			}
+			else{
+				TarjetaCheckList tarjetaCheckList = new TarjetaCheckList(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq, tarjetaEntity.getFechaLimite(), userMapper.toDomain(tarjetaEntity.getResponsable()));
 				tarjetaCheckList.setItems(((TarjetaCheckListEntity) tarjetaEntity).getItems().stream()
 																								.map(itemMapper::toDomain)
 																								.toList());
 				tarjeta = tarjetaCheckList;
 			}
-			else{
-				
-				TarjetaTarea tarjetaTarea = new TarjetaTarea(TarjetaId.of(tarjetaEntity.getId()), tarjetaEntity.getNombre(), etiq);
-				
-				tarjetaTarea.setDescripcion(((TarjetaTareaEntity) tarjetaEntity).getDescripcion());
-				tarjetaTarea.setFechaLimite(((TarjetaTareaEntity) tarjetaEntity).getFechaLimite());
-				
-				tarjeta = tarjetaTarea;
-			}
-			
-			
-			
 			tarjeta.setCompletada(tarjetaEntity.isCompletada());
-			
+		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

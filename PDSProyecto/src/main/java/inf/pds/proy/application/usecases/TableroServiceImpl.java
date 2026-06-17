@@ -8,12 +8,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import inf.pds.proy.domain.model.Etiqueta;
+import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
-import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
@@ -123,9 +123,9 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException {
+	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
-		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable);
+		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable, descripcion);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_Tarea, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
 		return tarjeta;	
@@ -133,9 +133,9 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta) throws TableroNoExistenteException, ListaNoExistenteException {
+	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
-		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, etiqueta);
+		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, etiqueta, fechaLimite, responsable);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_CheckList, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
 		return tarjeta;

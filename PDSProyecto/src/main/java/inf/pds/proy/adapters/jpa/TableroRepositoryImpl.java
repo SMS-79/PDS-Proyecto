@@ -2,7 +2,9 @@ package inf.pds.proy.adapters.jpa;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
+
 import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
 import inf.pds.proy.adapters.mappers.TableroMapper;
