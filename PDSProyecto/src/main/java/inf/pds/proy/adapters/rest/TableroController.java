@@ -180,38 +180,10 @@ public class TableroController {
 				
 		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
 			System.out.println(e.getMessage());
-		}  catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		} 
 		
-		return ResponseEntity.badRequest().build();
-	}
-	
-	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/cambiar")
-	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
-		try {
-			tableroService.moverTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
-			return ResponseEntity.noContent().build();
-		}catch (TableroNoExistenteException | ListaNoExistenteException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ResponseEntity.badRequest().build();
-	}
-	
-	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/completar")
-	public ResponseEntity<Tarjeta> alternarCompletarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
-		try {
-			
-			tableroService.alternarCompletarTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId);
-			return ResponseEntity.noContent().build();
-					
-		}catch (TableroNoExistenteException | ListaNoExistenteException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return ResponseEntity.badRequest().build();
 	}
 	
@@ -242,6 +214,49 @@ public class TableroController {
 		
 		return ResponseEntity.badRequest().build();
 	}
+	
+	@GetMapping("/{id}/tarjetas/{etiqueta}")
+	public ResponseEntity<List<Tarjeta>> obtenerTarjetaListaPorEtiqueta(@PathVariable Long id, @PathVariable String etiqueta){
+		try {
+			return ResponseEntity.ok(tableroService.obtenerTarjetasEtiqueta(TableroId.of(id), etiqueta));
+		} catch (TableroNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/cambiar")
+	public ResponseEntity<Tarjeta> cambiarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
+		try {
+			tableroService.moverTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId, ListaTareasId.of(listaObjId));
+			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PatchMapping("/{id}/listas/{listaId}/tarjeta/{tarjetaId}/completar")
+	public ResponseEntity<Tarjeta> alternarCompletarTarjeta(@PathVariable Long id, @PathVariable Long listaId, @PathVariable TarjetaId tarjetaId, @RequestBody Long listaObjId){
+		try {
+			
+			tableroService.alternarCompletarTarjeta(TableroId.of(id), ListaTareasId.of(listaId), tarjetaId);
+			return ResponseEntity.noContent().build();
+					
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.badRequest().build();
+	}
+	
+	
 	
 	@DeleteMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
 	public ResponseEntity<Tarjeta> eliminarTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){

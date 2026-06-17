@@ -190,6 +190,16 @@ public class Tablero {
 		return lista.getTarjetas(); 
 	}
 	
+	public List<Tarjeta> getTarjetasPorEtiqueta(String etiq){
+		Etiqueta etiquetaFiltro = new Etiqueta(etiq, "");
+		return getListas().stream()
+					.flatMap(l -> l.getTarjetas().stream())
+					.filter(t -> t.getEtiqueta()
+									.filter(e -> e.equals(etiquetaFiltro)).isPresent())
+					.toList();
+					
+	}
+	
 	public Optional<Tarjeta> obtenerTarjetaDeLista(ListaTareasId listaId, TarjetaId tarjetaId) throws ListaNoExistenteException{
 		return getTarjetasDeLista(listaId).stream()
 									.filter(t -> t.getId().equals(tarjetaId))
