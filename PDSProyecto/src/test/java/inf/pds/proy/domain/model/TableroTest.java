@@ -1,6 +1,10 @@
 package inf.pds.proy.domain.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -8,11 +12,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
-import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 
 class TableroTest {
 

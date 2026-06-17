@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaTarea;
-import inf.pds.proy.domain.model.exceptions.*;
+import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
@@ -170,10 +172,10 @@ public class TableroController {
 		try {
 			Tarjeta card;
 			if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
-				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getReponsable());
+				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getResponsable(), tarjetaTarea.getDescripcion());
 			}
 			else {
-				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null));
+				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjeta.getFechaLimite(), tarjeta.getResponsable());
 			}
 				
 			return ResponseEntity.ok(card);

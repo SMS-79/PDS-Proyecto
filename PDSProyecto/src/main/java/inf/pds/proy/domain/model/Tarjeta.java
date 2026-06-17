@@ -1,5 +1,6 @@
 package inf.pds.proy.domain.model;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import inf.pds.proy.domain.model.ids.TarjetaId;
@@ -10,19 +11,47 @@ public abstract class Tarjeta {
 	private TarjetaId id;
 	private String nombre;
 	private Optional<Etiqueta> etiqueta;
+	private LocalDate fechaLimite; 
+	private Usuario responsable; 
 	private boolean completada;
 	
 	
-	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta) {
+	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		this.id = id;
 		this.nombre = nombre;
 		this.etiqueta = Optional.ofNullable(etiqueta);
+		this.fechaLimite = fechaLimite;
+		this.responsable = responsable;
 		this.completada = false;
 	}
 	
-	protected Tarjeta(TarjetaId id, String nombre) {
-		this(id, nombre, null);
+	protected Tarjeta(TarjetaId id, String nombre, LocalDate fechaLimite, Usuario responsable) {
+		this(id, nombre, null, fechaLimite, responsable);
 	}
+	
+	public LocalDate getFechaLimite() {
+		return fechaLimite;
+	}
+
+	public void setFechaLimite(LocalDate fechaLimite) {
+		this.fechaLimite = fechaLimite;
+	}
+
+	public Usuario getResponsable() {
+		return responsable;
+	}
+
+	public void setResponsable(Usuario responsable) {
+		this.responsable = responsable;
+	}
+
+	public void setEtiqueta(Optional<Etiqueta> etiqueta) {
+		this.etiqueta = etiqueta;
+	}
+
+	
+	
+	
 
 	public TarjetaId getId() {
 		return id;

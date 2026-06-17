@@ -35,8 +35,8 @@ public interface TableroService {
 	Optional<ListaTareas> filtrarListaById(TableroId tablero, ListaTareasId id) throws TableroNoExistenteException;
 	void eliminarLista(TableroId tablero, ListaTareasId listaId) throws TableroNoExistenteException;
 	
-	TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException;
-	TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta) throws TableroNoExistenteException, ListaNoExistenteException; 
+	TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException;
+	TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException; 
 	List<Tarjeta> obtenerTarjetas(TableroId tableroId, ListaTareasId listaId) throws TableroNoExistenteException, ListaNoExistenteException;
 	List<Tarjeta> obtenerTarjetasEtiqueta(TableroId tableroId, String etiqueta) throws TableroNoExistenteException;
 	Optional<Tarjeta> filtrarTarjetasById(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException; 

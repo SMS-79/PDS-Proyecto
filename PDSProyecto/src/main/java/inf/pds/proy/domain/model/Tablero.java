@@ -9,11 +9,12 @@ import java.util.Optional;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
+import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.exceptions.*;
 
 public class Tablero {
 	
@@ -161,24 +162,24 @@ public class Tablero {
 		lista.addTarjeta(tarjeta);
 	}
 	
-	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException {
+	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws ListaNoExistenteException {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
 		
-		TarjetaTarea tarjeta = new TarjetaTarea(nombre, responsable, etiqueta, fechaLimite);
+		TarjetaTarea tarjeta = new TarjetaTarea(nombre, etiqueta, fechaLimite, responsable, descripcion);
 		
 		addTarjetaToList(listaId, tarjeta);
 		
 		return tarjeta; 
 	}
 	
-	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta) throws ListaNoExistenteException{
+	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException{
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
 		
-		TarjetaCheckList tarjeta = new TarjetaCheckList(nombre, etiqueta);
+		TarjetaCheckList tarjeta = new TarjetaCheckList(nombre, etiqueta, fechaLimite, responsable);
 		
 		addTarjetaToList(listaId, tarjeta);
 		
