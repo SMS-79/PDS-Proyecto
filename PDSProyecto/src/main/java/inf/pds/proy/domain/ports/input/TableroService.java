@@ -15,6 +15,7 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
@@ -32,15 +33,17 @@ public interface TableroService {
 	
 	ListaTareas crearLista(TableroId tableroId, String tipo) throws TableroNoExistenteException;
 	List<ListaTareas> obtenerListas(TableroId tablero) throws TableroNoExistenteException;
-	Optional<ListaTareas> filtrarListaById(TableroId tablero, ListaTareasId id) throws TableroNoExistenteException;
+	Optional<ListaTareas> filtrarListaById(TableroId tablero, ListaTareasId listaId) throws TableroNoExistenteException;
+	void setLimiteLista(TableroId tableroId, ListaTareasId listaId, int limite) throws TableroNoExistenteException, ListaNoExistenteException;
+	void addCaminoLista(TableroId tableroId, ListaTareasId listaId, ListaTareasId listaCaminoId) throws TableroNoExistenteException, ListaNoExistenteException;
 	void eliminarLista(TableroId tablero, ListaTareasId listaId) throws TableroNoExistenteException;
 	
-	TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException;
-	TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException; 
+	TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException;
+	TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException; 
 	List<Tarjeta> obtenerTarjetas(TableroId tableroId, ListaTareasId listaId) throws TableroNoExistenteException, ListaNoExistenteException;
 	List<Tarjeta> obtenerTarjetasEtiqueta(TableroId tableroId, String etiqueta) throws TableroNoExistenteException;
 	Optional<Tarjeta> filtrarTarjetasById(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException; 
-	void moverTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoExistenteException;
+	void moverTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoExistenteException, TarjetaNoInsertadaException;
 	void alternarCompletarTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoExistenteException;
 	void eliminarTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException,  TarjetaNoExistenteException; 
 	

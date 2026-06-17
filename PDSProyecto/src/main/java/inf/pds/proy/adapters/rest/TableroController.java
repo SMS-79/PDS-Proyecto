@@ -152,6 +152,34 @@ public class TableroController {
 		
 		return ResponseEntity.badRequest().build();
 	}
+	
+	@GetMapping("/{id}/listas/{listaId}/setLimite/{limite}")
+	public ResponseEntity<ListaTareas> setLimiteListaTablero(@PathVariable Long id, @PathVariable Long listaId, @PathVariable int limite){
+		try {
+			tableroService.setLimiteLista(TableroId.of(id), ListaTareasId.of(listaId), limite);
+			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@GetMapping("/{id}/listas/{listaId}/addCamino/{listaCamino}")
+	public ResponseEntity<ListaTareas> setCaminoListaTablero(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long listaCamino){
+		try {
+			tableroService.addCaminoLista(TableroId.of(id), ListaTareasId.of(listaId), ListaTareasId.of(listaId));
+			return ResponseEntity.noContent().build();
+		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+			System.out.println(e.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return ResponseEntity.badRequest().build();
+	}
 
 	@DeleteMapping("/{id}/listas/{listaId}")
 	public ResponseEntity<ListaTareas> eliminarListaTablero(@PathVariable Long id, @PathVariable Long listaId){
