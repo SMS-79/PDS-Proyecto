@@ -25,6 +25,8 @@ public class ListaTareasMapper {
                 .map(tarjetaMapper::toEntity)
                 .toList()
         );
+        entity.setLimiteItems(lista.getLimiteItems());
+        entity.setCaminoRequerido(lista.getCaminoRequerido().stream().map(this::toEntity).toList());
         return entity;
     }
 
@@ -34,6 +36,8 @@ public class ListaTareasMapper {
             entity.getTarjetas().stream()
                 .map(tarjetaMapper::toDomain)
                 .forEach(lista::addTarjeta);
+            lista.setLimiteItems(entity.getLimiteItems());
+            lista.setCaminoRequerido(entity.getCaminoRequerido().stream().map(this::toDomain).toList());
             return lista;
     	} catch(IdentificadorListaException e) {
     		e.printStackTrace();

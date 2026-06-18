@@ -1,6 +1,7 @@
 package inf.pds.proy.adapters.jpa.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.DiscriminatorColumn;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -36,6 +38,10 @@ public abstract class TarjetaEntity {
 	private UsuarioEntity responsable;
 	
 	private boolean completada;
+	
+	@ManyToMany
+	@JoinColumn(name="historial_lista")
+	private List<ListaTareasEntity> historialLista;
 
 	public Long getId() {
 		return id;
@@ -93,9 +99,18 @@ public abstract class TarjetaEntity {
 		this.completada = completada;
 	}
 
+	public List<ListaTareasEntity> getHistorialLista() {
+		return historialLista;
+	}
+
+	public void setHistorialLista(List<ListaTareasEntity> historialLista) {
+		this.historialLista = historialLista;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(completada, etiquetaColor, etiquetaNombre, fechaLimite, id, nombre, responsable);
+		return Objects.hash(completada, etiquetaColor, etiquetaNombre, fechaLimite, historialLista, id, nombre,
+				responsable);
 	}
 
 	@Override
@@ -107,13 +122,11 @@ public abstract class TarjetaEntity {
 		TarjetaEntity other = (TarjetaEntity) obj;
 		return completada == other.completada && Objects.equals(etiquetaColor, other.etiquetaColor)
 				&& Objects.equals(etiquetaNombre, other.etiquetaNombre)
-				&& Objects.equals(fechaLimite, other.fechaLimite) && Objects.equals(id, other.id)
+				&& Objects.equals(fechaLimite, other.fechaLimite)
+				&& Objects.equals(historialLista, other.historialLista) && Objects.equals(id, other.id)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(responsable, other.responsable);
 	}
+
 	
-	
-	
-	
-	
-	
+
 }
