@@ -16,6 +16,7 @@ public class TarjetaMapper {
 	
 	CheckListItemMapper itemMapper;
 	UsuarioMapper userMapper;
+	ListaTareasMapper listaMapper;
 
 	public TarjetaEntity toEntity(Tarjeta tarjeta) {
 		TarjetaEntity tarjetaEntity;
@@ -46,6 +47,7 @@ public class TarjetaMapper {
 		tarjetaEntity.setEtiquetaColor(etiq.color());
 		tarjetaEntity.setFechaLimite(tarjeta.getFechaLimite());
 		tarjetaEntity.setResponsable(userMapper.toEntity(tarjeta.getResponsable()));
+		tarjetaEntity.setHistorialLista(tarjeta.getHistorialLista().stream().map(listaMapper::toEntity).toList());
 		
 
 		return tarjetaEntity;
@@ -73,6 +75,7 @@ public class TarjetaMapper {
 				tarjeta = tarjetaCheckList;
 			}
 			tarjeta.setCompletada(tarjetaEntity.isCompletada());
+			tarjeta.setHistorialLista(tarjetaEntity.getHistorialLista().stream().map(listaMapper::toDomain).toList());
 		
 		}catch(Exception e) {
 			e.printStackTrace();

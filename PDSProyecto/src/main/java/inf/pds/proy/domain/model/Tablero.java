@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import inf.pds.proy.domain.model.HistorialOps.TipoOperacion;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
@@ -157,12 +158,18 @@ public class Tablero {
 
 	
 	
-	public void addTarjetaToList(ListaTareasId listaId, Tarjeta tarjeta) throws ListaNoExistenteException{
-		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));		
-		lista.addTarjeta(tarjeta);
+	public void addTarjetaToList(ListaTareasId listaId, Tarjeta tarjeta) throws ListaNoExistenteException, TarjetaNoInsertadaException{
+		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));	
+		if(lista.canAdd(tarjeta)) {
+			tarjeta.addListaToHistorial(lista);
+			lista.addTarjeta(tarjeta);
+		}
+		else {
+			throw new TarjetaNoInsertadaException("La lista está llena o la tarjeta no cumple con las condiciones necesarias para estar en esta lista");
+		}
 	}
 	
-	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws ListaNoExistenteException {
+	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws ListaNoExistenteException, TarjetaNoInsertadaException {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
@@ -174,7 +181,7 @@ public class Tablero {
 		return tarjeta; 
 	}
 	
-	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException{
+	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException, TarjetaNoInsertadaException{
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}

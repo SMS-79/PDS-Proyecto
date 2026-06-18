@@ -4,11 +4,13 @@ package inf.pds.proy.adapters.jpa.entity;
 import java.util.List;
 import java.util.Objects;
 
+import inf.pds.proy.domain.model.ListaTareas;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,6 +34,12 @@ public class ListaTareasEntity {
 	@OneToMany
 	@JoinColumn(name = "lista_tareas_id") 
 	private List<TarjetaEntity> tarjetas; 
+	
+	private int limiteItems;
+	
+	@ManyToMany
+	@JoinColumn(name = "camino_requerido")
+	private List<ListaTareasEntity> caminoRequerido;
 	
 	
 	public ListaTareasEntity() {}
@@ -68,9 +76,25 @@ public class ListaTareasEntity {
     	this.tarjetas = tarjetas;
     }
 
+	public int getLimiteItems() {
+		return limiteItems;
+	}
+
+	public void setLimiteItems(int limiteItems) {
+		this.limiteItems = limiteItems;
+	}
+
+	public List<ListaTareasEntity> getCaminoRequerido() {
+		return caminoRequerido;
+	}
+
+	public void setCaminoRequerido(List<ListaTareasEntity> caminoRequerido) {
+		this.caminoRequerido = caminoRequerido;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, tablero, tarjetas, tipo);
+		return Objects.hash(caminoRequerido, id, limiteItems, tablero, tarjetas, tipo);
 	}
 
 	@Override
@@ -80,9 +104,12 @@ public class ListaTareasEntity {
 		if (!(obj instanceof ListaTareasEntity))
 			return false;
 		ListaTareasEntity other = (ListaTareasEntity) obj;
-		return Objects.equals(id, other.id) && Objects.equals(tablero, other.tablero)
+		return Objects.equals(caminoRequerido, other.caminoRequerido) && Objects.equals(id, other.id)
+				&& limiteItems == other.limiteItems && Objects.equals(tablero, other.tablero)
 				&& Objects.equals(tarjetas, other.tarjetas) && Objects.equals(tipo, other.tipo);
 	}
+
+	
     
 	
 }

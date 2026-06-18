@@ -18,6 +18,7 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
@@ -102,7 +103,7 @@ public class TableroServiceImpl implements TableroService{
 	@Transactional
 	public Optional<ListaTareas> filtrarListaById(TableroId tableroId, ListaTareasId listaId) throws TableroNoExistenteException{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
-		Optional<ListaTareas>listaOptional = tablero.obtenerLista(listaId);
+		Optional<ListaTareas> listaOptional = tablero.obtenerLista(listaId);
 		String desc;
 		if(listaOptional.isPresent()) {
 			desc = "Lista del tablero " + tablero.getNombre() + "con id " + listaId + " filtrada";
@@ -111,7 +112,25 @@ public class TableroServiceImpl implements TableroService{
 		tablero.registrarOp(TipoOperacion.LISTA_BUSCADA, desc, tablero.getPropietario());
 		return listaOptional;
 	}
+	
+	@Override
+	@Transactional
+	public void setLimiteLista(TableroId tableroId, ListaTareasId listaId, int limite) throws TableroNoExistenteException, ListaNoExistenteException{
+		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+		ListaTareas lista = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
+		lista.setLimiteItems(limite);
+	}
 
+	@Override
+	@Transactional
+	public void addCaminoLista(TableroId tableroId, ListaTareasId listaId, ListaTareasId listaCaminoId) throws TableroNoExistenteException, ListaNoExistenteException{
+		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+		ListaTareas lista = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
+		ListaTareas listaCamino = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
+		
+		lista.addCaminoRequerido(List.of(listaCamino));
+	}
+	
 	@Override
 	@Transactional
 	public void eliminarLista(TableroId tableroId, ListaTareasId listaId)  throws TableroNoExistenteException{
@@ -123,7 +142,7 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException {
+	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable, descripcion);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_Tarea, con id " + tarjeta.getId() + " creada";
@@ -133,7 +152,7 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException {
+	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, etiqueta, fechaLimite, responsable);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_CheckList, con id " + tarjeta.getId() + " creada";
@@ -174,11 +193,11 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public void moverTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoExistenteException{
+	public void moverTarjeta(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId, ListaTareasId listaObjetivoId) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoExistenteException, TarjetaNoInsertadaException{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		Tarjeta tarjeta = tablero.obtenerTarjetaDeLista(listaId, tarjetaId).orElseThrow(() -> new TarjetaNoExistenteException("Tarjeta con id " + tarjetaId + " no encontrada"));
-		tablero.eliminarTarjetaDeLista(listaId, tarjetaId);
 		tablero.addTarjetaToList(listaObjetivoId, tarjeta);
+		tablero.eliminarTarjetaDeLista(listaId, tarjetaId);
 		String desc = "Tarjeta " + tarjeta.getNombre() + " con id " + tarjeta.getId() + " desplazada de lista " + listaId + " a lista " + listaObjetivoId;
 		tablero.registrarOp(TipoOperacion.TARJETA_DESPLAZADA, desc, tablero.getPropietario());	
 	}
@@ -200,6 +219,8 @@ public class TableroServiceImpl implements TableroService{
 		tablero.eliminarTarjetaDeLista(listaId, tarjetaId);
 		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, desc, tablero.getPropietario());
 	}
+
+	
 
 	
 
