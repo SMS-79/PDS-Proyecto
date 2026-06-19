@@ -1,30 +1,47 @@
 package inf.pds.proy.adapters.ui;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 @Component
 public class InicializadorUI implements ApplicationListener<VentanaListaEvent> {
-	@Override
+
+    private final ApplicationContext applicationContext;
+    
+    // Leemos el archivo FXML (lo vamos a crear en el siguiente paso)
+    @Value("classpath:/views/LoginView.fxml")
+    private Resource loginView;
+
+    public InicializadorUI(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
     public void onApplicationEvent(VentanaListaEvent event) {
-        Stage stage = event.getStage();
-        
-        // Creamos un texto y un panel básico
-        Label label = new Label("PRUEBA VENTANA PRINCIPAL");
-        label.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-        
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 800, 600); // Ventana de 800x600 px
-        
-        stage.setTitle("PDS prueba interfaz");
-        stage.setScene(scene);
-        stage.show(); // ¡Mostrar ventana!
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(loginView.getURL());
+            
+            // Le decimos a JavaFX que use Spring para crear los controladores
+            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 800, 600);
+            
+            Stage stage = event.getStage();
+            stage.setTitle("PDS Proyecto");
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar la interfaz FXML", e);
+        }
     }
 }
-	
-

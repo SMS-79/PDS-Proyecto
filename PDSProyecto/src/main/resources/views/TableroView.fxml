@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #0079bf;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inf.pds.proy.adapters.ui.TableroController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="20.0" style="-fx-background-color: #0067a3;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <children>
+            <Label text="PDS Trello - Tablero Principal" textFill="WHITE">
+               <font><Font name="System Bold" size="18.0" /></font>
+            </Label>
+            <HBox HBox.hgrow="ALWAYS" />
+            <Label fx:id="usuarioLabel" text="Usuario: " textFill="WHITE" />
+            <Button mnemonicParsing="false" onAction="#handleCerrarSesion" style="-fx-background-color: rgba(255,255,255,0.3);" text="Cerrar sesión" textFill="WHITE" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <ScrollPane fitToHeight="true" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <content>
+            <HBox fx:id="contenedorListas" spacing="15.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <children>
+                  <!-- Lista TO DO -->
+                  <VBox prefWidth="270.0" spacing="10.0" style="-fx-background-color: #ebecf0; -fx-background-radius: 5;">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <Label text="TO DO">
+                           <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Button mnemonicParsing="false" prefWidth="250.0" style="-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;" text="Tarea de ejemplo 1" />
+                        <Button mnemonicParsing="false" prefWidth="250.0" style="-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;" text="Tarea de ejemplo 2" />
+                        <Button mnemonicParsing="false" prefWidth="250.0" style="-fx-background-color: transparent;" text="+ Añadir tarjeta" textFill="#5e6c84" />
+                     </children>
+                  </VBox>
+                  <!-- Lista DOING -->
+                  <VBox prefWidth="270.0" spacing="10.0" style="-fx-background-color: #ebecf0; -fx-background-radius: 5;">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <Label text="DOING">
+                           <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Button mnemonicParsing="false" prefWidth="250.0" style="-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;" text="Hacer login con JavaFX" />
+                        <Button mnemonicParsing="false" prefWidth="250.0" style="-fx-background-color: transparent;" text="+ Añadir tarjeta" textFill="#5e6c84" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>

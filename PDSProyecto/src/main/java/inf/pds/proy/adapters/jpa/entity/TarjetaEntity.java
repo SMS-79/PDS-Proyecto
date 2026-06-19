@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -40,7 +41,11 @@ public abstract class TarjetaEntity {
 	private boolean completada;
 	
 	@ManyToMany
-	@JoinColumn(name="historial_lista")
+	@JoinTable(
+		name = "tarjetas_historial_listas",
+		joinColumns = @JoinColumn(name = "tarjeta_id"),
+		inverseJoinColumns = @JoinColumn(name = "lista_id")
+	)
 	private List<ListaTareasEntity> historialLista;
 
 	public Long getId() {
