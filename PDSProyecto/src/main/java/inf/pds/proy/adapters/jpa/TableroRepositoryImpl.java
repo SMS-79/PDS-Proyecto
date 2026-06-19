@@ -42,6 +42,7 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
+	@Transactional
 	public Optional<Tablero> filtrarTableroById(TableroId id) {
 		return jpaRepository.findById(id.getId()).map(tableMapper::toDomain);
 	}

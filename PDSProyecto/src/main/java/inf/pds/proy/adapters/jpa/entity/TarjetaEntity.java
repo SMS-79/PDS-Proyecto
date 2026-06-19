@@ -39,13 +39,8 @@ public abstract class TarjetaEntity {
 	
 	private boolean completada;
 	
-	@ManyToMany
-	@JoinTable(
-		name = "tarjetas_historial_listas",
-		joinColumns = @JoinColumn(name = "tarjeta_id"),
-		inverseJoinColumns = @JoinColumn(name = "lista_id")
-	)
-	private List<ListaTareasEntity> historialLista;
+	
+	private List<Long> historialLista;
 
 	public Long getId() {
 		return id;
@@ -103,11 +98,11 @@ public abstract class TarjetaEntity {
 		this.completada = completada;
 	}
 
-	public List<ListaTareasEntity> getHistorialLista() {
+	public List<Long> getHistorialLista() {
 		return historialLista;
 	}
 
-	public void setHistorialLista(List<ListaTareasEntity> historialLista) {
+	public void setHistorialLista(List<Long> historialLista) {
 		this.historialLista = historialLista;
 	}
 

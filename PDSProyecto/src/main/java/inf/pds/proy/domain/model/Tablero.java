@@ -156,7 +156,7 @@ public class Tablero {
 	public void addTarjetaToList(ListaTareasId listaId, Tarjeta tarjeta) throws ListaNoExistenteException, TarjetaNoInsertadaException{
 		ListaTareas lista = obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));	
 		if(lista.canAdd(tarjeta)) {
-			tarjeta.addListaToHistorial(lista);
+			tarjeta.addListaToHistorial(lista.getId());
 			lista.addTarjeta(tarjeta);
 		}
 		else {

@@ -11,6 +11,8 @@ import inf.pds.proy.domain.model.Etiqueta;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
 
 @Component
@@ -56,7 +58,7 @@ public class TarjetaMapper {
 		tarjetaEntity.setEtiquetaColor(etiq.color());
 		tarjetaEntity.setFechaLimite(tarjeta.getFechaLimite());
 		tarjetaEntity.setResponsable(userMapper.toEntity(tarjeta.getResponsable()));
-		tarjetaEntity.setHistorialLista(tarjeta.getHistorialLista().stream().map(listaMapper::toEntity).toList());
+		tarjetaEntity.setHistorialLista(tarjeta.getHistorialLista().stream().map(l -> l.getId()).toList());
 		
 
 		return tarjetaEntity;
@@ -84,7 +86,14 @@ public class TarjetaMapper {
 				tarjeta = tarjetaCheckList;
 			}
 			tarjeta.setCompletada(tarjetaEntity.isCompletada());
-			tarjeta.setHistorialLista(tarjetaEntity.getHistorialLista().stream().map(listaMapper::toDomain).toList());
+			tarjeta.setHistorialLista(tarjetaEntity.getHistorialLista().stream().map(l -> {
+				try {
+					return ListaTareasId.of(l);
+				} catch (IdentificadorListaException e) {
+					e.printStackTrace();
+					return ListaTareasId.random();
+				}
+			}).toList());
 		
 		}catch(Exception e) {
 			e.printStackTrace();

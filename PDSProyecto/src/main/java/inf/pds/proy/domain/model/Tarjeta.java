@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
 
 public abstract class Tarjeta {
@@ -15,7 +16,7 @@ public abstract class Tarjeta {
 	private LocalDate fechaLimite; 
 	private Usuario responsable; 
 	private boolean completada;
-	private List<ListaTareas> historialLista = new ArrayList<>();
+	private List<ListaTareasId> historialLista = new ArrayList<>();
 	
 	
 	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
@@ -90,15 +91,15 @@ public abstract class Tarjeta {
 		this.completada = completada;
 	}
 
-	public List<ListaTareas> getHistorialLista() {
+	public List<ListaTareasId> getHistorialLista() {
 		return historialLista;
 	}
 
-	public void setHistorialLista(List<ListaTareas> historialLista) {
+	public void setHistorialLista(List<ListaTareasId> historialLista) {
 		this.historialLista = historialLista;
 	}
 	
-	public void addListaToHistorial(ListaTareas lista) {
+	public void addListaToHistorial(ListaTareasId lista) {
 		this.historialLista.add(lista);
 	}
 	
