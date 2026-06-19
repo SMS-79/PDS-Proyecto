@@ -41,7 +41,7 @@ public class TableroController {
 	public ResponseEntity<Tablero> crear(@RequestBody Tablero tablero){
 		
 		try {
-			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario(), tablero.getUrl());
+			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario());
 			return ResponseEntity.ok(table);
 		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
@@ -124,22 +124,20 @@ public class TableroController {
 	
 	
 	@GetMapping("/{id}/listas")
-	public ResponseEntity<List<ListaTareas>> obtenerListasTablero(@PathVariable Long id){
+	public ResponseEntity<List<ListaTareas>> obtenerListasTablero(@PathVariable String id){
 		try {
-			return ResponseEntity.ok(tableroService.obtenerListas(TableroId.of(id)));
+			return ResponseEntity.ok(tableroService.obtenerListas(id));
 		} catch (TableroNoExistenteException e) {
 			System.out.println(e.getMessage());
-		} catch(IdentificadorTableroException e) {
-			e.printStackTrace();
 		} 
 		
 		return ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}")
-	public ResponseEntity<ListaTareas> obtenerListaTablero(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<ListaTareas> obtenerListaTablero(@PathVariable String id, @PathVariable Long listaId){
 		try {
-			Optional<ListaTareas> lista = tableroService.filtrarListaById(TableroId.of(id), ListaTareasId.of(listaId));
+			Optional<ListaTareas> lista = tableroService.filtrarListaById(id, ListaTareasId.of(listaId));
 			if(lista.isPresent()) {
 				return ResponseEntity.ok(lista.get());
 			}		
@@ -218,9 +216,9 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}/tarjetas")
-	public ResponseEntity<List<Tarjeta>> obtenerTarjetasLista(@PathVariable Long id, @PathVariable Long listaId){
+	public ResponseEntity<List<Tarjeta>> obtenerTarjetasLista(@PathVariable String id, @PathVariable Long listaId){
 		try {
-			return ResponseEntity.ok(tableroService.obtenerTarjetas(TableroId.of(id), ListaTareasId.of(listaId)));
+			return ResponseEntity.ok(tableroService.obtenerTarjetas(id, ListaTareasId.of(listaId)));
 		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
@@ -231,9 +229,9 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}/listas/{listaId}/tarjetas/{tarjetaId}")
-	public ResponseEntity<Tarjeta> obtenerTarjetaLista(@PathVariable Long id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
+	public ResponseEntity<Tarjeta> obtenerTarjetaLista(@PathVariable String id, @PathVariable Long listaId, @PathVariable Long tarjetaId){
 		try {
-			Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(TableroId.of(id), ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
+			Optional<Tarjeta> tarjeta = tableroService.filtrarTarjetasById(id, ListaTareasId.of(listaId), TarjetaId.of(tarjetaId));
 			if(tarjeta.isPresent()) {
 				return ResponseEntity.ok(tarjeta.get());
 			}
@@ -246,9 +244,9 @@ public class TableroController {
 	}
 	
 	@GetMapping("/{id}/tarjetas/{etiqueta}")
-	public ResponseEntity<List<Tarjeta>> obtenerTarjetaListaPorEtiqueta(@PathVariable Long id, @PathVariable String etiqueta){
+	public ResponseEntity<List<Tarjeta>> obtenerTarjetaListaPorEtiqueta(@PathVariable String id, @PathVariable String etiqueta){
 		try {
-			return ResponseEntity.ok(tableroService.obtenerTarjetasEtiqueta(TableroId.of(id), etiqueta));
+			return ResponseEntity.ok(tableroService.obtenerTarjetasEtiqueta(id, etiqueta));
 		} catch (TableroNoExistenteException e) {
 			System.out.println(e.getMessage());
 		} catch(Exception e) {

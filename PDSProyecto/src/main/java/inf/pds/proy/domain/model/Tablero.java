@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -46,6 +47,10 @@ public class Tablero {
 		} catch (IdentificadorListaException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Tablero(TableroId id, String nombre, Usuario propietario) {
+		this(id, nombre, propietario, UUID.randomUUID().toString());
 	}
 
 	public TableroId getId() {
@@ -111,7 +116,6 @@ public class Tablero {
 	public void setListas(List<ListaTareas> listaTareas) {
 		this.listasTareas = listaTareas;
 	}
-
 
 	public ListaTareas getListaCompletadas() {
 		return listaCompletadas;

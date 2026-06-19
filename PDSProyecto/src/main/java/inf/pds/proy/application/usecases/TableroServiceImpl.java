@@ -37,8 +37,8 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Tablero crearTablero(String nombre, Usuario propietario, String url) throws IdentificadorTableroException {
-		Tablero table = new Tablero(TableroId.random(), nombre, propietario, url);
+	public Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException {
+		Tablero table = new Tablero(TableroId.random(), nombre, propietario);
 		repTab.guardarTablero(table);
 		return table;
 	}
@@ -47,16 +47,23 @@ public class TableroServiceImpl implements TableroService{
 	public List<Tablero> obtenerTableros() {
 		return repTab.obtenerTableros();
 	}
-
+	
 	@Override
-	public Optional<Tablero> filtrarTableroById(TableroId id) {
-		return repTab.filtrarTableroById(id);
+	public Optional<Tablero> filtrarTableroById(TableroId tableroId) {
+		return repTab.filtrarTableroById(tableroId);
 	}
 
 	@Override
-	public Optional<Tablero> filtrarTableroByURL(String url) {
-		return repTab.filtrarTableroByURL(url);
+	public Optional<Tablero> filtrarTableroByIdOrUrl(String id) {
+		try {
+			Long idNum = Long.parseLong(id);
+			return repTab.filtrarTableroById(TableroId.of(idNum));
+		}catch(NumberFormatException | IdentificadorTableroException e) {
+			return repTab.filtrarTableroByURL(id);
+		}
+		
 	}
+
 
 	@Override
 	public void eliminarTablero(TableroId id) {
@@ -92,8 +99,8 @@ public class TableroServiceImpl implements TableroService{
 
 	@Override
 	@Transactional
-	public List<ListaTareas> obtenerListas(TableroId tableroId) throws TableroNoExistenteException{
-		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+	public List<ListaTareas> obtenerListas(String id) throws TableroNoExistenteException{
+		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Listas del tablero " + tablero.getNombre() + " obtenidas";
 		tablero.registrarOp(TipoOperacion.LISTAS_OBTENIDAS, desc, tablero.getPropietario());
 		return tablero.getListas();	
@@ -101,8 +108,8 @@ public class TableroServiceImpl implements TableroService{
 
 	@Override
 	@Transactional
-	public Optional<ListaTareas> filtrarListaById(TableroId tableroId, ListaTareasId listaId) throws TableroNoExistenteException{
-		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+	public Optional<ListaTareas> filtrarListaById(String id, ListaTareasId listaId) throws TableroNoExistenteException{
+		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		Optional<ListaTareas> listaOptional = tablero.obtenerLista(listaId);
 		String desc;
 		if(listaOptional.isPresent()) {
@@ -162,8 +169,8 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public List<Tarjeta> obtenerTarjetas(TableroId tableroId, ListaTareasId listaId) throws TableroNoExistenteException, ListaNoExistenteException{
-		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+	public List<Tarjeta> obtenerTarjetas(String id, ListaTareasId listaId) throws TableroNoExistenteException, ListaNoExistenteException{
+		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Tarjetas de la lista con id " + listaId + " obtenidas";
 		tablero.registrarOp(TipoOperacion.TARJETAS_OBTENIDAS, desc, tablero.getPropietario());
 		return tablero.getTarjetasDeLista(listaId);	
@@ -171,8 +178,8 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public List<Tarjeta> obtenerTarjetasEtiqueta(TableroId tableroId, String etiqueta) throws TableroNoExistenteException{
-		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+	public List<Tarjeta> obtenerTarjetasEtiqueta(String id, String etiqueta) throws TableroNoExistenteException{
+		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Tarjetas con etiqueta " + etiqueta + " obtenidas.";
 		tablero.registrarOp(TipoOperacion.TARJETAS_OBTENIDAS, desc, tablero.getPropietario());
 		return tablero.getTarjetasPorEtiqueta(etiqueta);	
@@ -180,8 +187,8 @@ public class TableroServiceImpl implements TableroService{
 
 	@Override
 	@Transactional
-	public Optional<Tarjeta> filtrarTarjetasById(TableroId tableroId, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException{
-		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
+	public Optional<Tarjeta> filtrarTarjetasById(String id, ListaTareasId listaId, TarjetaId tarjetaId) throws TableroNoExistenteException, ListaNoExistenteException{
+		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		Optional<Tarjeta> tarjetaOptional = tablero.obtenerTarjetaDeLista(listaId, tarjetaId);
 		String desc = "Tarjeta de la lista " + listaId + " con id " + tarjetaId + " no encontrada";
 		if(tarjetaOptional.isPresent()) {
