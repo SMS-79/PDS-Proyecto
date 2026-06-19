@@ -7,6 +7,7 @@ import java.util.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,12 +24,11 @@ import jakarta.persistence.Table;
 public class TableroEntity {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String nombre;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="propietario_id", nullable=false)
 	private UsuarioEntity propietario; 
 	
@@ -38,15 +38,15 @@ public class TableroEntity {
 	private boolean bloqueado;
 	private LocalDateTime bloqueoFin;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "tablero_id")
     private List<HistorialOpsEntity> historialOp; 
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "tablero_id")
     private List<ListaTareasEntity> listaTareas;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tablero_miembros",
 	joinColumns = @JoinColumn(name = "tablero_id"),
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))

@@ -39,8 +39,8 @@ public class TableroServiceImpl implements TableroService{
 	@Override
 	public Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException {
 		Tablero table = new Tablero(TableroId.random(), nombre, propietario);
-		repTab.guardarTablero(table);
-		return table;
+		System.out.println(table.getId());
+		return repTab.guardarTablero(table);
 	}
 
 	@Override

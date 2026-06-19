@@ -15,7 +15,7 @@ public abstract class Tarjeta {
 	private LocalDate fechaLimite; 
 	private Usuario responsable; 
 	private boolean completada;
-	private List<ListaTareas> historialLista;
+	private List<ListaTareas> historialLista = new ArrayList<>();
 	
 	
 	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
@@ -25,7 +25,6 @@ public abstract class Tarjeta {
 		this.fechaLimite = fechaLimite;
 		this.responsable = responsable;
 		this.completada = false;
-		this.historialLista = new ArrayList<>();
 	}
 	
 	protected Tarjeta(TarjetaId id, String nombre, LocalDate fechaLimite, Usuario responsable) {

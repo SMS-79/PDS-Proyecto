@@ -11,17 +11,17 @@ public class ListaTareas {
 	
 	private ListaTareasId id; 
 	private String tipo; 
-	private List<Tarjeta> tarjetas; 
+	private List<Tarjeta> tarjetas = new ArrayList<>();; 
 	private int limiteItems;
 	private List<ListaTareas> caminoRequerido;
 	
-	public ListaTareas (String tipo) throws IdentificadorListaException {
-		this.id = ListaTareasId.random();
+	public ListaTareas (ListaTareasId id, String tipo) {
+		this.id = id;
 		this.tipo = tipo;
-		this.tarjetas = new ArrayList<>(); 
 		this.limiteItems = -1;
 		this.caminoRequerido = null;
 	}
+	
 
 	public ListaTareasId getId() {
 		return id;
@@ -52,7 +52,7 @@ public class ListaTareas {
 	}
 	
 	public boolean canAdd(Tarjeta t) {
-		return (this.limiteItems == -1 || this.limiteItems > this.tarjetas.size()) && (this.caminoRequerido == null || this.caminoRequerido.equals(t.getHistorialLista()));
+		return (this.limiteItems == -1 || this.limiteItems > this.tarjetas.size()) && (this.caminoRequerido == null || t.getHistorialLista().containsAll(this.caminoRequerido));
 	}
 	
 	public void removeTarjeta(Tarjeta t) {

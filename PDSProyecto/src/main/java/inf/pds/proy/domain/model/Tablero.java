@@ -26,12 +26,14 @@ public class Tablero {
 	private String url;
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private LocalDateTime bloqueoFin;
-	private List<HistorialOps> historialOp;
-	private List<Usuario> miembros; 
-	private List<ListaTareas> listasTareas; // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
-	private ListaTareas listaCompletadas; // lista para separar las completadas
+	private List<HistorialOps> historialOp = new ArrayList<>();
+	private List<Usuario> miembros = new ArrayList<>(); 
+	private List<ListaTareas> listasTareas = new ArrayList<>(); // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
+	private ListaTareas listaCompletadas = new ListaTareas(ListaTareasId.random(), "Completadas"); // lista para separar las completadas
 	
-	public Tablero() {}
+	public Tablero() {
+	
+	}
 	
 	public Tablero(TableroId id, String nombre, Usuario propietario, String url) {
 		this.id = id;
@@ -39,14 +41,8 @@ public class Tablero {
 		this.propietario = propietario;
 		this.url = url;
 		this.bloqueado = false;
-		this.miembros = new ArrayList<>();
-		this.listasTareas = new ArrayList<>();
-		this.historialOp = new ArrayList<>();
-		try {
-			this.listaCompletadas = new ListaTareas("Completadas");
-		} catch (IdentificadorListaException e) {
-			e.printStackTrace();
-		}
+		
+		
 	}
 	
 	public Tablero(TableroId id, String nombre, Usuario propietario) {
@@ -106,7 +102,7 @@ public class Tablero {
 	}
 	
 	public void setHistorialOp(List<HistorialOps> historial) {
-		this.historialOp = historial;
+		this.historialOp = new ArrayList<>(historial);
 	}
 
 	public List<ListaTareas> getListas() {
@@ -114,7 +110,7 @@ public class Tablero {
 	}
 	
 	public void setListas(List<ListaTareas> listaTareas) {
-		this.listasTareas = listaTareas;
+		this.listasTareas = new ArrayList<>(listaTareas);
 	}
 
 	public ListaTareas getListaCompletadas() {
@@ -130,15 +126,10 @@ public class Tablero {
 	}
 	
 	public ListaTareas crearLista(String tipo) {
-		try {
-			ListaTareas listaTareas = new ListaTareas(tipo);
-			this.listasTareas.add(listaTareas);
-			return listaTareas;
-		}catch(IdentificadorListaException e) {
-			e.printStackTrace();
-		}
+		ListaTareas listaTareas = new ListaTareas(ListaTareasId.random(), tipo);
+		this.listasTareas.add(listaTareas);
+		return listaTareas;
 		
-		return null;
 	}
 	
 	public Optional<ListaTareas> obtenerLista(ListaTareasId id) {

@@ -1,5 +1,7 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.TarjetaCheckListEntity;
@@ -17,6 +19,13 @@ public class TarjetaMapper {
 	CheckListItemMapper itemMapper;
 	UsuarioMapper userMapper;
 	ListaTareasMapper listaMapper;
+	
+	@Autowired
+	public TarjetaMapper(CheckListItemMapper itemMapper, UsuarioMapper userMapper, @Lazy ListaTareasMapper listaMapper) {
+		this.itemMapper = itemMapper;
+		this.userMapper = userMapper;
+		this.listaMapper = listaMapper;
+	}
 
 	public TarjetaEntity toEntity(Tarjeta tarjeta) {
 		TarjetaEntity tarjetaEntity;

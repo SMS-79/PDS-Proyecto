@@ -1,5 +1,6 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.TableroEntity;
@@ -14,6 +15,13 @@ public class TableroMapper {
 	private UsuarioMapper userMapper; 
 	private ListaTareasMapper listaMapper;
 	private HistorialOpsMapper historialMapper;
+	
+	@Autowired
+	public TableroMapper(UsuarioMapper userMapper, ListaTareasMapper listaMapper, HistorialOpsMapper historialMapper) {
+		this.userMapper = userMapper;
+		this.listaMapper = listaMapper;
+		this.historialMapper = historialMapper;
+	}
 	
 	public TableroEntity toEntity(Tablero table) {
 		TableroEntity tableroEntity = new TableroEntity();
