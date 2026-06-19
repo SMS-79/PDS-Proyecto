@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -38,9 +39,12 @@ public class ListaTareasEntity {
 	private int limiteItems;
 	
 	@ManyToMany
-	@JoinColumn(name = "camino_requerido")
+	@JoinTable(
+		name = "lista_tareas_caminos",
+		joinColumns = @JoinColumn(name = "lista_id"),
+		inverseJoinColumns = @JoinColumn(name = "camino_requerido_id")
+	)
 	private List<ListaTareasEntity> caminoRequerido;
-	
 	
 	public ListaTareasEntity() {}
 
