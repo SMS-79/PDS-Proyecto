@@ -1,5 +1,7 @@
 package inf.pds.proy.adapters.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.TarjetaCheckListEntity;
@@ -9,6 +11,8 @@ import inf.pds.proy.domain.model.Etiqueta;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.ids.ListaTareasId;
+import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
 
 @Component
@@ -17,6 +21,13 @@ public class TarjetaMapper {
 	CheckListItemMapper itemMapper;
 	UsuarioMapper userMapper;
 	ListaTareasMapper listaMapper;
+	
+	@Autowired
+	public TarjetaMapper(CheckListItemMapper itemMapper, UsuarioMapper userMapper, @Lazy ListaTareasMapper listaMapper) {
+		this.itemMapper = itemMapper;
+		this.userMapper = userMapper;
+		this.listaMapper = listaMapper;
+	}
 
 	public TarjetaEntity toEntity(Tarjeta tarjeta) {
 		TarjetaEntity tarjetaEntity;
@@ -47,7 +58,7 @@ public class TarjetaMapper {
 		tarjetaEntity.setEtiquetaColor(etiq.color());
 		tarjetaEntity.setFechaLimite(tarjeta.getFechaLimite());
 		tarjetaEntity.setResponsable(userMapper.toEntity(tarjeta.getResponsable()));
-		tarjetaEntity.setHistorialLista(tarjeta.getHistorialLista().stream().map(listaMapper::toEntity).toList());
+		tarjetaEntity.setHistorialLista(tarjeta.getHistorialLista().stream().map(l -> l.getId()).toList());
 		
 
 		return tarjetaEntity;
@@ -75,7 +86,14 @@ public class TarjetaMapper {
 				tarjeta = tarjetaCheckList;
 			}
 			tarjeta.setCompletada(tarjetaEntity.isCompletada());
-			tarjeta.setHistorialLista(tarjetaEntity.getHistorialLista().stream().map(listaMapper::toDomain).toList());
+			tarjeta.setHistorialLista(tarjetaEntity.getHistorialLista().stream().map(l -> {
+				try {
+					return ListaTareasId.of(l);
+				} catch (IdentificadorListaException e) {
+					e.printStackTrace();
+					return ListaTareasId.random();
+				}
+			}).toList());
 		
 		}catch(Exception e) {
 			e.printStackTrace();

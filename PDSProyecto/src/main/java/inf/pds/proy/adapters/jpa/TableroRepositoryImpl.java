@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import inf.pds.proy.adapters.jpa.entity.TableroEntity;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
@@ -11,6 +12,7 @@ import inf.pds.proy.adapters.mappers.TableroMapper;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.ports.output.TableroRepository;
+
 
 @Repository
 public class TableroRepositoryImpl implements TableroRepository{
@@ -32,6 +34,7 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Tablero> obtenerTableros() {
 		return jpaRepository.findAll().stream()
 				.map(tableMapper::toDomain)
@@ -39,6 +42,7 @@ public class TableroRepositoryImpl implements TableroRepository{
 	}
 
 	@Override
+	@Transactional
 	public Optional<Tablero> filtrarTableroById(TableroId id) {
 		return jpaRepository.findById(id.getId()).map(tableMapper::toDomain);
 	}

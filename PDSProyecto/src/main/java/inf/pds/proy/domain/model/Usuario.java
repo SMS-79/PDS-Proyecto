@@ -1,5 +1,6 @@
 package inf.pds.proy.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import inf.pds.proy.domain.model.ids.UsuarioId;
@@ -23,6 +24,8 @@ public class Usuario {
 		this.nombre = nombre;
 		this.email = email;
 		this.pswd = pswd;
+		this.tableros = new ArrayList<>();
+		this.tablerosCompartidos = new ArrayList<>();
 	}
 	
 

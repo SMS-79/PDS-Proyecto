@@ -18,11 +18,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Component("tableroUIController")
 public class TableroController {
@@ -36,7 +39,7 @@ public class TableroController {
     @FXML private Label usuarioLabel;
     @FXML private HBox contenedorListas;
 
-    // Inyectamos el contexto de Spring y el servicio para leer de la BD
+    // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
     public TableroController(ApplicationContext applicationContext, TableroServiceImpl tableroService) {
         this.applicationContext = applicationContext;
         this.tableroService = tableroService;
@@ -55,9 +58,12 @@ public class TableroController {
         }
 
         // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
-        Tablero tablero = tableroService.filtrarTableroByIdOrUrl(1L); 
         
-        if(tablero == null) return;
+        //Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1"); 
+        
+        //if(tableroOpt.isEmpty()) return;
+        
+        Tablero tablero = tableroService.obtenerTableros().getFirst();
 
         // Vamos creando una columna visual por cada lista del tablero
         for (ListaTareas lista : tablero.getListas()) {
@@ -71,17 +77,54 @@ public class TableroController {
             columnaLista.getChildren().add(tituloLista);
 
             // Metemos las tarjetas reales dentro de su columna correspondiente
-            for (Tarjeta tarjeta : lista.getTarjetas()) {
-                Button botonTarjeta = new Button(tarjeta.getNombre());
-                botonTarjeta.setPrefWidth(250);
-                botonTarjeta.setStyle("-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
-                columnaLista.getChildren().add(botonTarjeta);
+            if (lista.getTarjetas() != null) {
+                for (Tarjeta tarjeta : lista.getTarjetas()) {
+                    Button botonTarjeta = new Button(tarjeta.getNombre());
+                    botonTarjeta.setPrefWidth(250);
+                    botonTarjeta.setStyle("-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
+                    columnaLista.getChildren().add(botonTarjeta);
+                }
             }
 
+            // Creamos el botón de añadir tarjeta
             Button btnAñadir = new Button("+ Añadir tarjeta");
             btnAñadir.setStyle("-fx-background-color: transparent; -fx-text-fill: #5e6c84;");
-            columnaLista.getChildren().add(btnAñadir);
+            
+            // Le damos acción al botón para que pregunte el nombre de la nueva tarea
+            btnAñadir.setOnAction(e -> {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Nueva Tarjeta");
+                dialog.setHeaderText("Añadir tarjeta a la lista: " + lista.getTipo());
+                dialog.setContentText("Nombre de la tarea:");
 
+                // Si el usuario escribe algo y le da a Aceptar...
+                Optional<String> resultado = dialog.showAndWait();
+                resultado.ifPresent(nombreTarea -> {
+                    try {
+                        // Llamamos al servicio real para crear la tarea en la BD
+                        // Pasamos null a lo que no tenemos aún (etiqueta, fecha, responsable)
+                        tableroService.crearTarjetaTarea(
+                            tablero.getId(), 
+                            lista.getId(), 
+                            nombreTarea, 
+                            null, 
+                            LocalDate.now(), 
+                            tablero.getPropietario(), 
+                            ""
+                        );
+                        
+                        System.out.println("Tarea '" + nombreTarea + "' creada en la BD!");
+                        
+                        // Recargamos el tablero para que la nueva tarjeta aparezca al instante
+                        cargarDatosReales();
+                    } catch (Exception ex) {
+                        System.out.println("Error al crear la tarea: " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                });
+            });
+
+            columnaLista.getChildren().add(btnAñadir);
             contenedorListas.getChildren().add(columnaLista);
         }
     }

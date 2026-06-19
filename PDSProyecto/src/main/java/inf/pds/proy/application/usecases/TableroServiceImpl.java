@@ -39,11 +39,12 @@ public class TableroServiceImpl implements TableroService{
 	@Override
 	public Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException {
 		Tablero table = new Tablero(TableroId.random(), nombre, propietario);
-		repTab.guardarTablero(table);
-		return table;
+		System.out.println(table.getId());
+		return repTab.guardarTablero(table);
 	}
 
 	@Override
+	@Transactional
 	public List<Tablero> obtenerTableros() {
 		return repTab.obtenerTableros();
 	}
@@ -71,6 +72,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 	
 	@Override
+	@Transactional
 	public void bloquearTablero(TableroId tableroId, LocalDateTime fechaBloqueo) throws TableroNoExistenteException{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		tablero.bloquear(fechaBloqueo);
@@ -79,6 +81,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
+	@Transactional
 	public void desbloquearTablero(TableroId tableroId) throws TableroNoExistenteException{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		tablero.desbloquear();
