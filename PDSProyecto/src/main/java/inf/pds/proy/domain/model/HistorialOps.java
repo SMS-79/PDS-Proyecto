@@ -20,6 +20,7 @@ public class HistorialOps {
 	
 	public HistorialOps(HistorialOpsId id, String descripcion, TipoOperacion tipo, Usuario usuario, LocalDateTime fecha){
 		this.id = id;
+		this.descripcion = descripcion;
 		this.tipo = tipo;
 		this.usuario = usuario;
 		this.fecha = fecha;
