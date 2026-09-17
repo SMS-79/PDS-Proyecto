@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inf.pds.proy.domain.model.ids.ListaTareasId;
-import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
-import inf.pds.proy.domain.model.exceptions.*;
 
 public class ListaTareas {
 	
@@ -81,11 +79,9 @@ public class ListaTareas {
 	
 	public void addCaminoRequerido(List<ListaTareas> caminoRequerido) {
 		if(this.caminoRequerido == null) {
-			caminoRequerido = new ArrayList<>();
+			this.caminoRequerido = new ArrayList<>();
 		}
 		this.caminoRequerido.addAll(caminoRequerido);
 	}
-	
-	
 	
 }
