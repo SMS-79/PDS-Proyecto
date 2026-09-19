@@ -50,7 +50,8 @@ public class ListaTareas {
 	}
 	
 	public boolean canAdd(Tarjeta t) {
-		return (this.limiteItems == -1 || this.limiteItems > this.tarjetas.size()) && (this.caminoRequerido == null || t.getHistorialLista().containsAll(this.caminoRequerido));
+		return (this.limiteItems == -1 || this.limiteItems > this.tarjetas.size())
+			&& (this.caminoRequerido == null || t.getHistorialLista().containsAll(this.caminoRequerido.stream().map(l -> l.getId()).toList()));
 	}
 	
 	public void removeTarjeta(Tarjeta t) {
