@@ -13,11 +13,6 @@ import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.adapters.jpa.repository.TableroJpaRepository;
-import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
-import inf.pds.proy.adapters.jpa.entity.TableroEntity;
-import inf.pds.proy.adapters.jpa.entity.ListaTareasEntity;
-
-import java.util.ArrayList;
 
 @Component
 public class InicializadorDatosPrueba implements CommandLineRunner {
