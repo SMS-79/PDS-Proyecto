@@ -45,7 +45,7 @@ public class TarjetaCheckList extends Tarjeta{
     }
     
     public boolean todosCompletados() { // funcion de autocompletado si la tarjeta tiene todos los checklists marcados
-        return !items.isEmpty() && items.stream().allMatch(CheckListItem::isCompletado);
+        return !items.isEmpty() && items.stream().allMatch(i -> i.isCompletado());
     }
   
 }

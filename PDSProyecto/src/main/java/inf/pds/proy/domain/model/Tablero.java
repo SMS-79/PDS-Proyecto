@@ -14,7 +14,6 @@ import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
-import inf.pds.proy.domain.model.ids.ListaTareasId.IdentificadorListaException;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
 
