@@ -13,6 +13,7 @@ public class Usuario {
 	private String pswd;
 	
 	private List<Tablero> tableros;
+	@SuppressWarnings ("unused")
 	private List<Tablero> tablerosCompartidos;
 	
 	public Usuario() {

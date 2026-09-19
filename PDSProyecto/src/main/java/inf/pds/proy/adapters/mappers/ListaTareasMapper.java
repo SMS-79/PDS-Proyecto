@@ -1,6 +1,5 @@
 package inf.pds.proy.adapters.mappers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ public class ListaTareasMapper {
 
     private final TarjetaMapper tarjetaMapper;
 
-    @Autowired
     public ListaTareasMapper(@Lazy TarjetaMapper tarjetaMapper) {
         this.tarjetaMapper = tarjetaMapper;
     }
