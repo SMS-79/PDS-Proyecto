@@ -51,11 +51,10 @@ public class InicializadorDatosPrueba implements CommandLineRunner {
               
                 // 3. Preparamos las Listas de Tareas y las metemos al Tablero
                 String[] nombresListas = {"TO DO", "DOING", "DONE"};
-                
+
                 for (String nombreLista : nombresListas) {
-                    ListaTareas lista = new ListaTareas(ListaTareasId.random(), "Tarea");
-                  
-                    
+                    ListaTareas lista = new ListaTareas(ListaTareasId.random(), nombreLista);
+
                     // Al ser un agregado, simplemente la añadimos a la raíz
                     tablero.getListas().add(lista);
                 }
