@@ -11,8 +11,7 @@ public class UsuarioId {
 	
 	public static class IdentificadorUsuarioException extends Exception {
 		private static final long serialVersionUID = 4944813248848099L;
-		
-		private static Random rand = new Random(); // Añadir la inicialización
+	
 		
 		public IdentificadorUsuarioException(String mensaje) {
 			super(mensaje);
