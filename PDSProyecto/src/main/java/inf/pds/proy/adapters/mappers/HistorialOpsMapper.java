@@ -1,6 +1,5 @@
 package inf.pds.proy.adapters.mappers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.HistorialOpsEntity;
@@ -15,7 +14,6 @@ public class HistorialOpsMapper {
 
 	private UsuarioMapper userMapper;
 	
-	@Autowired
 	public HistorialOpsMapper(UsuarioMapper userMapper) {
 		this.userMapper = userMapper;
 	}
