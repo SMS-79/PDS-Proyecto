@@ -36,7 +36,7 @@ public class TableroEntity {
 	private boolean bloqueado;
 	private LocalDateTime bloqueoFin;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "tablero_id")
     private List<HistorialOpsEntity> historialOp; 
     
