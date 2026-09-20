@@ -51,7 +51,7 @@ public class LoginController {
                 Parent root = fxmlLoader.load();
                 
                 // Le pasamos el email al controlador del tablero para que lo muestre arriba
-                TableroController tableroController = fxmlLoader.getController();
+                TableroViewController tableroController = fxmlLoader.getController();
                 tableroController.inicializarTablero(email);
 
                 // Sacamos la ventana actual a partir del botón y le cambiamos la escena
