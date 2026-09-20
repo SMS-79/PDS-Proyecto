@@ -78,6 +78,7 @@ public class TableroServiceImpl implements TableroService{
 		tablero.bloquear(fechaBloqueo);
 		String desc = "Tablero " + tablero.getNombre() + " bloqueado hasta " + fechaBloqueo.toString();
 		tablero.registrarOp(TipoOperacion.TABLERO_BLOQUEADO, desc , tablero.getPropietario());
+	 	repTab.guardarTablero(tablero);
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class TableroServiceImpl implements TableroService{
 		tablero.desbloquear();
 		String desc = "Tablero " + tablero.getNombre() + " desbloqueado.";
 		tablero.registrarOp(TipoOperacion.TABLERO_DESBLOQUEADO, desc , tablero.getPropietario());
+	 	repTab.guardarTablero(tablero);
 	}
 	
 
@@ -97,6 +99,7 @@ public class TableroServiceImpl implements TableroService{
 		ListaTareas lista = tablero.crearLista(tipo);
 		String desc = "Lista" + lista.getTipo() + " con id " + lista.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.LISTA_CREADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return lista;
 	}
 
@@ -129,6 +132,7 @@ public class TableroServiceImpl implements TableroService{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		ListaTareas lista = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
 		lista.setLimiteItems(limite);
+		repTab.guardarTablero(tablero);
 	}
 
 	@Override
@@ -136,9 +140,9 @@ public class TableroServiceImpl implements TableroService{
 	public void addCaminoLista(TableroId tableroId, ListaTareasId listaId, ListaTareasId listaCaminoId) throws TableroNoExistenteException, ListaNoExistenteException{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		ListaTareas lista = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
-		ListaTareas listaCamino = tablero.obtenerLista(listaId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaId + " no encontrada"));
-		
+		ListaTareas listaCamino = tablero.obtenerLista(listaCaminoId).orElseThrow(() -> new ListaNoExistenteException("Lista con id " + listaCaminoId + " no encontrada"));
 		lista.addCaminoRequerido(List.of(listaCamino));
+		repTab.guardarTablero(tablero);
 	}
 	
 	@Override
@@ -148,6 +152,7 @@ public class TableroServiceImpl implements TableroService{
 		tablero.eliminarLista(listaId);
 		String desc = "Lista con id " + listaId + " eliminada";
 		tablero.registrarOp(TipoOperacion.LISTA_ELIMINADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 	}
 	
 	@Override
@@ -157,7 +162,7 @@ public class TableroServiceImpl implements TableroService{
 		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, etiqueta, fechaLimite, responsable, descripcion);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_Tarea, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
-		return tarjeta;	
+		repTab.guardarTablero(tablero);return tarjeta;	
 	}
 	
 	@Override
@@ -167,6 +172,7 @@ public class TableroServiceImpl implements TableroService{
 		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, etiqueta, fechaLimite, responsable);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_CheckList, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return tarjeta;
 	}
 	
@@ -209,7 +215,8 @@ public class TableroServiceImpl implements TableroService{
 		tablero.addTarjetaToList(listaObjetivoId, tarjeta);
 		tablero.eliminarTarjetaDeLista(listaId, tarjetaId);
 		String desc = "Tarjeta " + tarjeta.getNombre() + " con id " + tarjeta.getId() + " desplazada de lista " + listaId + " a lista " + listaObjetivoId;
-		tablero.registrarOp(TipoOperacion.TARJETA_DESPLAZADA, desc, tablero.getPropietario());	
+		tablero.registrarOp(TipoOperacion.TARJETA_DESPLAZADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);	
 	}
 	
 	@Override
@@ -218,7 +225,8 @@ public class TableroServiceImpl implements TableroService{
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		String desc = "Tarjeta con id " + tarjetaId + " completada";
 		tablero.alternarCompletarTarjeta(listaId, tarjetaId);
-		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, desc, tablero.getPropietario());	
+		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);	
 	}
 
 	@Override
@@ -228,6 +236,7 @@ public class TableroServiceImpl implements TableroService{
 		String desc = "Tarjeta con id " + tarjetaId + " eliminada";
 		tablero.eliminarTarjetaDeLista(listaId, tarjetaId);
 		tablero.registrarOp(TipoOperacion.TARJETA_ELIMINADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 	}
 
 	
