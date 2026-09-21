@@ -109,6 +109,7 @@ public class TableroServiceImpl implements TableroService{
 		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Listas del tablero " + tablero.getNombre() + " obtenidas";
 		tablero.registrarOp(TipoOperacion.LISTAS_OBTENIDAS, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return tablero.getListas();	
 	}
 
@@ -123,6 +124,7 @@ public class TableroServiceImpl implements TableroService{
 		}
 		desc = "Lista del tablero " + tablero.getNombre() + "con id " + listaId + " no encontrada";
 		tablero.registrarOp(TipoOperacion.LISTA_BUSCADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return listaOptional;
 	}
 	
@@ -182,6 +184,7 @@ public class TableroServiceImpl implements TableroService{
 		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Tarjetas de la lista con id " + listaId + " obtenidas";
 		tablero.registrarOp(TipoOperacion.TARJETAS_OBTENIDAS, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return tablero.getTarjetasDeLista(listaId);	
 	}
 	
@@ -191,6 +194,7 @@ public class TableroServiceImpl implements TableroService{
 		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		String desc = "Tarjetas con etiqueta " + etiqueta + " obtenidas.";
 		tablero.registrarOp(TipoOperacion.TARJETAS_OBTENIDAS, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return tablero.getTarjetasPorEtiqueta(etiqueta);	
 	}
 
@@ -204,6 +208,7 @@ public class TableroServiceImpl implements TableroService{
 			desc = "Tarjeta " + tarjetaOptional.get().getNombre() + " de la lista " + listaId + "con id " + tarjetaId + " filtrada";
 		}
 		tablero.registrarOp(TipoOperacion.TARJETA_BUSCADA, desc, tablero.getPropietario());
+		repTab.guardarTablero(tablero);
 		return tarjetaOptional;
 	}
 	
