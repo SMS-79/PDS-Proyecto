@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import inf.pds.proy.adapters.rest.dto.ListaTareasDTO;
+import inf.pds.proy.adapters.rest.dto.TableroDTO;
+import inf.pds.proy.adapters.rest.dto.TarjetaDTO;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
-import inf.pds.proy.domain.model.TarjetaTarea;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
@@ -38,7 +40,7 @@ public class TableroController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Tablero> crear(@RequestBody Tablero tablero){
+	public ResponseEntity<Tablero> crear(@RequestBody TableroDTO tablero){
 		
 		try {
 			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario());
@@ -109,7 +111,7 @@ public class TableroController {
 	}
 	
 	@PostMapping("/{id}/listas")
-	public ResponseEntity<ListaTareas> crearLista(@PathVariable Long id, @RequestBody ListaTareas listaTarea){
+	public ResponseEntity<ListaTareas> crearLista(@PathVariable Long id, @RequestBody ListaTareasDTO listaTarea){
 		try{
 			ListaTareas lista = tableroService.crearLista(TableroId.of(id), listaTarea.getTipo());
 			return ResponseEntity.ok(lista);
@@ -194,14 +196,14 @@ public class TableroController {
 	}
 	
 	@PostMapping("/{id}/listas/{listaId}/tarjeta")
-	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody String tipo, @RequestBody Tarjeta tarjeta){
+	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody TarjetaDTO tarjeta){
 		try {
 			Tarjeta card;
-			if(tarjeta instanceof TarjetaTarea tarjetaTarea) {
-				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjetaTarea.getFechaLimite(), tarjetaTarea.getResponsable(), tarjetaTarea.getDescripcion());
+			if(tarjeta.getTipoTarjeta().equals("TAREA")) {
+				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable(), tarjeta.getDescripcion());
 			}
 			else {
-				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiqueta().orElse(null), tarjeta.getFechaLimite(), tarjeta.getResponsable());
+				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable());
 			}
 				
 			return ResponseEntity.ok(card);
