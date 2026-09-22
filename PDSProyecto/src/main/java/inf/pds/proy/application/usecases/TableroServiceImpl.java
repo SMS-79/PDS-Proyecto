@@ -118,11 +118,13 @@ public class TableroServiceImpl implements TableroService{
 	public Optional<ListaTareas> filtrarListaById(String id, ListaTareasId listaId) throws TableroNoExistenteException{
 		Tablero tablero = filtrarTableroByIdOrUrl(id).orElseThrow(() -> new TableroNoExistenteException("Tablero con id o url " + id + " no encontrado"));
 		Optional<ListaTareas> listaOptional = tablero.obtenerLista(listaId);
-		String desc;
+		String desc = "Lista del tablero " + tablero.getNombre() + "con id " + listaId;
 		if(listaOptional.isPresent()) {
-			desc = "Lista del tablero " + tablero.getNombre() + "con id " + listaId + " filtrada";
+			desc += " filtrada";
 		}
-		desc = "Lista del tablero " + tablero.getNombre() + "con id " + listaId + " no encontrada";
+		else{
+			desc +=" no encontrada";
+		}
 		tablero.registrarOp(TipoOperacion.LISTA_BUSCADA, desc, tablero.getPropietario());
 		repTab.guardarTablero(tablero);
 		return listaOptional;
