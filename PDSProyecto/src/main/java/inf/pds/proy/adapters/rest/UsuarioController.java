@@ -14,6 +14,7 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
+import inf.pds.proy.adapters.rest.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -26,7 +27,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> crear(@RequestBody UsuarioDTO usuario){
 		Usuario user = usuarioService.crearUsuario(usuario.getNombre(), usuario.getEmail(), usuario.getPswd());
 		
 		return ResponseEntity.ok(user);

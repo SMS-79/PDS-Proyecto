@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.application.usecases.TableroServiceImpl;
+import inf.pds.proy.adapters.rest.TableroController;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
@@ -28,10 +29,10 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Component("tableroUIController")
-public class TableroController {
+public class TableroViewController {
 
     private final ApplicationContext applicationContext;
-    private final TableroServiceImpl tableroService;
+    private final TableroController tableroController;
 
     @Value("classpath:/views/LoginView.fxml")
     private Resource loginView;
@@ -40,9 +41,9 @@ public class TableroController {
     @FXML private HBox contenedorListas;
 
     // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
-    public TableroController(ApplicationContext applicationContext, TableroServiceImpl tableroService) {
+    public TableroViewController(ApplicationContext applicationContext, TableroController tableroController) {
         this.applicationContext = applicationContext;
-        this.tableroService = tableroService;
+        this.tableroController = tableroController;
     }
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
@@ -63,7 +64,7 @@ public class TableroController {
         
         //if(tableroOpt.isEmpty()) return;
         
-        Tablero tablero = tableroService.obtenerTableros().getFirst();
+        Tablero tablero = tableroController.obtenerTableros().getBody().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
 
         // Vamos creando una columna visual por cada lista del tablero
         for (ListaTareas lista : tablero.getListas()) {
@@ -106,6 +107,16 @@ public class TableroController {
                         tableroService.crearTarjetaTarea(
                             tablero.getId(), 
                             lista.getId(), 
+                            nombreTarea, 
+                            null, 
+                            LocalDate.now(), 
+                            tablero.getPropietario(), 
+                            ""
+                        );
+                        tableroController.crearTarjeta(
+                            tablero.getId().getId(), 
+                            lista.getId().getId(), 
+                            Tarj
                             nombreTarea, 
                             null, 
                             LocalDate.now(), 
