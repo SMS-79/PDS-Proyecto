@@ -43,7 +43,7 @@ class TableroTest {
         ListaTareas lista = tablero.crearLista("DONE");
         assertEquals(1, tablero.getListas().size());
 
-        tablero.eliminarLista(lista);
+        tablero.eliminarLista(lista.getId());
 
         assertTrue(tablero.getListas().isEmpty());
     }
@@ -61,13 +61,13 @@ class TableroTest {
     // Tests de Tarjetas (Tareas) 
 
     @Test
-    void crearTarjetaTarea_laAñadeALaListaCorrecta() {
+    void crearTarjetaTarea_laAñadeALaListaCorrecta() throws Exception {
         ListaTareas lista = tablero.crearLista("TODO");
         Usuario responsable = new Usuario(UsuarioId.random(), "Ana", "ana@test.com", "abcd");
         LocalDate limite = LocalDate.now().plusDays(5);
 
         TarjetaTarea tarjeta = tablero.crearTarjetaTarea(
-                lista.getId(), "Subir a prod", null, limite, responsable);
+                lista.getId(), "Subir a prod", null, limite, responsable, "Descripción prod");
 
         assertNotNull(tarjeta);
         assertEquals("Subir a prod", tarjeta.getNombre());
@@ -79,13 +79,13 @@ class TableroTest {
     }
 
     @Test
-    void eliminarTarjetaDeLista_laQuitaDeLaLista() {
+    void eliminarTarjetaDeLista_laQuitaDeLaLista() throws Exception {
         ListaTareas lista = tablero.crearLista("BACKLOG");
         TarjetaTarea tarjeta = tablero.crearTarjetaTarea(
-                lista.getId(), "Tarea a borrar", null, LocalDate.now(), propietario);
+                lista.getId(), "Tarea a borrar", null, LocalDate.now(), propietario, "Descripción prod");
 
         // Llamamos al método correcto con la firma exacta que tienes en Tablero.java
-        tablero.eliminarTarjetaDeLista(lista.getId(), tarjeta);
+        tablero.eliminarTarjetaDeLista(lista.getId(), tarjeta.getId());
 
         ListaTareas listaActualizada = tablero.obtenerLista(lista.getId()).get();
         assertTrue(listaActualizada.tarjetasEmpty());
@@ -94,11 +94,11 @@ class TableroTest {
     //  Tests de Tarjetas (CheckList) 
 
     @Test
-    void crearTarjetaCheckList_laAñadeALaListaCorrecta() {
+    void crearTarjetaCheckList_laAñadeALaListaCorrecta() throws Exception {
         ListaTareas lista = tablero.crearLista("QA");
 
         TarjetaCheckList tarjetaCL = tablero.crearTarjetaCheckList(
-                lista.getId(), "Checklist de pruebas", null);
+                lista.getId(), "Checklist de pruebas", null, LocalDate.now(), propietario);
 
         assertNotNull(tarjetaCL);
         
@@ -108,10 +108,10 @@ class TableroTest {
     }
 
     @Test
-    void interactuarConCheckList_aTravesDelTablero() {
+    void interactuarConCheckList_aTravesDelTablero() throws Exception {
         ListaTareas lista = tablero.crearLista("DOING");
         TarjetaCheckList tarjetaCL = tablero.crearTarjetaCheckList(
-                lista.getId(), "Pasos", null);
+                lista.getId(), "Pasos", null, LocalDate.now(), propietario);
 
         // Modificamos el estado interno de la checklist (ya que la tenemos instanciada)
         CheckListItem item1 = new CheckListItem("Paso 1");
@@ -137,11 +137,11 @@ class TableroTest {
         tablero.setBloqueado(true);
 
         assertThrows(IllegalStateException.class, () -> 
-            tablero.crearTarjetaTarea(lista.getId(), "No se debe crear", null, LocalDate.now(), propietario)
+            tablero.crearTarjetaTarea(lista.getId(), "No se debe crear", null, LocalDate.now(), propietario, "Descripción")
         );
         
         assertThrows(IllegalStateException.class, () -> 
-            tablero.crearTarjetaCheckList(lista.getId(), "Ni esta tampoco", null)
+            tablero.crearTarjetaCheckList(lista.getId(), "Ni esta tampoco", null, LocalDate.now(), propietario)
         );
     }
 }
