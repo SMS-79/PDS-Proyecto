@@ -5,11 +5,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import inf.pds.proy.application.usecases.TableroServiceImpl;
-import inf.pds.proy.adapters.rest.TableroController;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
+import inf.pds.proy.domain.ports.input.TableroService;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,7 +31,8 @@ import java.util.Optional;
 public class TableroViewController {
 
     private final ApplicationContext applicationContext;
-    private final TableroController tableroController;
+    // Puerto de entrada: la UI (adapter) habla con el servicio, nunca con el REST.
+    private final TableroService tableroService;
 
     @Value("classpath:/views/LoginView.fxml")
     private Resource loginView;
@@ -41,9 +41,9 @@ public class TableroViewController {
     @FXML private HBox contenedorListas;
 
     // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
-    public TableroViewController(ApplicationContext applicationContext, TableroController tableroController) {
+    public TableroViewController(ApplicationContext applicationContext, TableroService tableroService) {
         this.applicationContext = applicationContext;
-        this.tableroController = tableroController;
+        this.tableroService = tableroService;
     }
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
@@ -59,17 +59,17 @@ public class TableroViewController {
         }
 
         // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
-        
-        //Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1"); 
-        
+
+        //Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
+
         //if(tableroOpt.isEmpty()) return;
-        
-        Tablero tablero = tableroController.obtenerTableros().getBody().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
+
+        Tablero tablero = tableroService.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
 
         // Vamos creando una columna visual por cada lista del tablero
         for (ListaTareas lista : tablero.getListas()) {
-            
-            VBox columnaLista = new VBox(10); 
+
+            VBox columnaLista = new VBox(10);
             columnaLista.setPrefWidth(270);
             columnaLista.setStyle("-fx-background-color: #ebecf0; -fx-background-radius: 5; -fx-padding: 10;");
 
@@ -90,7 +90,7 @@ public class TableroViewController {
             // Creamos el botón de añadir tarjeta
             Button btnAñadir = new Button("+ Añadir tarjeta");
             btnAñadir.setStyle("-fx-background-color: transparent; -fx-text-fill: #5e6c84;");
-            
+
             // Le damos acción al botón para que pregunte el nombre de la nueva tarea
             btnAñadir.setOnAction(e -> {
                 TextInputDialog dialog = new TextInputDialog();
@@ -102,30 +102,21 @@ public class TableroViewController {
                 Optional<String> resultado = dialog.showAndWait();
                 resultado.ifPresent(nombreTarea -> {
                     try {
-                        // Llamamos al servicio real para crear la tarea en la BD
+                        // Llamamos al puerto de entrada, la UI usa el servicio
                         // Pasamos null a lo que no tenemos aún (etiqueta, fecha, responsable)
                         tableroService.crearTarjetaTarea(
-                            tablero.getId(), 
-                            lista.getId(), 
-                            nombreTarea, 
-                            null, 
-                            LocalDate.now(), 
-                            tablero.getPropietario(), 
+                            tablero.getId(),
+                            lista.getId(),
+                            nombreTarea,
+                            null,
+                            null,
+                            LocalDate.now(),
+                            tablero.getPropietario(),
                             ""
                         );
-                        tableroController.crearTarjeta(
-                            tablero.getId().getId(), 
-                            lista.getId().getId(), 
-                            Tarj
-                            nombreTarea, 
-                            null, 
-                            LocalDate.now(), 
-                            tablero.getPropietario(), 
-                            ""
-                        );
-                        
+
                         System.out.println("Tarea '" + nombreTarea + "' creada en la BD!");
-                        
+
                         // Recargamos el tablero para que la nueva tarjeta aparezca al instante
                         cargarDatosReales();
                     } catch (Exception ex) {

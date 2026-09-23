@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #0079bf;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inf.pds.proy.adapters.ui.TableroController">
+<BorderPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #0079bf;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inf.pds.proy.adapters.ui.TableroViewController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="20.0" style="-fx-background-color: #0067a3;" BorderPane.alignment="CENTER">
          <padding>
