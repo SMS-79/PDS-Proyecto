@@ -1,14 +1,5 @@
 package inf.pds.proy.adapters.ui;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
-
-import inf.pds.proy.domain.model.ListaTareas;
-import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.Tarjeta;
-import inf.pds.proy.domain.ports.input.TableroService;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,23 +18,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Component("tableroUIController")
 public class TableroViewController {
-
-    private final ApplicationContext applicationContext;
-    // Puerto de entrada: la UI (adapter) habla con el servicio, nunca con el REST.
-    private final TableroService tableroService;
-
-    @Value("classpath:/views/LoginView.fxml")
-    private Resource loginView;
 
     @FXML private Label usuarioLabel;
     @FXML private HBox contenedorListas;
 
+    private TableroApiClient tableroApiClient;
+
     // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
-    public TableroViewController(ApplicationContext applicationContext, TableroService tableroService) {
+    public TableroViewController(ApplicationContext applicationContext, TableroApiClient tableroApiClient) {
         this.applicationContext = applicationContext;
-        this.tableroService = tableroService;
+        this.tableroApiClient = tableroApiClient;
     }
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
@@ -64,10 +49,10 @@ public class TableroViewController {
 
         //if(tableroOpt.isEmpty()) return;
 
-        Tablero tablero = tableroService.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
+        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
 
         // Vamos creando una columna visual por cada lista del tablero
-        for (ListaTareas lista : tablero.getListas()) {
+        for (ListaTareaModel lista : tablero.getListas()) {
 
             VBox columnaLista = new VBox(10);
             columnaLista.setPrefWidth(270);
@@ -79,7 +64,7 @@ public class TableroViewController {
 
             // Metemos las tarjetas reales dentro de su columna correspondiente
             if (lista.getTarjetas() != null) {
-                for (Tarjeta tarjeta : lista.getTarjetas()) {
+                for (TarjetaModel tarjeta : lista.getTarjetas()) {
                     Button botonTarjeta = new Button(tarjeta.getNombre());
                     botonTarjeta.setPrefWidth(250);
                     botonTarjeta.setStyle("-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
@@ -104,7 +89,7 @@ public class TableroViewController {
                     try {
                         // Llamamos al puerto de entrada, la UI usa el servicio
                         // Pasamos null a lo que no tenemos aún (etiqueta, fecha, responsable)
-                        tableroService.crearTarjetaTarea(
+                        tableroApiClient.crearTarjetaTarea(
                             tablero.getId(),
                             lista.getId(),
                             nombreTarea,
