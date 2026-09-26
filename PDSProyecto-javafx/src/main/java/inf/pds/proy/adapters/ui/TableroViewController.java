@@ -18,18 +18,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import inf.pds.proy.adapters.rest.TableroApiClient;
+import inf.pds.proy.model.ListaTareaModel;
+import inf.pds.proy.model.TableroModel;
+import inf.pds.proy.model.TarjetaModel;
+
 public class TableroViewController {
 
     @FXML private Label usuarioLabel;
     @FXML private HBox contenedorListas;
 
-    private TableroApiClient tableroApiClient;
-
-    // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
-    public TableroViewController(ApplicationContext applicationContext, TableroApiClient tableroApiClient) {
-        this.applicationContext = applicationContext;
-        this.tableroApiClient = tableroApiClient;
-    }
+    private final TableroApiClient tableroApiClient = new TableroApiClient();
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
     public void inicializarTablero(String email) {
@@ -120,8 +119,9 @@ public class TableroViewController {
     void handleCerrarSesion(ActionEvent event) {
         // Cargamos la vista del login y cambiamos la escena de la ventana
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(loginView.getURL());
-            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                getClass().getResource("/views/LoginView.fxml")
+            );
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
