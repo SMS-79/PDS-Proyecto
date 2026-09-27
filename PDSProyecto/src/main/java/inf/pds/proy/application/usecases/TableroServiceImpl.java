@@ -19,21 +19,26 @@ import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
+import inf.pds.proy.domain.model.exceptions.UsuarioNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
+import inf.pds.proy.domain.ports.output.UsuarioRepository;
 import jakarta.transaction.Transactional;
 
 @Service
 public class TableroServiceImpl implements TableroService{
 
 	private TableroRepository repTab;
+	private UsuarioRepository repUser;
 	
-	public TableroServiceImpl(TableroRepository rep) {
-		this.repTab = rep;
+	public TableroServiceImpl(TableroRepository repTab, UsuarioRepository repUser) {
+		this.repTab = repTab;
+		this.repUser = repUser;
 	}
 
 	@Override
@@ -161,9 +166,10 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
+	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, UsuarioId responsable, String descripcion) throws UsuarioNoExistenteException, TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
-		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsable, descripcion);
+		Usuario responsableUser = repUser.filtrarUsuarioById(responsable).orElseThrow(() -> new UsuarioNoExistenteException("No se encontró el usuario"));
+		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsableUser, descripcion);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_Tarea, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
 		repTab.guardarTablero(tablero);return tarjeta;	
@@ -171,9 +177,10 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
+	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, UsuarioId responsable) throws UsuarioNoExistenteException, TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
-		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsable);
+		Usuario responsableUser = repUser.filtrarUsuarioById(responsable).orElseThrow(() -> new UsuarioNoExistenteException("No se encontró el usuario"));
+		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsableUser);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_CheckList, con id " + tarjeta.getId() + " creada";
 		tablero.registrarOp(TipoOperacion.TARJETA_CREADA, desc, tablero.getPropietario());
 		repTab.guardarTablero(tablero);
