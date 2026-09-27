@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public abstract class Tarjeta {
 
@@ -15,12 +14,12 @@ public abstract class Tarjeta {
 	private String nombre;
 	private Optional<Etiqueta> etiqueta;
 	private LocalDate fechaLimite; 
-	private UsuarioId responsable; 
+	private Usuario responsable; 
 	private boolean completada;
 	private List<ListaTareasId> historialLista = new ArrayList<>();
 	
 	
-	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, UsuarioId responsable) {
+	protected Tarjeta(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		this.id = id;
 		this.nombre = nombre;
 		this.etiqueta = Optional.ofNullable(etiqueta);
@@ -29,7 +28,7 @@ public abstract class Tarjeta {
 		this.completada = false;
 	}
 	
-	protected Tarjeta(TarjetaId id, String nombre, LocalDate fechaLimite, UsuarioId responsable) {
+	protected Tarjeta(TarjetaId id, String nombre, LocalDate fechaLimite, Usuario responsable) {
 		this(id, nombre, null, fechaLimite, responsable);
 	}
 	
@@ -41,11 +40,11 @@ public abstract class Tarjeta {
 		this.fechaLimite = fechaLimite;
 	}
 
-	public UsuarioId getResponsable() {
+	public Usuario getResponsable() {
 		return responsable;
 	}
 
-	public void setResponsable(UsuarioId responsable) {
+	public void setResponsable(Usuario responsable) {
 		this.responsable = responsable;
 	}
 

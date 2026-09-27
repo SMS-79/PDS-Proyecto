@@ -26,9 +26,7 @@ import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
-import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.input.TableroService;
 
 @RestController
@@ -45,9 +43,9 @@ public class TableroController {
 	public ResponseEntity<Tablero> crear(@RequestBody TableroDTO tablero){
 		
 		try {
-			Tablero table = tableroService.crearTablero(tablero.getNombre(), UsuarioId.of(tablero.getPropietario()));
+			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario());
 			return ResponseEntity.ok(table);
-		} catch (IdentificadorTableroException | IdentificadorUsuarioException e) {
+		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
 		}
 		
@@ -202,10 +200,10 @@ public class TableroController {
 		try {
 			Tarjeta card;
 			if(tarjeta.getTipoTarjeta().equals("TAREA")) {
-				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), UsuarioId.of(tarjeta.getResponsableId()), tarjeta.getDescripcion());
+				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable(), tarjeta.getDescripcion());
 			}
 			else {
-				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), UsuarioId.of(tarjeta.getResponsableId()));
+				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable());
 			}
 				
 			return ResponseEntity.ok(card);

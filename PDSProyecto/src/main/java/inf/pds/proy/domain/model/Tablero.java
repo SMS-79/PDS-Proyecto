@@ -16,18 +16,17 @@ import inf.pds.proy.domain.model.exceptions.TarjetaNoInsertadaException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public class Tablero {
 	
 	private TableroId id;
 	private String nombre;
-	private UsuarioId propietario;
+	private Usuario propietario;
 	private String url;
 	private boolean bloqueado; // bloqueo temporal de un tablero que durará como máximo una semana
 	private LocalDateTime bloqueoFin;
 	private List<HistorialOps> historialOp = new ArrayList<>();
-	private List<UsuarioId> miembros = new ArrayList<>(); 
+	private List<Usuario> miembros = new ArrayList<>(); 
 	private List<ListaTareas> listasTareas = new ArrayList<>(); // columnas dinámicas tipo (DOING, T0DO, BACKLOG, STOPPED etc...) 
 	private ListaTareas listaCompletadas = new ListaTareas(ListaTareasId.random(), "Completadas"); // lista para separar las completadas
 	
@@ -35,7 +34,7 @@ public class Tablero {
 	
 	}
 	
-	public Tablero(TableroId id, String nombre, UsuarioId propietario, String url) {
+	public Tablero(TableroId id, String nombre, Usuario propietario, String url) {
 		this.id = id;
 		this.nombre = nombre;
 		this.propietario = propietario;
@@ -45,7 +44,7 @@ public class Tablero {
 		
 	}
 	
-	public Tablero(TableroId id, String nombre, UsuarioId propietario) {
+	public Tablero(TableroId id, String nombre, Usuario propietario) {
 		this(id, nombre, propietario, UUID.randomUUID().toString());
 	}
 
@@ -65,11 +64,11 @@ public class Tablero {
 		this.nombre = nombre;
 	}
 
-	public UsuarioId getPropietario() {
+	public Usuario getPropietario() {
 		return propietario;
 	}
 
-	public void setPropietario(UsuarioId propietario) {
+	public void setPropietario(Usuario propietario) {
 		this.propietario = propietario;
 	}
 
@@ -121,7 +120,7 @@ public class Tablero {
 		this.listaCompletadas = listaCompletadas;
 	}
 	
-	public List<UsuarioId> getMiembros(){
+	public List<Usuario> getMiembros(){
 		return miembros;
 	}
 	
@@ -143,11 +142,11 @@ public class Tablero {
 		this.listasTareas.remove(lista);
 	}
 	
-	public void addMiembro(UsuarioId u) {
+	public void addMiembro(Usuario u) {
 		this.miembros.add(u); 
 	}
 	
-	public void registrarOp(TipoOperacion tOp, String descripcion, UsuarioId user) {
+	public void registrarOp(TipoOperacion tOp, String descripcion, Usuario user) {
 		this.historialOp.add(new HistorialOps(tOp, descripcion, user)); 
 	}
 
@@ -164,7 +163,7 @@ public class Tablero {
 		}
 	}
 	
-	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, UsuarioId responsable, String descripcion) throws ListaNoExistenteException, TarjetaNoInsertadaException {
+	public TarjetaTarea crearTarjetaTarea(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable, String descripcion) throws ListaNoExistenteException, TarjetaNoInsertadaException {
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}
@@ -176,7 +175,7 @@ public class Tablero {
 		return tarjeta; 
 	}
 	
-	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, UsuarioId responsable) throws ListaNoExistenteException, TarjetaNoInsertadaException{
+	public TarjetaCheckList crearTarjetaCheckList(ListaTareasId listaId, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) throws ListaNoExistenteException, TarjetaNoInsertadaException{
 		if(this.bloqueado) {
 			throw new IllegalStateException("El tablero está bloqueado, no se pueden añadir tarjetas");
 		}

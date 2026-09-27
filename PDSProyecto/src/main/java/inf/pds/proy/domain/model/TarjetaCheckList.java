@@ -5,25 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 public class TarjetaCheckList extends Tarjeta{
 	
 	List<CheckListItem> items;
 
-	public TarjetaCheckList(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, UsuarioId responsable) {
+	public TarjetaCheckList(TarjetaId id, String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		super(id, nombre, etiqueta, fechaLimite, responsable);
 		this.items = new ArrayList<>();
 	}
 	
-	public TarjetaCheckList(TarjetaId id, String nombre, LocalDate fechaLimite, UsuarioId responsable, String descripcion) {
+	public TarjetaCheckList(TarjetaId id, String nombre, LocalDate fechaLimite, Usuario responsable, String descripcion) {
 		this(id, nombre, null, fechaLimite, responsable);
 	}
 	
-	public TarjetaCheckList(String nombre, Etiqueta etiqueta, LocalDate fechaLimite, UsuarioId responsable) {
+	public TarjetaCheckList(String nombre, Etiqueta etiqueta, LocalDate fechaLimite, Usuario responsable) {
 		this(TarjetaId.random(), nombre, etiqueta, fechaLimite, responsable);
 	}
 	
-	public TarjetaCheckList(String nombre, LocalDate fechaLimite, UsuarioId responsable) {
+	public TarjetaCheckList(String nombre, LocalDate fechaLimite, Usuario responsable) {
 		this(TarjetaId.random(), nombre, null, fechaLimite, responsable);
 	}
    

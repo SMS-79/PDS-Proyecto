@@ -10,7 +10,6 @@ public class TableroModel {
 
     private IdentificadorModel id;
     private String nombre;
-    private UsuarioModel propietario;
     private List<ListaTareaModel> listas = new ArrayList<>();
 
     public TableroModel() {
@@ -31,15 +30,7 @@ public class TableroModel {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    public UsuarioModel getPropietario() {
-        return propietario;
-    }
 
-    public void setPropietario(UsuarioModel propietario) {
-        this.propietario = propietario;
-    }
-    
     public List<ListaTareaModel> getListas() {
         return listas;
     }
@@ -47,6 +38,4 @@ public class TableroModel {
     public void setListas(List<ListaTareaModel> listas) {
         this.listas = listas;
     }
-
-    
 }

@@ -3,6 +3,7 @@ package inf.pds.proy.adapters.rest.dto;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import inf.pds.proy.domain.model.Usuario;
 
 import inf.pds.proy.domain.model.CheckListItem;
 import jakarta.validation.constraints.*;
@@ -24,7 +25,7 @@ public class TarjetaDTO {
 	private LocalDate fechaLimite; 
 
     @NotNull (message = "El responsable de la tarjeta no puede ser nulo")
-	private Long responsableId;
+	private Usuario responsable;
 
     @NotNull (message = "El tipo de tarjeta no puede ser nulo")
     private TipoTarjeta tipoTarjeta;
@@ -40,13 +41,13 @@ public class TarjetaDTO {
 
 
     public TarjetaDTO(Long id, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite,
-            Long responsableId, TipoTarjeta tipoTarjeta, String descripcion, List<CheckListItem> items) {
+            Usuario responsable, TipoTarjeta tipoTarjeta, String descripcion, List<CheckListItem> items) {
         this.id = id;
         this.nombre = nombre;
         this.etiquetaNombre = etiquetaNombre;
         this.etiquetaColor = etiquetaColor;
         this.fechaLimite = fechaLimite;
-        this.responsableId = responsableId;
+        this.responsable = responsable;
         this.tipoTarjeta = tipoTarjeta;
         this.descripcion = descripcion;
         this.items = items;
@@ -94,12 +95,12 @@ public class TarjetaDTO {
         this.fechaLimite = fechaLimite;
     }
 
-    public Long getResponsableId() {
-        return responsableId;
+    public Usuario getResponsable() {
+        return responsable;
     }
 
-    public void setResponsableId(Long responsableId) {
-        this.responsableId = responsableId;
+    public void setResponsable(Usuario responsable) {
+        this.responsable = responsable;
     }
 
     public TipoTarjeta getTipoTarjeta() {
@@ -128,7 +129,7 @@ public class TarjetaDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, etiquetaNombre, etiquetaColor, fechaLimite, responsableId, tipoTarjeta, descripcion, items);
+        return Objects.hash(id, nombre, etiquetaNombre, etiquetaColor, fechaLimite, responsable, tipoTarjeta, descripcion, items);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class TarjetaDTO {
         
         return Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
                 && Objects.equals(etiquetaNombre, other.etiquetaNombre) && Objects.equals(etiquetaColor, other.etiquetaColor)
-                && Objects.equals(fechaLimite, other.fechaLimite) && Objects.equals(responsableId, other.responsableId)
+                && Objects.equals(fechaLimite, other.fechaLimite) && Objects.equals(responsable, other.responsable)
                 && Objects.equals(tipoTarjeta, other.tipoTarjeta) && Objects.equals(descripcion, other.descripcion)
                 && Objects.equals(items, other.items);
     }
@@ -149,7 +150,7 @@ public class TarjetaDTO {
     @Override
     public String toString() {
         return "TarjetaDTO [id=" + id + ", nombre=" + nombre + ", etiquetaNombre=" + etiquetaNombre + ", etiquetaColor="
-                + etiquetaColor + ", fechaLimite=" + fechaLimite + ", responsable=" + responsableId + ", tipoTarjeta=" + tipoTarjeta + ", descripcion="
+                + etiquetaColor + ", fechaLimite=" + fechaLimite + ", responsable=" + responsable + ", tipoTarjeta=" + tipoTarjeta + ", descripcion="
                 + descripcion + ", items=" + items + "]";
     }
 

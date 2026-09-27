@@ -14,6 +14,7 @@ import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
+import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
@@ -22,7 +23,6 @@ import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
-import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.ports.input.TableroService;
 import inf.pds.proy.domain.ports.output.TableroRepository;
 import jakarta.transaction.Transactional;
@@ -37,7 +37,7 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Tablero crearTablero(String nombre, UsuarioId propietario) throws IdentificadorTableroException {
+	public Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException {
 		Tablero table = new Tablero(TableroId.random(), nombre, propietario);
 		System.out.println(table.getId());
 		return repTab.guardarTablero(table);
@@ -161,7 +161,7 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, UsuarioId responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
+	public TarjetaTarea crearTarjetaTarea(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, Usuario responsable, String descripcion) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		TarjetaTarea tarjeta = tablero.crearTarjetaTarea(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsable, descripcion);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_Tarea, con id " + tarjeta.getId() + " creada";
@@ -171,7 +171,7 @@ public class TableroServiceImpl implements TableroService{
 	
 	@Override
 	@Transactional
-	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, UsuarioId responsable) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
+	public TarjetaCheckList crearTarjetaCheckList(TableroId tableroId, ListaTareasId listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, Usuario responsable) throws TableroNoExistenteException, ListaNoExistenteException, TarjetaNoInsertadaException {
 		Tablero tablero = filtrarTableroById(tableroId).orElseThrow(() -> new TableroNoExistenteException("Tablero con id " + tableroId + " no encontrado"));
 		TarjetaCheckList tarjeta = tablero.crearTarjetaCheckList(listaId, nombre, new Etiqueta(etiquetaNombre, etiquetaColor), fechaLimite, responsable);
 		String desc = "Tarjeta " + tarjeta.getNombre() + ", de tipo Tarjeta_CheckList, con id " + tarjeta.getId() + " creada";
