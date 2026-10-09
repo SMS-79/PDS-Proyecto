@@ -5,19 +5,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TarjetaModel {
 
-    private IdentificadorModel id;
+    private IdentificadorModel tarjetaId;
     private String nombre;
     private String descripcion;
 
     public TarjetaModel() {
     }
 
-    public IdentificadorModel getId() {
-        return id;
+    public IdentificadorModel getTarjetaId() {
+        return tarjetaId;
     }
 
-    public void setId(IdentificadorModel id) {
-        this.id = id;
+    public void setTarjetaId(IdentificadorModel id) {
+        this.tarjetaId = id;
     }
 
     public String getNombre() {

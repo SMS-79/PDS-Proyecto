@@ -8,19 +8,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ListaTareaModel {
     
-    private IdentificadorModel id;
+    private IdentificadorModel ListaId;
     private String tipo;
     private List<TarjetaModel> tarjetas = new ArrayList<>();
 
     public ListaTareaModel() {
     }
 
-    public IdentificadorModel getId() {
-        return id;
+    public IdentificadorModel getListaId() {
+        return ListaId;
     }
 
-    public void setId(IdentificadorModel id) {
-        this.id = id;
+    public void setListaId(IdentificadorModel id) {
+        this.ListaId = id;
     }
 
     public String getTipo() {

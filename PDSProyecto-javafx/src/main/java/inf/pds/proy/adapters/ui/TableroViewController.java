@@ -1,6 +1,5 @@
 package inf.pds.proy.adapters.ui;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +24,15 @@ import inf.pds.proy.model.TarjetaModel;
 
 public class TableroViewController {
 
-    @FXML private Label usuarioLabel;
-    @FXML private HBox contenedorListas;
+    @FXML
+    private Label usuarioLabel;
+    @FXML
+    private HBox contenedorListas;
 
     private final TableroApiClient tableroApiClient = new TableroApiClient();
 
-    // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
+    // Se llama desde el login para preparar la vista con el usuario que acaba de
+    // entrar
     public void inicializarTablero(String email) {
         usuarioLabel.setText("Usuario: " + email);
         cargarDatosReales();
@@ -38,17 +40,19 @@ public class TableroViewController {
 
     private void cargarDatosReales() {
         // Limpiamos el contenedor por si había componentes de prueba en el FXML
-        if(contenedorListas != null) {
+        if (contenedorListas != null) {
             contenedorListas.getChildren().clear();
         }
 
         // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
 
-        //Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
+        // Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
 
-        //if(tableroOpt.isEmpty()) return;
+        // if(tableroOpt.isEmpty()) return;
 
-        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
+        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista
+                                                                              // (de momento lo dejamos fijo para hacer
+                                                                              // pruebas)
 
         // Vamos creando una columna visual por cada lista del tablero
         for (ListaTareaModel lista : tablero.getListas()) {
@@ -66,7 +70,8 @@ public class TableroViewController {
                 for (TarjetaModel tarjeta : lista.getTarjetas()) {
                     Button botonTarjeta = new Button(tarjeta.getNombre());
                     botonTarjeta.setPrefWidth(250);
-                    botonTarjeta.setStyle("-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
+                    botonTarjeta.setStyle(
+                            "-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
                     columnaLista.getChildren().add(botonTarjeta);
                 }
             }
@@ -89,13 +94,13 @@ public class TableroViewController {
                         // Llamamos al puerto de entrada, la UI usa el servicio
                         // Pasamos null a lo que no tenemos aún (etiqueta, fecha, responsable)
                         tableroApiClient.crearTarjetaTarea(
-                            tablero.getId(),
-                            lista.getId(),
-                            nombreTarea,
-                            null,
-                            null,
-                            LocalDate.now(),
-                            tablero.getPropietario(),
+                            tablero.getTableroId().getId(), 
+                            lista.getListaId().getId(), 
+                            nombreTarea, 
+                            null, 
+                            null, 
+                            LocalDate.now(), 
+                            tablero.getPropietario().getUsuarioId().getId(), 
                             ""
                         );
 
@@ -120,8 +125,7 @@ public class TableroViewController {
         // Cargamos la vista del login y cambiamos la escena de la ventana
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("/views/LoginView.fxml")
-            );
+                    getClass().getResource("/views/LoginView.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);

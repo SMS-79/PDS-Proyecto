@@ -8,19 +8,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TableroModel {
 
-    private IdentificadorModel id;
+    private IdentificadorModel tableroId;
     private String nombre;
     private List<ListaTareaModel> listas = new ArrayList<>();
+    private UsuarioModel propietario;
 
     public TableroModel() {
     }
 
-    public IdentificadorModel getId() {
-        return id;
+    public IdentificadorModel getTableroId() {
+        return tableroId;
     }
 
-    public void setId(IdentificadorModel id) {
-        this.id = id;
+    public void setTableroId(IdentificadorModel id) {
+        this.tableroId = id;
     }
 
     public String getNombre() {
@@ -38,4 +39,14 @@ public class TableroModel {
     public void setListas(List<ListaTareaModel> listas) {
         this.listas = listas;
     }
+
+    public UsuarioModel getPropietario() {
+        return propietario;
+    }
+
+    public void setPropietario(UsuarioModel propietario) {
+        this.propietario = propietario;
+    }
+
+    
 }
