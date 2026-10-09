@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TableroModel {
 
+    @JsonProperty("id")    
     private IdentificadorModel tableroId;
     private String nombre;
     private List<ListaTareaModel> listas = new ArrayList<>();

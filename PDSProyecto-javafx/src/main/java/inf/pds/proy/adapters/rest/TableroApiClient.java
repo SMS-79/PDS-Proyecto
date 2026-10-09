@@ -25,8 +25,8 @@ public class TableroApiClient {
         String etiquetaNombre, 
         String etiquetaColor, 
         LocalDate fechaLimite, 
-        Long responsableId, 
-        TipoTarjeta tipo,
+        Long responsable, 
+        TipoTarjeta tipoTarjeta,
         String descripcion
     ) {}
     
@@ -77,7 +77,7 @@ public class TableroApiClient {
 
         CrearTarjetaTareaRequest datos = new CrearTarjetaTareaRequest(nombre, etiquetaNombre, etiquetaColor, fechaLimite, responsableId, TipoTarjeta.Tarea, descripcion);
         
-        HttpResponse<String> response = post('/' + tableroId + "/listas/" + listaId + "/tarjeta", datos);
+        HttpResponse<String> response = post("/" + tableroId + "/listas/" + listaId + "/tarjeta", datos);
 
         if(response.statusCode() != 200){
             throw new IllegalStateException("Error al crear la tarjeta: " + response.statusCode());
