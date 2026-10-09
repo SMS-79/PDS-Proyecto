@@ -3,7 +3,6 @@ package inf.pds.proy.adapters.rest.dto;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import inf.pds.proy.domain.model.Usuario;
 
 import inf.pds.proy.domain.model.CheckListItem;
 import jakarta.validation.constraints.*;
@@ -25,7 +24,7 @@ public class TarjetaDTO {
 	private LocalDate fechaLimite; 
 
     @NotNull (message = "El responsable de la tarjeta no puede ser nulo")
-	private Usuario responsable;
+	private Long responsable;
 
     @NotNull (message = "El tipo de tarjeta no puede ser nulo")
     private TipoTarjeta tipoTarjeta;
@@ -41,7 +40,7 @@ public class TarjetaDTO {
 
 
     public TarjetaDTO(Long id, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite,
-            Usuario responsable, TipoTarjeta tipoTarjeta, String descripcion, List<CheckListItem> items) {
+            Long responsable, TipoTarjeta tipoTarjeta, String descripcion, List<CheckListItem> items) {
         this.id = id;
         this.nombre = nombre;
         this.etiquetaNombre = etiquetaNombre;
@@ -95,11 +94,11 @@ public class TarjetaDTO {
         this.fechaLimite = fechaLimite;
     }
 
-    public Usuario getResponsable() {
+    public Long getResponsable() {
         return responsable;
     }
 
-    public void setResponsable(Usuario responsable) {
+    public void setResponsable(Long responsable) {
         this.responsable = responsable;
     }
 

@@ -18,13 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import inf.pds.proy.adapters.rest.dto.ListaTareasDTO;
 import inf.pds.proy.adapters.rest.dto.TableroDTO;
 import inf.pds.proy.adapters.rest.dto.TarjetaDTO;
+import inf.pds.proy.adapters.rest.dto.TipoTarjeta;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
+import inf.pds.proy.domain.model.exceptions.UsuarioNoExistenteException;
 import inf.pds.proy.domain.model.ids.ListaTareasId;
 import inf.pds.proy.domain.model.ids.TableroId;
+import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.model.ids.TableroId.IdentificadorTableroException;
 import inf.pds.proy.domain.model.ids.TarjetaId;
 import inf.pds.proy.domain.ports.input.TableroService;
@@ -199,16 +202,16 @@ public class TableroController {
 	public ResponseEntity<Tarjeta> crearTarjeta(@PathVariable Long id, @PathVariable Long listaId, @RequestBody TarjetaDTO tarjeta){
 		try {
 			Tarjeta card;
-			if(tarjeta.getTipoTarjeta().equals("TAREA")) {
-				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable(), tarjeta.getDescripcion());
+			if(tarjeta.getTipoTarjeta().equals(TipoTarjeta.Tarea)) {
+				card = tableroService.crearTarjetaTarea(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), UsuarioId.of(tarjeta.getResponsable()), tarjeta.getDescripcion());
 			}
 			else {
-				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), tarjeta.getResponsable());
+				card = tableroService.crearTarjetaCheckList(TableroId.of(id), ListaTareasId.of(listaId), tarjeta.getNombre(), tarjeta.getEtiquetaNombre(), tarjeta.getEtiquetaColor(), tarjeta.getFechaLimite(), UsuarioId.of(tarjeta.getResponsable()));
 			}
 				
 			return ResponseEntity.ok(card);
 				
-		} catch (TableroNoExistenteException | ListaNoExistenteException e) {
+		} catch (UsuarioNoExistenteException | TableroNoExistenteException | ListaNoExistenteException e) {
 			System.out.println(e.getMessage());
 		} catch(Exception e) {
 			e.printStackTrace();

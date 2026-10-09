@@ -1,15 +1,5 @@
 package inf.pds.proy.adapters.ui;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
-
-import inf.pds.proy.domain.model.ListaTareas;
-import inf.pds.proy.domain.model.Tablero;
-import inf.pds.proy.domain.model.Tarjeta;
-import inf.pds.proy.domain.ports.input.TableroService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,26 +17,22 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Component("tableroUIController")
+import inf.pds.proy.adapters.rest.TableroApiClient;
+import inf.pds.proy.model.ListaTareaModel;
+import inf.pds.proy.model.TableroModel;
+import inf.pds.proy.model.TarjetaModel;
+
 public class TableroViewController {
 
-    private final ApplicationContext applicationContext;
-    // Puerto de entrada: la UI (adapter) habla con el servicio, nunca con el REST.
-    private final TableroService tableroService;
+    @FXML
+    private Label usuarioLabel;
+    @FXML
+    private HBox contenedorListas;
 
-    @Value("classpath:/views/LoginView.fxml")
-    private Resource loginView;
+    private final TableroApiClient tableroApiClient = new TableroApiClient();
 
-    @FXML private Label usuarioLabel;
-    @FXML private HBox contenedorListas;
-
-    // Inyectamos el contexto de Spring y el servicio para leer/escribir de la BD
-    public TableroViewController(ApplicationContext applicationContext, TableroService tableroService) {
-        this.applicationContext = applicationContext;
-        this.tableroService = tableroService;
-    }
-
-    // Se llama desde el login para preparar la vista con el usuario que acaba de entrar
+    // Se llama desde el login para preparar la vista con el usuario que acaba de
+    // entrar
     public void inicializarTablero(String email) {
         usuarioLabel.setText("Usuario: " + email);
         cargarDatosReales();
@@ -54,20 +40,22 @@ public class TableroViewController {
 
     private void cargarDatosReales() {
         // Limpiamos el contenedor por si había componentes de prueba en el FXML
-        if(contenedorListas != null) {
+        if (contenedorListas != null) {
             contenedorListas.getChildren().clear();
         }
 
         // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
 
-        //Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
+        // Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
 
-        //if(tableroOpt.isEmpty()) return;
+        // if(tableroOpt.isEmpty()) return;
 
-        Tablero tablero = tableroService.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista (de momento lo dejamos fijo para hacer pruebas)
+        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista
+                                                                              // (de momento lo dejamos fijo para hacer
+                                                                              // pruebas)
 
         // Vamos creando una columna visual por cada lista del tablero
-        for (ListaTareas lista : tablero.getListas()) {
+        for (ListaTareaModel lista : tablero.getListas()) {
 
             VBox columnaLista = new VBox(10);
             columnaLista.setPrefWidth(270);
@@ -79,10 +67,11 @@ public class TableroViewController {
 
             // Metemos las tarjetas reales dentro de su columna correspondiente
             if (lista.getTarjetas() != null) {
-                for (Tarjeta tarjeta : lista.getTarjetas()) {
+                for (TarjetaModel tarjeta : lista.getTarjetas()) {
                     Button botonTarjeta = new Button(tarjeta.getNombre());
                     botonTarjeta.setPrefWidth(250);
-                    botonTarjeta.setStyle("-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
+                    botonTarjeta.setStyle(
+                            "-fx-alignment: center-left; -fx-background-color: white; -fx-background-radius: 3;");
                     columnaLista.getChildren().add(botonTarjeta);
                 }
             }
@@ -104,14 +93,14 @@ public class TableroViewController {
                     try {
                         // Llamamos al puerto de entrada, la UI usa el servicio
                         // Pasamos null a lo que no tenemos aún (etiqueta, fecha, responsable)
-                        tableroService.crearTarjetaTarea(
-                            tablero.getId(),
-                            lista.getId(),
-                            nombreTarea,
-                            null,
-                            null,
-                            LocalDate.now(),
-                            tablero.getPropietario(),
+                        tableroApiClient.crearTarjetaTarea(
+                            tablero.getTableroId().getId(), 
+                            lista.getListaId().getId(), 
+                            nombreTarea, 
+                            null, 
+                            null, 
+                            LocalDate.now(), 
+                            tablero.getPropietario().getUsuarioId().getId(), 
                             ""
                         );
 
@@ -135,8 +124,8 @@ public class TableroViewController {
     void handleCerrarSesion(ActionEvent event) {
         // Cargamos la vista del login y cambiamos la escena de la ventana
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(loginView.getURL());
-            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    getClass().getResource("/views/LoginView.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
