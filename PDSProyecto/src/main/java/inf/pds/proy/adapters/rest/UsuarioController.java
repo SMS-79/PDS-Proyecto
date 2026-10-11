@@ -1,6 +1,7 @@
 package inf.pds.proy.adapters.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,29 +15,38 @@ import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
 import inf.pds.proy.domain.ports.input.UsuarioService;
+import inf.pds.proy.adapters.mappers.UsuarioMapper;
 import inf.pds.proy.adapters.rest.dto.UsuarioDTO;
+import inf.pds.proy.adapters.rest.dto.UsuarioRespuestaDTO;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
 	private final UsuarioService usuarioService;
-	
-	public UsuarioController(UsuarioService usuarioService) {
+	private final UsuarioMapper usuarioMapper;
+
+
+	public UsuarioController(UsuarioService usuarioService, UsuarioMapper usuarioMapper) {
 		this.usuarioService = usuarioService;
+		this.usuarioMapper = usuarioMapper;
 	}
 	
 	@PostMapping
-	public ResponseEntity<Usuario> crear(@RequestBody UsuarioDTO usuario){
+	public ResponseEntity<UsuarioRespuestaDTO> crear(@RequestBody UsuarioDTO usuario){
 		Usuario user = usuarioService.crearUsuario(usuario.getNombre(), usuario.getEmail(), usuario.getPswd());
+		UsuarioRespuestaDTO respuesta = usuarioMapper.toRespuestaDTO(user);
 		
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(respuesta);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> obtener(@PathVariable Long id){
+	public ResponseEntity<UsuarioRespuestaDTO> obtener(@PathVariable Long id){
 		try {
-			return usuarioService.filtrarUsuarioById(UsuarioId.of(id)).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+			return usuarioService.filtrarUsuarioById(UsuarioId.of(id))
+					.map(usuarioMapper::toRespuestaDTO)
+					.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.notFound().build());
 		}catch (IdentificadorUsuarioException e) {
 			e.printStackTrace();
 		}
@@ -46,8 +56,13 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Usuario>> obtenerUsuarios(){
-		return ResponseEntity.ok(usuarioService.obtenerUsuarios());
+	public ResponseEntity<List<UsuarioRespuestaDTO>> obtenerUsuarios(){
+		List<Usuario> usuarios = usuarioService.obtenerUsuarios();
+		List<UsuarioRespuestaDTO> respuesta = usuarios.stream()
+														.map(usuarioMapper::toRespuestaDTO)
+														.collect(Collectors.toList());
+
+		return ResponseEntity.ok(respuesta);
 	}
 	
 	

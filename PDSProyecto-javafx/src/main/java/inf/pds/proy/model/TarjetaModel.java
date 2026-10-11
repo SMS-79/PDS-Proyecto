@@ -1,12 +1,14 @@
 package inf.pds.proy.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TarjetaModel {
 
-    @JsonProperty ("id")
+    @JsonProperty("tarjetaId")
+    @JsonAlias("id")
     private IdentificadorModel tarjetaId;
     private String nombre;
     private String descripcion;

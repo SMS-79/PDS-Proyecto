@@ -3,13 +3,16 @@ package inf.pds.proy.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ListaTareaModel {
 
-    @JsonProperty("id")
+    @JsonProperty("listaId")
+    @JsonAlias ("id")
     private IdentificadorModel ListaId;
     private String tipo;
     private List<TarjetaModel> tarjetas = new ArrayList<>();
