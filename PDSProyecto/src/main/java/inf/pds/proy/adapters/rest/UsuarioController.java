@@ -1,8 +1,11 @@
 package inf.pds.proy.adapters.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +36,20 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<UsuarioRespuestaDTO> crear(@RequestBody UsuarioDTO usuario){
-		Usuario user = usuarioService.crearUsuario(usuario.getNombre(), usuario.getEmail(), usuario.getPswd());
-		UsuarioRespuestaDTO respuesta = usuarioMapper.toRespuestaDTO(user);
-		
-		return ResponseEntity.ok(respuesta);
+	public ResponseEntity<?> crear(@RequestBody UsuarioDTO usuario){
+
+		try{
+			Usuario user = usuarioService.crearUsuario(
+				usuario.getNombre(),
+				usuario.getEmail(),
+				usuario.getPswd()
+			);
+			UsuarioRespuestaDTO respuesta = usuarioMapper.toRespuestaDTO(user);
+			return ResponseEntity.ok(respuesta);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body(Map.of("error", e.getMessage()));
+		}
 	}
 	
 	@GetMapping("/{id}")

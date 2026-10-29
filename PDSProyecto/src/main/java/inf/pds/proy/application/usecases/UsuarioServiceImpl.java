@@ -21,6 +21,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 	
 	@Override
 	public Usuario crearUsuario(String nombre, String correo, String pswd) {
+		if(repUser.filtrarUsuarioByEmail(correo).isPresent()){
+			throw new IllegalArgumentException(
+				"Ya existe un usuario con ese correo electronico"
+			);
+		}
 		Usuario user = new Usuario(UsuarioId.random(), nombre, correo, pswd);
 		repUser.guardarUsuario(user);
 		return user;
