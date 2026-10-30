@@ -19,6 +19,24 @@ public class LoginController {
     @FXML private Label mensajeError;
 
     @FXML
+    void handleMostrarRegistro(ActionEvent e){
+        try{
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/views/RegistroView.fxml")
+            );
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) e.getSource())
+                            .getScene().getWindow();
+            stage.setScene(new Scene(root, 800, 600));
+            stage.centerOnScreen();
+        } catch (IOException exception){
+            exception.printStackTrace();
+            mensajeError.setText("No se pudo abrir el formulario de registro");
+            mensajeError.setVisible(true);
+        }
+    }
+
+    @FXML
     void handleLogin(ActionEvent event) {
         String email = emailInput.getText();
         String pwd = passwordInput.getText();
