@@ -6,7 +6,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import inf.pds.proy.model.TableroModel;
 import inf.pds.proy.model.TipoTarjeta;
-import javafx.scene.AccessibleAttribute.ToggleState;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,9 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TableroApiClient {
 
