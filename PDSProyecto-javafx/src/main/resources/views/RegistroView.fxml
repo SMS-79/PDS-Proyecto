@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="inf.pds.proy.adapters.ui.RegistroController">
+
+    <Label text="Crear cuenta"
+           style="-fx-font-size: 28px; -fx-text-fill: #0052cc;" />
+
+    <VBox alignment="CENTER" maxWidth="300.0" spacing="15.0">
+        <TextField fx:id="nombreInput"
+                   prefHeight="40.0"
+                   promptText="Nombre" />
+
+        <TextField fx:id="emailInput"
+                   prefHeight="40.0"
+                   promptText="Correo electrónico" />
+
+        <PasswordField fx:id="pswdInput"
+                       prefHeight="40.0"
+                       promptText="Contraseña" />
+
+        <Button fx:id="registrarButton"
+                text="Registrarse"
+                onAction="#handleRegister"
+                prefHeight="40.0" prefWidth="300.0"
+                style="-fx-background-color: #0052cc; -fx-text-fill: white;" />
+
+        <Button text="Volver al inicio de sesión"
+                onAction="#handleBackToLogin"
+                prefHeight="40.0" prefWidth="300.0" />
+
+        <Label fx:id="mensajeError"
+               textFill="#de350b" wrapText="true"
+               visible="false" />
+    </VBox>
+</VBox>
