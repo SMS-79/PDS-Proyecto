@@ -47,4 +47,33 @@ public class UsuarioApiClient {
             );
         }
     }
+
+    public void iniciarSesion(String email, String pswd) throws IOException, InterruptedException{
+
+        String json = objectMapper.writeValueAsString(Map.of("email", email, "pswd", pswd));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create(USUARIOS_URL + "/login"))
+                            .header("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(json))
+                            .build();
+        
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode() == 401){
+            throw new IllegalArgumentException(
+                "Correo o contraseña incorrectos"
+            );
+        }
+        if(response.statusCode() == 400){
+            throw new IllegalArgumentException(
+                "Rellena el correo y la contraseña"
+            );
+        }
+        if (response.statusCode() != 200){
+            throw new IllegalStateException(
+                "No se pudo iniciar sesión." + response.statusCode()
+            );
+        }
+
+    }
 }

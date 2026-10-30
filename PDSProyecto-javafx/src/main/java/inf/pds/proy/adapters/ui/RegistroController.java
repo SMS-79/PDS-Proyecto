@@ -31,7 +31,7 @@ public class RegistroController {
     @FXML 
     private Button registrarButton; 
 
-    public UsuarioApiClient UsuarioApiClient = new UsuarioApiClient();
+    private final UsuarioApiClient usuarioApiClient = Configuracion.getInstancia().getUsuarioApiClient();
 
     @FXML
     void handleRegister(ActionEvent e) {
@@ -48,7 +48,7 @@ public class RegistroController {
         }
 
         try {
-            UsuarioApiClient.crearUsuario(nombre, email, pswd);
+            usuarioApiClient.crearUsuario(nombre, email, pswd);
 
             pswdInput.clear();
             mensajeError.setStyle("-fx-text-fill: #00875a;");

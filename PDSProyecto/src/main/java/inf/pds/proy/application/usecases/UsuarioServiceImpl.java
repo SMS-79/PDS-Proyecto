@@ -46,6 +46,18 @@ public class UsuarioServiceImpl implements UsuarioService{
 		return repUser.filtrarUsuarioByEmail(email); 
 	}
 	
+	@Override 
+	public Optional<Usuario> comprobarCredenciales(String email, String pswd){
+		Optional<Usuario> user = filtrarUsuarioByEmail(email);
+		if(user.isEmpty()){
+			return Optional.empty();
+		}
+		else if(pswd == null || !pswd.equals(user.get().getPswd())){
+			return Optional.empty();
+		}
+		return user;
+	}
+
 	@Override
 	public void eliminarUsuario(Usuario usuario) {
 		repUser.eliminarUsuario(usuario);

@@ -12,11 +12,15 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
 
+import inf.pds.proy.adapters.rest.UsuarioApiClient;
+
 public class LoginController {
 
     @FXML private TextField emailInput;
     @FXML private PasswordField passwordInput;
     @FXML private Label mensajeError;
+
+    private final UsuarioApiClient usuarioApiClient = Configuracion.getInstancia().getUsuarioApiClient();
 
     @FXML
     void handleMostrarRegistro(ActionEvent e){
@@ -41,13 +45,16 @@ public class LoginController {
         String email = emailInput.getText();
         String pwd = passwordInput.getText();
 
+        mensajeError.setStyle("-fx-text-fill: red;");
+
         // Comprobamos que no se hayan dejado ningún campo en blanco
         if (email.isBlank() || pwd.isBlank()) {
             mensajeError.setText("Rellena todos los campos");
-            mensajeError.setStyle("-fx-text-fill: red;");
             mensajeError.setVisible(true);
         } else {
             try {
+                usuarioApiClient.iniciarSesion(email, pwd);
+
                 // Cargamos el archivo visual del tablero
                 FXMLLoader fxmlLoader = new FXMLLoader(
                     getClass().getResource("/views/TableroView.fxml")
@@ -67,6 +74,13 @@ public class LoginController {
             } catch (IOException e) {
                 e.printStackTrace();
                 mensajeError.setText("Error al cargar el tablero");
+                mensajeError.setVisible(true);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+                mensajeError.setText("Se ha interrumpido el inicio de sesión");
+                mensajeError.setVisible(true);
+            } catch(IllegalArgumentException e){
+                mensajeError.setText(e.getMessage());
                 mensajeError.setVisible(true);
             }
         }

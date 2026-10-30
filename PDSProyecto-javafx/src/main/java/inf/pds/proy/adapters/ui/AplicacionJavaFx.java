@@ -12,6 +12,10 @@ public class AplicacionJavaFx extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        
+        Configuracion configuracion = new Configuracion();
+        Configuracion.setInstancia(configuracion);
+        
         FXMLLoader loader = new FXMLLoader(
             AplicacionJavaFx.class.getResource("/views/LoginView.fxml")
         );

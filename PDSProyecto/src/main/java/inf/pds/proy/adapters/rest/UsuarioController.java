@@ -2,6 +2,7 @@ package inf.pds.proy.adapters.rest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,22 @@ public class UsuarioController {
 		return ResponseEntity.ok(respuesta);
 	}
 	
+
+	@PostMapping("/login")
+	public ResponseEntity<?> comprobarCredenciales(@RequestBody UsuarioDTO user){
+		String email = user.getEmail();
+		String pswd = user.getPswd();
+
+		if(email == null || email.isBlank() || pswd == null || pswd.isBlank()){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("Error", "Rellena el correo y la contraseña"));
+		}
+
+		Optional<Usuario> usuario = usuarioService.comprobarCredenciales(email.strip(), pswd);
+		if(usuario.isEmpty()){
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("Error", "Correo o contraseña incorrectos"));
+		}
+		return ResponseEntity.ok(usuarioMapper.toRespuestaDTO(usuario.get()));
+	}
 	
 	
 }
