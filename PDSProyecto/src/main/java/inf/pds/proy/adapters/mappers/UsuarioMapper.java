@@ -3,6 +3,7 @@ package inf.pds.proy.adapters.mappers;
 import org.springframework.stereotype.Component;
 
 import inf.pds.proy.adapters.jpa.entity.UsuarioEntity;
+import inf.pds.proy.adapters.rest.dto.UsuarioRespuestaDTO;
 import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 import inf.pds.proy.domain.model.ids.UsuarioId.IdentificadorUsuarioException;
@@ -30,5 +31,9 @@ public class UsuarioMapper {
 		
 		return null;
 		
+	}
+
+	public UsuarioRespuestaDTO toRespuestaDTO(Usuario user) {
+		return new UsuarioRespuestaDTO(user.getId(), user.getNombre(), user.getEmail());
 	}
 }

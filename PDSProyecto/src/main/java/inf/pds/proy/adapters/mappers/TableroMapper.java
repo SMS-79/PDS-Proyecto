@@ -32,6 +32,8 @@ public class TableroMapper {
 		tableroEntity.setListaTareas(table.getListas().stream()
 				.map(listaMapper::toEntity)
 				.toList());
+		tableroEntity.getListaTareas()
+				.forEach(lista -> lista.setTablero(tableroEntity));;
 		tableroEntity.setMiembros(table.getMiembros().stream()
 				.map(userMapper::toEntity)
 				.toList());
