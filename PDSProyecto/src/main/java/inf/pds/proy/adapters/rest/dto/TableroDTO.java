@@ -1,9 +1,6 @@
 package inf.pds.proy.adapters.rest.dto;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-
-import inf.pds.proy.domain.model.Usuario;
 
 import jakarta.validation.constraints.*;
 
@@ -15,7 +12,7 @@ public class TableroDTO {
 	private String nombre;
 	
     @NotNull(message = "El propietario del tablero no puede ser nulo")
-	private Usuario propietario; 
+	private UsuarioDTO propietario; 
 
     @NotNull(message = "La URL del tablero no puede ser nula")
 	private String url; 
@@ -23,8 +20,7 @@ public class TableroDTO {
     public TableroDTO() {
     }
 
-    public TableroDTO(Long id, String nombre, Usuario propietario, String url, boolean bloqueado,
-            LocalDateTime bloqueoFin) {
+    public TableroDTO(Long id, String nombre, UsuarioDTO propietario, String url) {
         this.id = id;
         this.nombre = nombre;
         this.propietario = propietario;
@@ -47,11 +43,11 @@ public class TableroDTO {
         this.nombre = nombre;
     }
 
-    public Usuario getPropietario() {
+    public UsuarioDTO getPropietario() {
         return propietario;
     }
 
-    public void setPropietario(Usuario propietario) {
+    public void setPropietario(UsuarioDTO propietario) {
         this.propietario = propietario;
     }
 

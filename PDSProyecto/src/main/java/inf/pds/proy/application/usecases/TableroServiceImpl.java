@@ -42,8 +42,11 @@ public class TableroServiceImpl implements TableroService{
 	}
 
 	@Override
-	public Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException {
-		Tablero table = new Tablero(TableroId.random(), nombre, propietario);
+	public Tablero crearTablero(String nombre, String email) throws IdentificadorTableroException, UsuarioNoExistenteException {
+		Usuario emailUsuarioPropietario = repUser
+										.filtrarUsuarioByEmail(email.strip())
+										.orElseThrow(() -> new UsuarioNoExistenteException("No se encontró el correo del usuario registrado actualmente."));
+		Tablero table = new Tablero(TableroId.random(), nombre, emailUsuarioPropietario);
 		System.out.println(table.getId());
 		return repTab.guardarTablero(table);
 	}
@@ -52,6 +55,14 @@ public class TableroServiceImpl implements TableroService{
 	@Transactional
 	public List<Tablero> obtenerTableros() {
 		return repTab.obtenerTableros();
+	}
+
+	@Override
+	@Transactional 
+	public List<Tablero> obtenerTablerosByEmail(String email){
+		return repTab.obtenerTableros().stream()
+			.filter(tablero -> tablero.getPropietario().getEmail().equals(email.strip()))
+			.toList();
 	}
 	
 	@Override

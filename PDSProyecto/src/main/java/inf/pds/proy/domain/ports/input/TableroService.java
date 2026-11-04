@@ -10,7 +10,6 @@ import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
 import inf.pds.proy.domain.model.TarjetaCheckList;
 import inf.pds.proy.domain.model.TarjetaTarea;
-import inf.pds.proy.domain.model.Usuario;
 import inf.pds.proy.domain.model.exceptions.ListaNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TableroNoExistenteException;
 import inf.pds.proy.domain.model.exceptions.TarjetaNoExistenteException;
@@ -24,8 +23,9 @@ import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public interface TableroService {
 	
-	Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException;
+	Tablero crearTablero(String nombre, String email) throws IdentificadorTableroException, UsuarioNoExistenteException;
 	List<Tablero> obtenerTableros();
+	List<Tablero> obtenerTablerosByEmail(String email);
 	Optional<Tablero> filtrarTableroById(TableroId tableroId);
 	Optional<Tablero> filtrarTableroByIdOrUrl(String id);
 	void eliminarTablero(TableroId tableroId);

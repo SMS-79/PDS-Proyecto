@@ -9,9 +9,11 @@ import inf.pds.proy.model.TipoTarjeta;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,6 +29,14 @@ public class TableroApiClient {
         String descripcion
     ) {}
     
+    record PropietarioRequest(
+        String email
+    ) {}
+
+    record CrearTableroRequest(
+        String nombre,
+        PropietarioRequest propietario
+    ) {}
 
     private static final String TABLEROS_URL = "http://localhost:8080/api/tableros";
 
@@ -37,6 +47,26 @@ public class TableroApiClient {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModules(new JavaTimeModule());
+    }
+
+    public TableroModel crearTablero(String nombre, String email) throws IOException, InterruptedException{ 
+        CrearTableroRequest datos = new CrearTableroRequest(nombre, new PropietarioRequest(email));
+
+        HttpResponse<String> response = post("", datos);
+
+        if (response.statusCode() == 404) {
+            throw new IllegalArgumentException(
+                "No se encontró el usuario propietario del tablero"
+            );
+        }
+
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException(
+                "No se pudo crear el tablero: " + response.statusCode()
+            );
+        }
+
+        return objectMapper.readValue(response.body(), TableroModel.class);
     }
 
     public List<TableroModel> obtenerTableros() {
@@ -66,7 +96,22 @@ public class TableroApiClient {
             throw new IllegalStateException("La llamada al backend fue interrumpida", e);
         }
 
-        
+    }
+
+    public List<TableroModel> obtenerTablerosByEmail(String email) throws IOException, InterruptedException{
+        String correo = URLEncoder.encode(email, StandardCharsets.UTF_8);
+        System.out.println(TABLEROS_URL + "/" + correo.strip());
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(TABLEROS_URL + "/email?email=" + correo.strip()))
+                                .GET()
+                                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    
+        if(response.statusCode() != 200){
+            throw new IllegalStateException("Error al obtener los tableros por email: " + response.statusCode());
+        }
+
+        return objectMapper.readValue(response.body(), new TypeReference<List<TableroModel>>() {});
+
     }
 
     public void crearTarjetaTarea(Long tableroId, Long listaId, String nombre, String etiquetaNombre, String etiquetaColor, LocalDate fechaLimite, Long responsableId, String descripcion) throws IOException, InterruptedException{

@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import inf.pds.proy.adapters.rest.TableroApiClient;
@@ -28,33 +31,73 @@ public class TableroViewController {
     private Label usuarioLabel;
     @FXML
     private HBox contenedorListas;
+    @FXML 
+    private Label tituloTableroLabel;
+    @FXML 
+    private Menu misTablerosMenu;
+
+    private String emailUsuarioActual;
+
+    private TableroModel tableroActual;
 
     private final TableroApiClient tableroApiClient = new TableroApiClient();
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de
     // entrar
     public void inicializarTablero(String email) {
-        usuarioLabel.setText("Usuario: " + email);
-        cargarDatosReales();
+        this.emailUsuarioActual = email.strip();
+        usuarioLabel.setText("Usuario: " + emailUsuarioActual);
+        tituloTableroLabel.setText("Sin tablero seleccionado");
+        contenedorListas.getChildren().clear();
+        try{
+            cargarDatosReales();
+        } catch(Exception e){
+            System.out.println("Error al cargar los tableros: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
     }
 
-    private void cargarDatosReales() {
-        // Limpiamos el contenedor por si había componentes de prueba en el FXML
-        if (contenedorListas != null) {
-            contenedorListas.getChildren().clear();
+    private void cargarDatosReales() throws IOException, InterruptedException{
+        List<TableroModel> tableros = tableroApiClient.obtenerTablerosByEmail(emailUsuarioActual);
+        misTablerosMenu.getItems().clear();
+        for(TableroModel tablero : tableros){
+            agregarTableroAlMenu(tablero);
         }
 
-        // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
+        if(tableros.isEmpty()){
+            tableroActual = null;
+            tituloTableroLabel.setText("Sin tableros");
+            contenedorListas.getChildren().clear();
+            contenedorListas.getChildren().add(new Label("Todavia no tienes tableros. Usa Tableros >  Nuevo tablero..."));
+            return;
+        }
 
-        // Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
+        if(tableroActual != null){
+            for(TableroModel tablero : tableros){
+                if(tablero.getTableroId().getId().equals(tableroActual.getTableroId().getId())){
+                    mostrarTablero(tablero);
+                    return;
+                }
+            }
+        }
+        mostrarTablero(tableros.getFirst());
+    }
 
-        // if(tableroOpt.isEmpty()) return;
-
-        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista
-                                                                              // (de momento lo dejamos fijo para hacer
-                                                                              // pruebas)
-
-        // Vamos creando una columna visual por cada lista del tablero
+    private void agregarTableroAlMenu(TableroModel tablero){
+        MenuItem opcion = new MenuItem(tablero.getNombre());
+        misTablerosMenu.getItems().add(opcion);
+        opcion.setOnAction(e -> mostrarTablero(tablero));
+    }
+    
+    private void mostrarTablero(TableroModel tablero) { 
+        this.tableroActual = tablero;
+        tituloTableroLabel.setText(tablero.getNombre());
+        contenedorListas.getChildren().clear();
+        if(tablero.getListas().isEmpty()){
+            contenedorListas.getChildren().add(new Label("Este tablero todavía no tiene listas."));
+            return;
+        }
         for (ListaTareaModel lista : tablero.getListas()) {
 
             VBox columnaLista = new VBox(10);
@@ -118,6 +161,32 @@ public class TableroViewController {
             columnaLista.getChildren().add(btnAñadir);
             contenedorListas.getChildren().add(columnaLista);
         }
+    }
+    
+    @FXML 
+    void handleNuevoTablero() {
+        TextInputDialog text = new TextInputDialog();
+        text.setTitle("Nuevo Tablero");
+        text.setHeaderText("Crear un tablero");
+        text.setContentText("Nombre del tablero:");
+
+        Optional<String> resultado = text.showAndWait();
+
+        resultado.ifPresent(nombreTablero -> {
+            if (nombreTablero.isBlank()) {
+                System.out.println("Escribe un nombre para el tablero");
+                return;
+            }   
+            try{
+                TableroModel nuevoTablero = tableroApiClient.crearTablero(nombreTablero.strip(), emailUsuarioActual.strip());
+                agregarTableroAlMenu(nuevoTablero);
+                mostrarTablero(nuevoTablero);
+                System.out.println("Tablero " + nuevoTablero.getNombre() + " creado en la base de datos");
+            } catch(Exception e){ 
+                System.out.println("Error al crear el tablero: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
