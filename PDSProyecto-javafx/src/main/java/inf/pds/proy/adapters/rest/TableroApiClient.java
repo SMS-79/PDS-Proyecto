@@ -27,6 +27,14 @@ public class TableroApiClient {
         String descripcion
     ) {}
     
+    record PropietarioRequest(
+        String email
+    ) {}
+
+    record CrearTableroRequest(
+        String nombre,
+        PropietarioRequest propietario
+    ) {}
 
     private static final String TABLEROS_URL = "http://localhost:8080/api/tableros";
 
@@ -37,6 +45,26 @@ public class TableroApiClient {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModules(new JavaTimeModule());
+    }
+
+    public TableroModel crearTablero(String nombre, String email) throws IOException, InterruptedException{ 
+        CrearTableroRequest datos = new CrearTableroRequest(nombre, new PropietarioRequest(email));
+
+        HttpResponse<String> response = post("", datos);
+
+        if (response.statusCode() == 404) {
+            throw new IllegalArgumentException(
+                "No se encontró el usuario propietario del tablero"
+            );
+        }
+
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException(
+                "No se pudo crear el tablero: " + response.statusCode()
+            );
+        }
+
+        return objectMapper.readValue(response.body(), TableroModel.class);
     }
 
     public List<TableroModel> obtenerTableros() {

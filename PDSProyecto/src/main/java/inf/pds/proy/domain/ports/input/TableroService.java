@@ -24,7 +24,7 @@ import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public interface TableroService {
 	
-	Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException;
+	Tablero crearTablero(String nombre, Usuario propietario) throws IdentificadorTableroException, UsuarioNoExistenteException;
 	List<Tablero> obtenerTableros();
 	Optional<Tablero> filtrarTableroById(TableroId tableroId);
 	Optional<Tablero> filtrarTableroByIdOrUrl(String id);

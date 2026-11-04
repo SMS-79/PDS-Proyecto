@@ -24,7 +24,8 @@
             <menus>
                <Menu text="Tableros">
                   <items>
-                     <MenuItem text="Nuevo tablero..." />
+                     <MenuItem text="Nuevo tablero..." 
+                              onAction="#handleNuevoTablero"/>
                   </items>
                </Menu>
             </menus>

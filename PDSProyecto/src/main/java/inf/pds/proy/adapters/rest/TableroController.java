@@ -50,6 +50,8 @@ public class TableroController {
 			return ResponseEntity.ok(table);
 		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
+		} catch (UsuarioNoExistenteException e){
+			return ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.badRequest().build();

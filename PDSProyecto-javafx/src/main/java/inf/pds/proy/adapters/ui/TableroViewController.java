@@ -29,32 +29,27 @@ public class TableroViewController {
     @FXML
     private HBox contenedorListas;
 
+    private String emailUsuarioActual;
+
     private final TableroApiClient tableroApiClient = new TableroApiClient();
 
     // Se llama desde el login para preparar la vista con el usuario que acaba de
     // entrar
     public void inicializarTablero(String email) {
+        this.emailUsuarioActual = email;
         usuarioLabel.setText("Usuario: " + email);
         cargarDatosReales();
     }
 
     private void cargarDatosReales() {
-        // Limpiamos el contenedor por si había componentes de prueba en el FXML
-        if (contenedorListas != null) {
+        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst();
+        mostrarTablero(tablero);
+    }
+
+    private void mostrarTablero(TableroModel tablero) { 
+        if (contenedorListas != null){
             contenedorListas.getChildren().clear();
         }
-
-        // Sacamos el tablero 1 (de momento lo dejamos fijo para hacer pruebas)
-
-        // Optional<Tablero> tableroOpt = tableroService.filtrarTableroByIdOrUrl("1");
-
-        // if(tableroOpt.isEmpty()) return;
-
-        TableroModel tablero = tableroApiClient.obtenerTableros().getFirst(); // Obtenemos el primer tablero de la lista
-                                                                              // (de momento lo dejamos fijo para hacer
-                                                                              // pruebas)
-
-        // Vamos creando una columna visual por cada lista del tablero
         for (ListaTareaModel lista : tablero.getListas()) {
 
             VBox columnaLista = new VBox(10);
@@ -118,6 +113,30 @@ public class TableroViewController {
             columnaLista.getChildren().add(btnAñadir);
             contenedorListas.getChildren().add(columnaLista);
         }
+    }
+    
+    @FXML 
+    void handleNuevoTablero() {
+        TextInputDialog text = new TextInputDialog();
+        text.setTitle("Nuevo Tablero");
+        text.setHeaderText("Crear un tablero");
+        text.setContentText("Nombre del tablero:");
+
+        Optional<String> resultado = text.showAndWait();
+
+        resultado.ifPresent(nombreTablero -> {
+            if (nombreTablero.isBlank()) {
+                System.out.println("Escribe un nombre para el tablero");
+                return;
+            }   
+            try{
+                TableroModel nuevoTablero = tableroApiClient.crearTablero(nombreTablero, emailUsuarioActual);
+                System.out.println("Tablero " + nuevoTablero.getNombre() + " creado en la base de datos");
+            } catch(Exception e){ 
+                System.out.println("Error al crear el tablero: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
