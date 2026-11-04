@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import inf.pds.proy.adapters.rest.dto.ListaTareasDTO;
@@ -44,9 +45,11 @@ public class TableroController {
 	
 	@PostMapping
 	public ResponseEntity<Tablero> crear(@RequestBody TableroDTO tablero){
-		
+		if(tablero.getNombre() == null || tablero.getNombre().isBlank() || tablero.getPropietario() == null || tablero.getPropietario().getEmail() == null || tablero.getPropietario().getEmail().isBlank()){
+			return ResponseEntity.badRequest().build();
+		}
 		try {
-			Tablero table = tableroService.crearTablero(tablero.getNombre(), tablero.getPropietario());
+			Tablero table = tableroService.crearTablero(tablero.getNombre().strip(), tablero.getPropietario().getEmail().strip());
 			return ResponseEntity.ok(table);
 		} catch (IdentificadorTableroException e) {
 			e.printStackTrace();
@@ -61,6 +64,14 @@ public class TableroController {
 	@GetMapping
 	public ResponseEntity<List<Tablero>> obtenerTableros(){
 		return ResponseEntity.ok(tableroService.obtenerTableros());
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity<List<Tablero>> obtenerTablerosByEmail(@RequestParam String email){
+		if(email.isBlank()){
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok(tableroService.obtenerTablerosByEmail(email));
 	}
 	
 	@GetMapping("/{id}")

@@ -26,6 +26,7 @@
                   <items>
                      <MenuItem text="Nuevo tablero..." 
                               onAction="#handleNuevoTablero"/>
+                     <Menu fx:id="misTablerosMenu" text="Mis tableros" />
                   </items>
                </Menu>
             </menus>
@@ -42,7 +43,7 @@
             </padding>
 
             <children>
-               <Label text="PDS Trello - Tablero Principal" textFill="WHITE">
+               <Label fx:id="tituloTableroLabel" text="Sin tablero seleccionado" textFill="WHITE">
                   <font><Font name="System Bold" size="18.0" /></font>
                </Label>
                <HBox HBox.hgrow="ALWAYS" />
