@@ -24,8 +24,10 @@
             <menus>
                <Menu text="Tableros">
                   <items>
-                     <MenuItem text="Nuevo tablero..." 
+                     <MenuItem text="Nuevo tablero" 
                               onAction="#handleNuevoTablero"/>
+                     <MenuItem text="Añadir tablero compartido" 
+                              onAction="#handleAbrirTableroCompartido"/>
                      <Menu fx:id="misTablerosMenu" text="Mis tableros" />
                   </items>
                </Menu>

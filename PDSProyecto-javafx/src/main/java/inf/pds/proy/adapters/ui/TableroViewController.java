@@ -189,6 +189,25 @@ public class TableroViewController {
         });
     }
 
+    @FXML 
+    void handleAbrirTableroCompartido () {
+        TextInputDialog text = new TextInputDialog();
+        text.setTitle("Abrir tablero compartido");
+        text.setHeaderText("Acceder mediante la URL a un tablero:");
+        text.setContentText("URl del tablero:");
+
+        Optional<String> resultado = text.showAndWait();
+
+        resultado.ifPresent(url -> {
+            if(url.isBlank()){
+                System.out.println("Escribe la URL del tablero");
+                return;
+            }
+
+            System.out.println("URL introducida: " + url.strip());
+        });
+    }
+
     @FXML
     void handleCerrarSesion(ActionEvent event) {
         // Cargamos la vista del login y cambiamos la escena de la ventana

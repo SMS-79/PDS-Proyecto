@@ -143,7 +143,21 @@ public class Tablero {
 	}
 	
 	public void addMiembro(Usuario u) {
-		this.miembros.add(u); 
+		if(propietario.getEmail().equals(u.getEmail())) {
+			return;
+		}
+		if(esMiembro(u.getEmail())) { 
+			return;
+		}
+
+		this.miembros.add(u);
+	}
+
+	public boolean esMiembro(String email) {
+		return miembros.stream()
+				.filter(miembros -> miembros.getEmail().equals(email.strip()))
+				.findFirst()
+				.isPresent();
 	}
 	
 	public void registrarOp(TipoOperacion tOp, String descripcion, Usuario user) {
