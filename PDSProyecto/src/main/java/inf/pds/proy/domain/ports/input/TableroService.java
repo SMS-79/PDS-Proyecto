@@ -22,10 +22,15 @@ import inf.pds.proy.domain.model.ids.TarjetaId;
 import inf.pds.proy.domain.model.ids.UsuarioId;
 
 public interface TableroService {
+
+	record ResultadoAcceso(Tablero tablero, boolean yaEraMiembro) {}
+	
+	ResultadoAcceso accederTableroCompartido(String url, String email) throws TableroNoExistenteException, UsuarioNoExistenteException;
 	
 	Tablero crearTablero(String nombre, String email) throws IdentificadorTableroException, UsuarioNoExistenteException;
 	List<Tablero> obtenerTableros();
 	List<Tablero> obtenerTablerosByEmail(String email);
+	List<Tablero> obtenerTablerosCompartidos(String email);
 	Optional<Tablero> filtrarTableroById(TableroId tableroId);
 	Optional<Tablero> filtrarTableroByIdOrUrl(String id);
 	void eliminarTablero(TableroId tableroId);

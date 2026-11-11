@@ -65,6 +65,14 @@ public class TableroServiceImpl implements TableroService{
 			.toList();
 	}
 	
+	@Override 
+	@Transactional 
+	public List<Tablero> obtenerTablerosCompartidos(String email) { 
+		return repTab.obtenerTableros().stream()
+					.filter(tablero -> tablero.esMiembro(email))
+					.toList();
+	}
+
 	@Override
 	public Optional<Tablero> filtrarTableroById(TableroId tableroId) {
 		return repTab.filtrarTableroById(tableroId);
@@ -264,7 +272,26 @@ public class TableroServiceImpl implements TableroService{
 		repTab.guardarTablero(tablero);
 	}
 
-	
+	@Override 
+	@Transactional 
+	public ResultadoAcceso accederTableroCompartido(String url, String email) throws TableroNoExistenteException, UsuarioNoExistenteException{ 
+		Usuario usuario = repUser.filtrarUsuarioByEmail(email.strip())
+							.orElseThrow(() -> new UsuarioNoExistenteException("No se encontró un usuario con ese correo electrónico."));
+
+		Tablero tablero = repTab.filtrarTableroByURL(url.strip())
+							.orElseThrow(() -> new TableroNoExistenteException("No se encontró un tablero con esa URL."));
+
+		boolean yaEraMiembro = tablero.esMiembro(usuario.getEmail());
+		boolean esPropietario = tablero.getPropietario().getEmail().equals(usuario.getEmail());
+
+		if (yaEraMiembro || esPropietario) {
+			return new ResultadoAcceso(tablero, yaEraMiembro);
+		}
+
+		tablero.addMiembro(usuario);
+		Tablero tableroGuardado = repTab.guardarTablero(tablero);
+		return new ResultadoAcceso(tableroGuardado, false);
+	}
 
 	
 

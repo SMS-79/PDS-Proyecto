@@ -20,6 +20,8 @@ import inf.pds.proy.adapters.rest.dto.ListaTareasDTO;
 import inf.pds.proy.adapters.rest.dto.TableroDTO;
 import inf.pds.proy.adapters.rest.dto.TarjetaDTO;
 import inf.pds.proy.adapters.rest.dto.TipoTarjeta;
+import inf.pds.proy.adapters.rest.dto.AccesoTableroCompartidoDTO.RespuestaAcceso;
+import inf.pds.proy.adapters.rest.dto.AccesoTableroCompartidoDTO.SolicitudAcceso;
 import inf.pds.proy.domain.model.ListaTareas;
 import inf.pds.proy.domain.model.Tablero;
 import inf.pds.proy.domain.model.Tarjeta;
@@ -42,6 +44,24 @@ public class TableroController {
 	public TableroController(TableroService tableroService) {
 		this.tableroService = tableroService;
 	}
+
+	@PostMapping("/compartidos/acceso")
+	public ResponseEntity<RespuestaAcceso> accederTableroCompartido(@RequestBody SolicitudAcceso datos) {
+		if(datos.url() == null || datos.url().isBlank() || datos.email() == null || datos.email().isBlank()) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		try {
+			TableroService.ResultadoAcceso resultado = tableroService.accederTableroCompartido(datos.url(), datos.email());
+
+			return ResponseEntity.ok(new RespuestaAcceso(
+				resultado.tablero().getId().getId(),
+				resultado.yaEraMiembro()));
+		} catch (TableroNoExistenteException | UsuarioNoExistenteException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	
 	@PostMapping
 	public ResponseEntity<Tablero> crear(@RequestBody TableroDTO tablero){

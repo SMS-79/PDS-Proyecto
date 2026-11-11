@@ -38,6 +38,10 @@ public class TableroApiClient {
         PropietarioRequest propietario
     ) {}
 
+    record SolicitudAcceso(String url, String email) {}
+    
+    public record RespuestaAcceso(Long tableroId, boolean yaEraMiembro) {}
+
     private static final String TABLEROS_URL = "http://localhost:8080/api/tableros";
 
     private final HttpClient httpClient;
@@ -68,6 +72,26 @@ public class TableroApiClient {
 
         return objectMapper.readValue(response.body(), TableroModel.class);
     }
+
+    public RespuestaAcceso accederTableroCompartido(String url, String email) throws IOException, InterruptedException { 
+        SolicitudAcceso datos = new SolicitudAcceso(url, email);
+
+        HttpResponse<String> respuesta = post("/compartidos/acceso", datos);
+        
+        if (respuesta.statusCode() == 404) { 
+            throw new IllegalArgumentException(
+                "No se encontró el tablero o el usuario."
+            );
+        }
+
+        if (respuesta.statusCode() != 200) {
+            throw new IllegalStateException(
+                "No se pudo acceder al tablero: " + respuesta.statusCode()
+            );
+        }
+
+        return objectMapper.readValue(respuesta.body(), RespuestaAcceso.class);
+     }
 
     public List<TableroModel> obtenerTableros() {
         HttpRequest request = HttpRequest.newBuilder()
