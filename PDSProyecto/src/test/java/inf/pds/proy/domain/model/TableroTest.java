@@ -27,7 +27,37 @@ class TableroTest {
         tablero = new Tablero(TableroId.random(), "Tablero Proyecto", propietario, "url-proyecto");
     }
 
-    // --- Tests de Listas de Tareas ---
+
+    @Test
+    void addMiembro_noDuplicaAlUsuarioSiYaParticipa() { 
+        Usuario participante1 = new Usuario(
+            new UsuarioId(6666L),
+            "Pedro",
+            "pedro@testeos.es",
+            "1234"
+        );
+
+        Usuario participante2 = new Usuario(
+            new UsuarioId(7777L),
+            "Salva",
+            "salva@testeos.es",
+            "hola"
+        );
+
+        tablero.addMiembro(participante1);
+        tablero.addMiembro(participante2);
+        tablero.addMiembro(participante1);
+
+        int apariciones = tablero.getMiembros().stream()
+                            .filter(miembro -> miembro.getEmail().equals(participante1.getEmail()))
+                            .toList()
+                            .size();
+
+        assertEquals(1, apariciones);
+        assertTrue(tablero.esMiembro(participante2.getEmail()));
+        assertEquals(propietario, tablero.getPropietario());
+    }
+    
 
     @Test
     void crearLista_añadeListaAlTablero() {
